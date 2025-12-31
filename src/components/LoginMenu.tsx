@@ -1,5 +1,5 @@
 export default function LoginMenu() {
-    return <div className="w-full h-full flex flex-col justify-between items-center">
+    return <div className="w-full h-full text-black flex flex-col justify-between items-center">
         <h1 className="text-2xl font-bold">Iniciar sesion de administrador</h1>
         <form action="" className="w-3/4 h-3/5 bg-white px-8 rounded-xl flex flex-col justify-evenly items-start">
             <div className="w-full flex flex-col items-start.">

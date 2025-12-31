@@ -1,5 +1,5 @@
 export default function InfGestion() {
-    return <div className="w-full h-36 bg-green-500 rounded-tr-3xl rounded-bl-3xl flex-flex-col justify-center content-center">
+    return <div className="w-full h-36 bg-green-base rounded-tr-3xl rounded-bl-3xl flex-flex-col justify-center content-center">
         <div className="w-full h-1/2 text-center text-3xl font-bold">
             MIRA TODO LO QUE VENIMOS HACIENDO EN LOBERÌA
         </div>

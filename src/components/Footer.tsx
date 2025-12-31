@@ -1,10 +1,10 @@
 export default function Footer() {
     return <div className="w-full">
         <div className="w-full flex flex-row">
-            <div className="w-1/4 h-1 bg-green-500"></div>
-            <div className="w-1/4 h-1 bg-blue-500"></div>
-            <div className="w-1/4 h-1 bg-red-500"></div>
-            <div className="w-1/4 h-1 bg-yellow-500"></div>
+            <div className="w-1/4 h-1 bg-green-base"></div>
+            <div className="w-1/4 h-1 bg-blue-base"></div>
+            <div className="w-1/4 h-1 bg-red-base"></div>
+            <div className="w-1/4 h-1 bg-yellow-base"></div>
         </div>
         <footer className="w-full h-32 bg-neutral-900 flex flex-row justify-evenly items-center">
             <div className="w-1/3 h-full flex items-center justify-center items-center">
