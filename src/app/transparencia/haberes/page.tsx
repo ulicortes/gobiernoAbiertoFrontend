@@ -1,3 +1,5 @@
+import Historial from "@/components/Historial";
+
 export default function Page() {
     return <div className="w-3/5 h-full flex flex-col bg-white items-center">
         <div className="w-full h-fit bg-slate-100 rounded-md text-black p-4">
@@ -19,5 +21,6 @@ export default function Page() {
                 </tbody>
             </table>
         </div>
+        <Historial anio={2025} />
     </div>
 }
