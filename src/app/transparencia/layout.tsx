@@ -9,9 +9,9 @@ export default function TransparenciaLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <div className="w-full h-full flex flex-col bg-white items-center">
+        <div className="w-full h-screen pt-24 bg-white flex flex-col justify-center items-center">
             <LoginUser />
-            <div className="w-full h-screen flex flex-row justify-around">
+            <div className="w-full h-full max-h-screen flex flex-row justify-around">
                 <MenuTransparencia />
                 {children}
             </div>
