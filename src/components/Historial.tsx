@@ -1,14 +1,12 @@
 'use client'
 
-import { useState } from "react"
-
 export default function Historial({ anio, abierto, onToggle }: { anio: number, abierto: boolean, onToggle: () => void }) {
-    return <div className="mt-4 w-2/3 h-fit bg-neutral-900 text-white rounded-md flex flex-col justify-center">
+    return <div className="mb-4 w-2/3 h-fit bg-neutral-900 text-white rounded-t-md flex flex-col justify-center">
         <div onClick={onToggle} className="cursor-pointer flex flex-row justify-between">
-            <h1 className="text-2xl w-2/6 text-center">{anio}</h1>
-            <h1 className="text-2xl w-1/6 text-center">▼</h1>
+            <h1 className="py-2 text-2xl w-2/6 text-center">{anio}</h1>
+            <h1 className="py-2 text-2xl w-1/6 text-center">▼</h1>
         </div>
-        {abierto ? <div className="w-full h-74 bg-white text-black rounded-b-md flex flex-col justify-center">
+        {abierto ? <div className="w-full h-74 bg-white text-black flex flex-col justify-center border-1 border-black">
             <div>
                 <h1 className="text-md text-center cursor-pointer hover:underline">Presupuesto anual</h1>
             </div>
