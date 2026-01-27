@@ -6,7 +6,7 @@ export default function Historial({ anio, abierto, onToggle }: { anio: number, a
             <h1 className="py-2 text-2xl w-2/6 text-center">{anio}</h1>
             <h1 className="py-2 text-2xl w-1/6 text-center">▼</h1>
         </div>
-        {abierto ? <div className="w-full h-74 bg-white text-black flex flex-col justify-center border-1 border-black">
+        {abierto ? <div className="w-full h-74 py-2 bg-white text-black flex flex-col justify-center border-1 border-black">
             <div>
                 <h1 className="text-md text-center cursor-pointer hover:underline">Presupuesto anual</h1>
             </div>

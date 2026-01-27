@@ -119,7 +119,7 @@ export default function Page() {
     ];
     let [anio, setAnio] = useState("2025");
     return <div className="w-3/5 h-fit flex flex-col bg-white items-center">
-        <div className="w-full h-fit bg-slate-100 rounded-md text-black p-4">
+        <div className="w-5/6 h-fit bg-slate-100 rounded-md text-black p-4">
             <table className="w-full table-auto.">
                 <thead className="border-b-2 border-black">
                     <tr>
