@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from 'next/navigation';
 export default function Nav() {
     let path = usePathname()
-    return <nav className={`fixed top-0 w-full h-24 bg-black-base border-b-4 ${path.startsWith('/transparencia') ? 'border-blue-base' : 'border-green-base'} flex flex-row justify-between`}>
+    return <nav className={`z-50 fixed top-0 w-full h-24 bg-black-base border-b-4 ${path.startsWith('/transparencia') ? 'border-blue-base' : 'border-green-base'} flex flex-row justify-between`}>
         <div className="w-1/4 h-full flex justify-center items-center">
             <Link href={'/'}><img src="logo_municipio.png" alt="" className="w-4/5 pl-2." /></Link>
         </div>

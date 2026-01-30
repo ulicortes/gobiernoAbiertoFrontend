@@ -1,6 +1,5 @@
 'use client'
-import Historial from "@/components/Historial";
-import { useState } from "react";
+import TablaDescargas from "@/components/TablaDescargas";
 
 export default function Page() {
     let haberes = [
@@ -117,43 +116,7 @@ export default function Page() {
         "haberes_oct_2025.pdf",
         "haberes_noviembre_2025.pdf"
     ];
-    let [anio, setAnio] = useState("2025");
-    return <div className="w-3/5 h-fit flex flex-col bg-white items-center">
-        <div className="w-5/6 h-fit bg-slate-100 rounded-md text-black p-4">
-            <table className="w-full table-auto.">
-                <thead className="border-b-2 border-black">
-                    <tr>
-                        <th colSpan={2} className="text-2xl">Descargas</th>
-                    </tr>
-                    <tr>
-                        <th colSpan={2} className="text-2xl">
-                            <select value={anio} onChange={e=>setAnio(e.target.value)} className="cursor-pointer" >
-                                <option value="2017">2017</option>
-                                <option value="2018">2018</option>
-                                <option value="2019">2019</option>
-                                <option value="2020">2020</option>
-                                <option value="2021">2021</option>
-                                <option value="2022">2022</option>
-                                <option value="2023">2023</option>
-                                <option value="2024">2024</option>
-                                <option value="2025">2025</option>
-                            </select>
-                            </th>
-                    </tr>
-                    <tr>
-                        <th className="text-start text-md">Adjunto</th>
-                        <th className="text-start text-md">Tamaño</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {haberes.filter(h => h.includes(anio)).map((h, index) => (
-                        <tr key={index} className="border-y-1 border-black">
-                            <td className="py-1">{h}</td>
-                            <td className="py-1">308 KB</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-        </div>
+    return <div className="w-3/5 h-fit flex flex-col animate-fade items-center">
+        <TablaDescargas selector={true} listado={haberes}  />
     </div>
 }

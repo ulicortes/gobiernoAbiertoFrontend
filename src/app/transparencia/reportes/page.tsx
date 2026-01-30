@@ -9,7 +9,7 @@ export default function Page() {
     const handleToggle = (a: number) => {
         setActivo(prevAnio => (prevAnio === a ? 0 : a));
     };
-    return <div className="w-3/5 h-full flex flex-col justify-start bg-white items-center">
+    return <div className="animate-fade w-3/5 h-full flex flex-col justify-start bg-white. items-center">
         {anios.map(a => (
             <Historial key={a} anio={a} abierto={activo === a} onToggle={() => handleToggle(a)} />
         ))}
