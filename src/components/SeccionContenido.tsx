@@ -11,11 +11,11 @@ export default function SeccionContenido({
   imagenFondo,
 }: SeccionContenidoProps) {
   return (
-    <section className="relative w-full min-h-[40vh] flex flex-col items-center justify-center text-white overflow-hidden">
+    <section className="group relative w-full min-h-[40vh] flex flex-col items-center justify-center text-white overflow-hidden cursor-pointer">
       {/* Imagen de fondo con blur */}
       {imagenFondo && (
         <div 
-          className="absolute inset-0 bg-cover bg-center"
+          className="absolute inset-0 bg-cover bg-center transition-transform duration-600 ease-out group-hover:scale-110"
           style={{
             backgroundImage: `url(${imagenFondo})`,
             filter: 'blur(8px)',
