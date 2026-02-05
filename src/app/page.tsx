@@ -29,6 +29,7 @@ export default function Home() {
   return (
     <div className="w-full flex flex-col">
       <HeroSection imagenFondo={imagenHero} />
+      
       {secciones.map((seccion, index) => (
         <SeccionContenido
           key={index}
@@ -37,9 +38,9 @@ export default function Home() {
           imagenFondo={seccion.imagenFondo}
         />
       ))}
-      <section className="w-full py-16 px-8">
-        <InfGestion />
-      </section>
+
+      <InfGestion />
+
       <GuiaUsuario />
     </div>
   );
