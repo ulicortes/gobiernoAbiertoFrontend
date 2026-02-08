@@ -39,7 +39,7 @@ export default function Page() {
         "15/01/2026 Director del Centro de Salud de San Manuel",
         "15/01/2026 Coordinadora Integración Comunitaria"
     ];
-    return <div className="w-3/5 h-5/6 flex flex-col animate-fade items-center">
+    return <div className="w-full md:w-3/5 h-80 md:h-4/6 flex flex-col animate-fade items-center">
         <TablaDescargas selector={false} listado={cargos} />
     </div>
 }

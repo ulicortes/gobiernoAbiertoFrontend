@@ -3,16 +3,16 @@ import { useState } from "react";
 
 export default function TablaDescargas({ selector, listado }: { selector: boolean, listado: String[] }) {
     let [anio, setAnio] = useState("2025");
-    return <div className="w-5/6 h-fit bg-white rounded-md text-black overflow-hidden shadow-xl shadow-black border-2. border-slate-400">
-        <div className="descargas w-full h-fit max-h-120 overflow-y-scroll">
+    return <div className="w-5/6 h-full bg-white rounded-md text-black overflow-hidden shadow-xl shadow-black border-2. border-slate-400">
+        <div className="descargas w-full h-full max-h-150 overflow-y-scroll">
             <table className="w-full h-full">
                 <thead className="text-white">
                     <tr>
-                        <th colSpan={2} className="text-2xl bg-black sticky top-0 px-1 py-2">Descargas</th>
+                        <th colSpan={2} className="text-2xl bg-black sticky top-0 px-1. py-2">Descargas</th>
                     </tr>
                     {selector ?
                         <tr>
-                            <th colSpan={2} className="text-2xl bg-black sticky top-0">
+                            <th colSpan={2} className="text-2xl bg-black sticky top-0 md:top-10.">
                                 <select value={anio} onChange={e => setAnio(e.target.value)} className="bg-black cursor-pointer" >
                                     <option value="2017">2017</option>
                                     <option value="2018">2018</option>
@@ -29,8 +29,8 @@ export default function TablaDescargas({ selector, listado }: { selector: boolea
                         :
                         <></>}
                     <tr>
-                        <th className="text-start text-md bg-black px-1 sticky top-12">Adjunto</th>
-                        <th className="text-start text-md bg-black px-1 sticky top-12">Tamaño</th>
+                        <th className="text-start text-md bg-black px-1 sticky top-8">Adjunto</th>
+                        <th className="text-start text-md bg-black px-1 sticky top-8">Tamaño</th>
                     </tr>
                 </thead>
                 <tbody className="text-sm">

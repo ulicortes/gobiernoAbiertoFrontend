@@ -38,7 +38,7 @@ export default function Page() {
   "Concejal",
   "Consejal"
 ];
-    return <div className="w-3/5 h-full flex flex-col animate-fade items-center">
+    return <div className="w-full md:w-3/5 h-80 md:h-3/6 flex flex-col animate-fade items-center">
         <TablaDescargas selector={false} listado={cargos} />
     </div>
 }

@@ -116,7 +116,7 @@ export default function Page() {
         "haberes_oct_2025.pdf",
         "haberes_noviembre_2025.pdf"
     ];
-    return <div className="w-3/5 h-fit flex flex-col animate-fade items-center">
+    return <div className="w-full md:w-3/5 h-100 md:h-80 md:h-3/6 flex flex-col animate-fade items-center">
         <TablaDescargas selector={true} listado={haberes}  />
     </div>
 }

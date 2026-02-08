@@ -1,7 +1,7 @@
 'use client'
 
 export default function Historial({ anio, abierto, onToggle }: { anio: number, abierto: boolean, onToggle: () => void }) {
-    return <div className="mb-4 w-2/3 h-fit bg-black-dark shadow-md shadow-black .border-1 border-gray-200 text-white rounded-t-md flex flex-col justify-center">
+    return <div className="mb-4 w-3/3 md:w-2/3 h-fit bg-black-dark shadow-md shadow-black .border-1 border-gray-200 text-white rounded-t-md flex flex-col justify-center">
         <div onClick={onToggle} className="cursor-pointer flex flex-row justify-between">
             <h1 className="py-6 text-2xl w-2/6 text-center">{anio}</h1>
             <h1 className="py-6 text-2xl w-1/6 text-center">▼</h1>
@@ -37,12 +37,12 @@ export default function Historial({ anio, abierto, onToggle }: { anio: number, a
 
 function trimestre(dia: String, mes: String, anio: number) {
     return <div className="w-5/6 self-center flex flex-col items-start">
-        <p className="text-sm cursor-pointer hover:underline">Situación económica financiera al {dia}/{mes}/{anio}</p>
-        <p className="text-sm cursor-pointer hover:underline">Cuenta ahorro inversión financiamiento de ejecución presupuestaria al {dia}/{mes}/{anio}</p>
-        <p className="text-sm cursor-pointer hover:underline">Disponibilidades al {dia}/{mes}/{anio}</p>
-        <p className="text-sm cursor-pointer hover:underline">Estado de ejecución del presupuesto de gastos al {dia}/{mes}/{anio}</p>
-        <p className="text-sm cursor-pointer hover:underline">Estado de ejecución del presupuesto de gastos por finalidad y función al {dia}/{mes}/{anio}</p>
-        <p className="text-sm cursor-pointer hover:underline">Estado de ejecución presupuestaria de recursos al {dia}/{mes}/{anio}</p>
-        <p className="text-sm cursor-pointer hover:underline">Registro de endeudamiento municipal al {dia}/{mes}/{anio}</p>
+        <p className="py-2 text-sm cursor-pointer hover:underline">Situación económica financiera al {dia}/{mes}/{anio}</p>
+        <p className="py-2 text-sm cursor-pointer hover:underline">Cuenta ahorro inversión financiamiento de ejecución presupuestaria al {dia}/{mes}/{anio}</p>
+        <p className="py-2 text-sm cursor-pointer hover:underline">Disponibilidades al {dia}/{mes}/{anio}</p>
+        <p className="py-2 text-sm cursor-pointer hover:underline">Estado de ejecución del presupuesto de gastos al {dia}/{mes}/{anio}</p>
+        <p className="py-2 text-sm cursor-pointer hover:underline">Estado de ejecución del presupuesto de gastos por finalidad y función al {dia}/{mes}/{anio}</p>
+        <p className="py-2 text-sm cursor-pointer hover:underline">Estado de ejecución presupuestaria de recursos al {dia}/{mes}/{anio}</p>
+        <p className="py-2 text-sm cursor-pointer hover:underline">Registro de endeudamiento municipal al {dia}/{mes}/{anio}</p>
     </div>
 }

@@ -2,7 +2,7 @@ import TablaDescargas from "@/components/TablaDescargas"
 
 export default function Page() {
     let nomina = ["Nómina de Empleados"]
-    return <div className="w-3/5 h-full flex flex-col animate-fade items-center">
+    return <div className="w-full md:w-3/5 h-fit flex flex-col animate-fade items-center">
         <TablaDescargas selector={false} listado={nomina} />
     </div>
 }
