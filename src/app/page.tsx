@@ -27,7 +27,7 @@ export default function Home() {
   ];
 
   return (
-    <div className="w-full flex flex-col">
+    <div className="w-full flex flex-col items-center bg-white font-sans">
       <HeroSection imagenFondo={imagenHero} />
       
       {secciones.map((seccion, index) => (
