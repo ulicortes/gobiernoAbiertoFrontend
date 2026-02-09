@@ -4,7 +4,7 @@ interface HeroSectionProps {
 
 export default function HeroSection({ imagenFondo }: HeroSectionProps) {
   return (
-    <section className="relative w-full h-[60vh] flex flex-col items-center justify-center text-white overflow-hidden">
+    <section className="relative w-full h-[60vh] flex flex-col items-center justify-center text-white overflow-hidden mt-24">
       {/* Imagen de fondo con blur */}
       {imagenFondo && (
         <div 

@@ -3,7 +3,7 @@ import { useState } from "react";
 
 export default function TablaDescargas({ selector, listado }: { selector: boolean, listado: String[] }) {
     let [anio, setAnio] = useState("2025");
-    return <div className="w-5/6 h-full bg-white rounded-md text-black overflow-hidden shadow-xl shadow-black border-2. border-slate-400">
+    return <div className="w-5/6 h-full bg-white rounded-md text-black overflow-hidden shadow-lg/40">
         <div className="descargas w-full h-full max-h-150 overflow-y-scroll">
             <table className="w-full h-full">
                 <thead className="text-white">
