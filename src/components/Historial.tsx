@@ -38,7 +38,7 @@ export default function Historial({ anio, abierto, onToggle }: { anio: number, a
 }
 
 function trimestre(dia: String, mes: String, anio: number) {
-    return <div className="w-5/6 self-center flex flex-col items-start">
+    return <div className="w-5/6 self-center flex flex-col items-start font-sans">
         <p className="py-2 text-sm cursor-pointer hover:underline">Situación económica financiera al {dia}/{mes}/{anio}</p>
         <p className="py-2 text-sm cursor-pointer hover:underline">Cuenta ahorro inversión financiamiento de ejecución presupuestaria al {dia}/{mes}/{anio}</p>
         <p className="py-2 text-sm cursor-pointer hover:underline">Disponibilidades al {dia}/{mes}/{anio}</p>

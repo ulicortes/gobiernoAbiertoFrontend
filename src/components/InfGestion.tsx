@@ -16,7 +16,7 @@ export default function InfGestion() {
                             <h3 className="text-4xl md:text-4xl font-bold text-black-base mb-1">
                                 {year}
                             </h3>
-                            <p className="text-sm md:text-base text-black-base font-normal">
+                            <p className="text-sm md:text-base text-black-base font-sans">
                                 Informe de gestión
                             </p>
                         </div>

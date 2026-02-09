@@ -20,7 +20,7 @@ export default function HeroSection({ imagenFondo }: HeroSectionProps) {
         <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold uppercase mb-8">
           GOBIERNO ABIERTO
         </h1>
-        <p className="text-lg md:text-xl lg:text-2xl leading-relaxed">
+        <p className="text-lg md:text-xl lg:text-2xl leading-relaxed font-sans">
           Comprometidos con los principios de Gobierno Abierto, trabajamos en la transparencia, la participación y la colaboración con el objetivo de aumentar la eficiencia y la eficacia en la administración pública.
         </p>
       </div>

@@ -27,7 +27,7 @@ export default function SeccionContenido({
         <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold uppercase mb-8">
           {titulo}
         </h2>
-        <p className="text-lg md:text-xl leading-relaxed">{texto}</p>
+        <p className="text-lg md:text-xl leading-relaxed font-sans">{texto}</p>
       </div>
     </section>
   );

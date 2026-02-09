@@ -37,15 +37,15 @@ export default function TablaDescargas({ selector, listado }: { selector: boolea
                     {selector ?
                         listado.filter(h => h.includes(anio)).map((h, index) => (
                             <tr key={index} className="border-y-1 border-black">
-                                <td className="p-1 hover:underline cursor-pointer">{h}</td>
-                                <td className="p-1">308 KB</td>
+                                <td className="p-1 hover:underline font-sans cursor-pointer">{h}</td>
+                                <td className="p-1 font-sans">308 KB</td>
                             </tr>
                         ))
                         :
                         listado.map((h, index) => (
                             <tr key={index} className="border-y-1 border-black">
-                                <td className="p-1 hover:underline cursor-pointer">{h}</td>
-                                <td className="p-1">308 KB</td>
+                                <td className="p-1 hover:underline font-sans cursor-pointer">{h}</td>
+                                <td className="p-1 font-sans">308 KB</td>
                             </tr>
                         ))
                     }
