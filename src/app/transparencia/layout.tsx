@@ -16,7 +16,7 @@ export default function TransparenciaLayout({
             {/* <div className="w-full h-1/3 flex flex-col py-2 layout-transparencia"></div> */}
             <LoginUser />
             {/* <h1 className="hidden md:inline text-green-base text-shadow-lg text-shadow-black text-center text-5xl pb-10 font-bold w-full h-fit">TRANSPARENCIA</h1> */}
-            <h1 className="inline md:hidden text-green-base text-shadow-lg text-shadow-black text-center text-5xl pb-10 font-bold w-full h-fit">{txt || 'TRANSPARENCIA'}</h1>
+            <h1 className="inline md:hidden text-black-base text-center text-5xl pb-10 font-bold w-full h-fit">{txt || 'TRANSPARENCIA'}</h1>
             <div className="animate-fade w-full h-full max-h-screen. flex flex-col-reverse md:flex-row justify-start">
                 <div className="w-full md:w-2/5 h-full py-10 md:py-0 flex flex-col justify-start items-center">
                     <MenuTransparencia />

@@ -1,16 +1,18 @@
 'use client'
 
 export default function Historial({ anio, abierto, onToggle }: { anio: number, abierto: boolean, onToggle: () => void }) {
-    return <div className="mb-4 w-3/3 md:w-2/3 h-fit bg-black-dark shadow-md shadow-black .border-1 border-gray-200 text-white rounded-t-md flex flex-col justify-center">
-        <div onClick={onToggle} className="cursor-pointer flex flex-row justify-between">
-            <h1 className="py-6 text-2xl w-2/6 text-center">{anio}</h1>
-            <h1 className="py-6 text-2xl w-1/6 text-center">▼</h1>
-        </div>
-        {abierto ? <div className="w-full h-74 py-2 bg-white text-black flex flex-col justify-center border-4. border-red-200">
-            <div>
-                <h1 className="text-md text-center cursor-pointer hover:underline">Presupuesto anual</h1>
+    return <div className="mb-4 w-11/12 md:w-2/3 h-fit text-white flex flex-col justify-center">
+        <div onClick={onToggle} className={`bg-black-base cursor-pointer flex flex-row justify-between ${abierto ? 'rounded-t-4xl' : 'rounded-4xl'}`}>
+            <h1 className="py-6 pl-10 text-5xl font-bold w-2/6 text-center">{anio}</h1>
+            <div className="py-6 w-1/6 flex justify-center items-center">
+                <span className={`text-4xl inline-block transition-transform duration-300 origin-center ${abierto ? 'rotate-180' : ''}`}>▼</span>
             </div>
-            <div className="w-3/4 h-0.5 bg-blue-light self-center"></div>
+        </div>
+        {abierto ? <div className="w-full h-74 p-2 bg-white text-black flex flex-col justify-center border-1 border-black-base rounded-b-4xl">
+            <div>
+                <h1 className="text-md text-center font-bold cursor-pointer hover:underline">PRESUPUESTO ANUAL</h1>
+            </div>
+            <hr className="w-3/4 h-1 bg-blue-light border-0 rounded-lg my-3 self-center my-0 shrink-0" aria-hidden />
             <div className="historial w-full px-2 overflow-y-scroll">
                 <div className="w-full flex flex-col">
                     <h1 className="w-5/6 self-start text-2xl text-blue-light font-bold">Primer trimestre</h1>
