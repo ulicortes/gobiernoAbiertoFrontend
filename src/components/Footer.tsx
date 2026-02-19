@@ -1,11 +1,8 @@
+import ColorDivider from "@/components/ColorDivider";
+
 export default function Footer() {
     return <div className="w-full">
-        <div className="w-full flex flex-row">
-            <div className="w-1/4 h-1 bg-green-base"></div>
-            <div className="w-1/4 h-1 bg-blue-base"></div>
-            <div className="w-1/4 h-1 bg-red-base"></div>
-            <div className="w-1/4 h-1 bg-yellow-base"></div>
-        </div>
+        <ColorDivider />
         <footer className="w-full py-15 bg-black-base flex flex-col md:flex-row justify-evenly items-center gap-6 md:gap-0">
             <div className="w-full md:w-1/3 px-8 flex justify-center md:justify-start">
                 <img src="logo_municipio_footer.png" alt="" />

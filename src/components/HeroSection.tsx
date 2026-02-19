@@ -1,3 +1,5 @@
+import ColorDivider from "@/components/ColorDivider";
+
 interface HeroSectionProps {
   imagenFondo?: string;
 }
@@ -24,13 +26,7 @@ export default function HeroSection({ imagenFondo }: HeroSectionProps) {
           Comprometidos con los principios de Gobierno Abierto, trabajamos en la transparencia, la participación y la colaboración con el objetivo de aumentar la eficiencia y la eficacia en la administración pública.
         </p>
       </div>
-      {/* Color separator */}
-      <div className="absolute bottom-0 w-full flex flex-row z-10">
-        <div className="w-1/4 h-1 bg-green-base"></div>
-        <div className="w-1/4 h-1 bg-yellow-base"></div>
-        <div className="w-1/4 h-1 bg-red-base"></div>
-        <div className="w-1/4 h-1 bg-blue-base"></div>
-      </div>
+      <ColorDivider className="absolute bottom-0 z-10" />
     </section>
   );
 }

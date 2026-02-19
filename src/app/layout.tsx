@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Nav from "@/components/Nav";
-import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
   title: "Gobierno abierto - Loberìa",
@@ -17,11 +15,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="w-full h-screen min-h-screen bg-white">
-        <Nav />
-        <main>
-          {children}
-        </main>
-        <Footer />
+        {children}
       </body>
     </html>
   );
