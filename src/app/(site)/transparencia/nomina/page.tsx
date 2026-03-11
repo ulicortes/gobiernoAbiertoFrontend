@@ -1,10 +1,11 @@
-import TablaDescargas from "@/components/TablaDescargas"
-import DataTable from "@/components/DataTable"
+'use client'
+import DataTable from "@/components/DataTable";
+import { getTableDataForCategory } from "@/lib/tableData";
 
 export default function Page() {
-    let nomina = ["Nómina de Empleados"]
+    const { rows, columns } = getTableDataForCategory("Nómina del personal");
+
     return <div className="w-full md:w-3/5 h-fit flex flex-col animate-fade items-center">
-        {/* <TablaDescargas selector={false} listado={nomina} /> */}
-        <DataTable />
+        <DataTable rows={rows} columns={columns} />
     </div>
 }

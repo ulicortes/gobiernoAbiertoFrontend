@@ -2,12 +2,12 @@
 
 import { useState } from 'react';
 
-const HOME_CATEGORIES = [
+export const HOME_CATEGORIES = [
   'Informes de gestión',
   'Guía de usuario',
 ];
 
-const TRANSPARENCIA_CATEGORIES = [
+export const TRANSPARENCIA_CATEGORIES = [
   'Haberes de empleados',
   'Recibos de funcionarios',
   'Declaraciones juradas',

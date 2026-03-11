@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import PanelSidebar from '@/components/PanelSidebar';
 import DataTable from '@/components/DataTable';
+import { getTableDataForCategory } from '@/lib/tableData';
 import UploadForm from '@/components/UploadForm';
 import PanelHeader from '@/components/PanelHeader';
 
@@ -17,6 +18,8 @@ export default function PanelPage() {
     setSelectedCategory(category);
   };
   const showUploadForm = () => setContentView('uploadForm');
+
+  const { rows, columns } = getTableDataForCategory(selectedCategory);
 
   return (
     <div className="w-full min-h-screen flex flex-col">
@@ -38,7 +41,7 @@ export default function PanelPage() {
             <button
               type="button"
               onClick={showUploadForm}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg text-black-base font-medium transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg text-black-base font-medium transition-colors cursor-pointer"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
@@ -48,7 +51,7 @@ export default function PanelPage() {
           </div>
 
           <div className="w-full min-h-[400px]">
-            {contentView === 'dataTable' && <DataTable />}
+            {contentView === 'dataTable' && <DataTable rows={rows} columns={columns} />}
             {contentView === 'uploadForm' && <UploadForm />}
             {contentView === 'none' && (
               <div className="flex items-center justify-center min-h-[400px] text-gray-500">
