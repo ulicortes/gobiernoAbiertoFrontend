@@ -16,16 +16,17 @@ const TRANSPARENCIA_CATEGORIES = [
 ];
 
 type PanelSidebarProps = {
-  onSelectCategory: () => void;
+  selectedCategory: string | null;
+  onSelectCategory: (category: string) => void;
   onEditarCategorias: () => void;
 };
 
-export default function PanelSidebar({ onSelectCategory, onEditarCategorias }: PanelSidebarProps) {
+export default function PanelSidebar({ selectedCategory, onSelectCategory, onEditarCategorias }: PanelSidebarProps) {
   const [homeOpen, setHomeOpen] = useState(true);
   const [transparenciaOpen, setTransparenciaOpen] = useState(true);
 
   return (
-    <aside className="w-full md:w-1/4 min-h-[60vh] bg-gray-200 rounded-b-xl flex flex-col py-4 px-4">
+    <aside className="h-full w-full min-h-[60vh] bg-gray-200 rounded-xl flex flex-col py-4 px-4">
       {/* HOME */}
       <div className="flex flex-col">
         <button
@@ -49,8 +50,8 @@ export default function PanelSidebar({ onSelectCategory, onEditarCategorias }: P
               <button
                 key={label}
                 type="button"
-                onClick={onSelectCategory}
-                className="text-left py-2 px-2 rounded hover:bg-gray-300 text-black-base"
+                onClick={() => onSelectCategory(label)}
+                className={`text-left py-2 px-2 rounded hover:bg-gray-300 ${selectedCategory === label ? 'text-blue-base font-medium' : 'text-black-base'}`}
               >
                 {label}
               </button>
@@ -82,8 +83,8 @@ export default function PanelSidebar({ onSelectCategory, onEditarCategorias }: P
               <button
                 key={label}
                 type="button"
-                onClick={onSelectCategory}
-                className="text-left py-2 px-2 rounded hover:bg-gray-300 text-black-base"
+                onClick={() => onSelectCategory(label)}
+                className={`text-left py-2 px-2 rounded hover:bg-gray-300 ${selectedCategory === label ? 'text-blue-base font-medium' : 'text-black-base'}`}
               >
                 {label}
               </button>
@@ -97,7 +98,7 @@ export default function PanelSidebar({ onSelectCategory, onEditarCategorias }: P
         <button
           type="button"
           onClick={onEditarCategorias}
-          className="flex items-center gap-2 w-full py-2 px-2 rounded hover:bg-gray-300 text-black-base font-medium"
+          className={`flex items-center gap-2 w-full py-2 px-2 rounded hover:bg-gray-300 font-medium ${selectedCategory === 'Editar categorías' ? 'text-blue-base' : 'text-black-base'}`}
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />

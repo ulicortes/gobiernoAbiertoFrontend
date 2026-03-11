@@ -1,9 +1,16 @@
+'use client';
+
+import { useState } from "react";
 import InfGestion from "@/components/InfGestion";
 import HeroSection from "@/components/HeroSection";
 import SeccionContenido from "@/components/SeccionContenido";
 import GuiaUsuario from "@/components/GuiaUsuario";
+import ContactSection from "@/components/ContactSection";
+import ContactForm from "@/components/ContactForm";
 
 export default function Home() {
+  const [isContactOpen, setIsContactOpen] = useState(false);
+
   const imagenHero = "/WelcomePage_HeroBackgroundImage.png";
   const secciones = [
     {
@@ -27,7 +34,7 @@ export default function Home() {
   ];
 
   return (
-    <div className="w-full flex flex-col items-center bg-white">
+    <div className="relative w-full flex flex-col items-center bg-white">
       <HeroSection imagenFondo={imagenHero} />
       
       {secciones.map((seccion, index) => (
@@ -42,6 +49,12 @@ export default function Home() {
       <InfGestion />
 
       <GuiaUsuario />
+
+      <ContactSection onContactClick={() => setIsContactOpen(true)} />
+
+      {isContactOpen && (
+        <ContactForm onClose={() => setIsContactOpen(false)} />
+      )}
     </div>
   );
 }

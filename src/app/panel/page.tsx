@@ -10,8 +10,12 @@ type ContentView = 'none' | 'dataTable' | 'uploadForm';
 
 export default function PanelPage() {
   const [contentView, setContentView] = useState<ContentView>('none');
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
-  const showDataTable = () => setContentView('dataTable');
+  const showDataTable = (category: string) => {
+    setContentView('dataTable');
+    setSelectedCategory(category);
+  };
   const showUploadForm = () => setContentView('uploadForm');
 
   return (
@@ -23,8 +27,9 @@ export default function PanelPage() {
       <div className="w-full flex-1 flex flex-col md:flex-row">
         <div className="w-full md:w-1/4 flex-shrink-0 p-4 md:p-6">
           <PanelSidebar
+            selectedCategory={selectedCategory}
             onSelectCategory={showDataTable}
-            onEditarCategorias={showDataTable}
+            onEditarCategorias={() => showDataTable('Editar categorías')}
           />
         </div>
 

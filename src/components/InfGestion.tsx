@@ -3,7 +3,7 @@ export default function InfGestion() {
 
     return (
         <section className="w-full py-16 bg-white">
-            <div className="py-12 px-8 bg-gradient-to-r from-blue-light to-green-base flex flex-col items-center justify-center gap-8">
+            <div className="py-12 px-8 bg-gradient-to-r from-green-light to-green-base flex flex-col items-center justify-center gap-8">
                 <h2 className="text-white-base text-3xl md:text-4xl font-bold text-center">
                     MIRÁ TODO LO QUE VENIMOS HACIENDO EN LOBERÍA
                 </h2>
