@@ -34,7 +34,7 @@ export default function Home() {
   ];
 
   return (
-    <div className="relative w-full flex flex-col items-center bg-white">
+    <div className="relative w-full flex flex-col justify-center items-center bg-white">
       <HeroSection imagenFondo={imagenHero} />
       
       {secciones.map((seccion, index) => (

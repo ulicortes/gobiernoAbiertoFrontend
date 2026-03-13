@@ -26,7 +26,7 @@ export default function Nav() {
         <>
             <nav className={`fixed top-0 left-0 right-0 z-50 w-full h-24 bg-black-base border-b-4 transition-colors duration-300 ${getBorderColor()} flex flex-row justify-between`}>
                 <div className="h-full flex justify-center items-center">
-                    <Link href={'/'}><img src="logo_municipio.png" alt="" className="w-4/5 pl-2" /></Link>
+                    <Link href={'/'}><img src="/logo_municipio.png" alt="" className="w-4/5 pl-2" /></Link>
                 </div>
                 {/* Desktop Navigation */}
                 <div className="hidden md:flex w-3/4 h-full flex-col justify-between items-end">
@@ -93,9 +93,9 @@ export default function Nav() {
                     </Link>
                 </div>
                 <div className="py-4 flex flex-row justify-around">
-                    <img className="w-6" src="Facebook.png" alt="" />
-                    <img className="w-6" src="Mail.png" alt="" />
-                    <img className="w-6" src="Instagram.png" alt="" />
+                    <img className="w-6" src="/Facebook.png" alt="" />
+                    <img className="w-6" src="/Mail.png" alt="" />
+                    <img className="w-6" src="/Instagram.png" alt="" />
                 </div>
             </div>
         </>

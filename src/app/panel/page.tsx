@@ -6,6 +6,8 @@ import DataTable from '@/components/DataTable';
 import { getTableDataForCategory } from '@/lib/tableData';
 import UploadForm from '@/components/UploadForm';
 import PanelHeader from '@/components/PanelHeader';
+import LoginUser from '@/components/LoginUser';
+import LoginMenu from '@/components/LoginMenu';
 
 type ContentView = 'none' | 'dataTable' | 'uploadForm';
 
@@ -21,7 +23,11 @@ export default function PanelPage() {
 
   const { rows, columns } = getTableDataForCategory(selectedCategory);
 
-  return (
+  let user = undefined;
+
+  if(!user) return <LoginMenu />
+
+  else return (
     <div className="w-full min-h-screen flex flex-col">
       {/* Header del panel */}
       <PanelHeader />

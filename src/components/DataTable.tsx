@@ -10,7 +10,7 @@ interface DataTableProps {
 
 export default function DataTable({ rows, columns }: DataTableProps) {
   return (
-    <Box sx={{ height: 600, width: '100%' }}>
+    <Box sx={{ height: 600, width: '90%' }}>
       <DataGrid
         rows={rows}
         columns={columns}
@@ -23,6 +23,11 @@ export default function DataTable({ rows, columns }: DataTableProps) {
         }}
         pageSizeOptions={[10]}
         checkboxSelection
+        // autosizeOnMount // Ajusta el ancho al cargar
+        // autosizeOptions={{
+        //   includeOutliers: true,
+        //   includeHeaders: true,
+        // }}
         disableRowSelectionOnClick
       />
     </Box>

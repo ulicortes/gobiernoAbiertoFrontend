@@ -12,14 +12,13 @@ export default function TransparenciaLayout({
     let path = usePathname();
     let txt = path.split('/')[2]?.toUpperCase();
     return (
-        <div className="w-full h-fit md:h-250 min-h-screen mt-24 bg-transparent z-50 flex flex-col justify-start md:justify-start items-center">
-            {/* <div className="w-full h-1/3 flex flex-col py-2 layout-transparencia"></div> */}
-            <LoginUser />
-            {/* <h1 className="hidden md:inline text-green-base text-shadow-lg text-shadow-black text-center text-5xl pb-10 font-bold w-full h-fit">TRANSPARENCIA</h1> */}
+        <div className="w-full h-fit md:h-250 min-h-screen mt-24. bg-transparent z-50 flex flex-col md:justify-center items-center">
             <h1 className="inline md:hidden text-black-base text-center text-5xl pb-10 font-bold w-full h-fit">{txt || 'TRANSPARENCIA'}</h1>
-            <div className="animate-fade w-full h-full max-h-screen. flex flex-col-reverse md:flex-row justify-start">
-                <div className="w-full md:w-2/5 h-full py-10 md:py-0 flex flex-col justify-start items-center">
+            <div className="animate-fade w-full h-full flex flex-col-reverse md:flex-row justify-start items-center">
+
+                <div className="w-full md:w-2/5 h-full py-10 md:py-0 flex flex-col justify-center items-center">
                     <MenuTransparencia />
+
                     <div className="py-4"></div>
                     {path == '/transparencia/recibos' || path == '/transparencia/ddjj' || path == '/transparencia/nomina'
                         ? <Contacto titulo="DIRECCIÓN DE RECURSOS HUMANOS"
@@ -40,7 +39,9 @@ export default function TransparenciaLayout({
                         :
                         <></>}
                 </div>
+
                 {children}
+
             </div>
         </div>
     );
