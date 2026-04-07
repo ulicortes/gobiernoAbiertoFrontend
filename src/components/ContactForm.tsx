@@ -2,13 +2,13 @@ import { useState } from "react";
 import {
   TextField,
   Checkbox,
-  FormControlLabel,
   Button,
   Box,
   Typography,
   Link,
 } from "@mui/material";
 import { Controller, useForm, FieldValues, FieldError } from "react-hook-form";
+import { submitContactForm } from "@/lib/resendAction";
 
 type ContactFormProps = {
   onClose: () => void;
@@ -23,6 +23,7 @@ type ContactFormValues = {
 
 export default function ContactForm({ onClose }: ContactFormProps) {
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
   const {
     control,
@@ -41,16 +42,20 @@ export default function ContactForm({ onClose }: ContactFormProps) {
 
   const subscribe = watch("subscribe");
 
-  const onSubmit = (data: ContactFormValues) => {
-    const payload = {
-      name: data.name,
-      message: data.message,
-      phone: data.phone,
-      whatsapp: data.subscribe,
-    };
-
-    console.log(payload);
-    setIsSubmitted(true);
+  const onSubmit = async (data: ContactFormValues) => {
+    setSubmitError("");
+    try {
+      const formData = new FormData();
+      formData.append("name", data.name);
+      formData.append("message", data.message);
+      formData.append("phone", data.phone ?? "");
+      formData.append("subscribe", data.subscribe ? "on" : "off");
+      await submitContactForm(formData);
+      setIsSubmitted(true);
+    } catch (error) {
+      console.error(error);
+      setSubmitError("No se pudo enviar el mensaje. Intentá nuevamente.");
+    }
   };
 
   return (
@@ -59,7 +64,7 @@ export default function ContactForm({ onClose }: ContactFormProps) {
         <button
           type="button"
           onClick={onClose}
-          className="absolute top-3 right-3 text-black-base hover:text-red-base text-xl font-bold"
+          className="absolute top-3 right-3 text-black-base hover:text-red-base text-xl font-bold cursor-pointer"
           aria-label="Cerrar contacto"
         >
           X
@@ -121,16 +126,15 @@ export default function ContactForm({ onClose }: ContactFormProps) {
               name="subscribe"
               control={control}
               render={({ field }: { field: FieldValues }) => (
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      {...field}
-                      checked={field.value}
-                    />
-                  }
-                  label="Quiero recibir noticias del municipio por WhatsApp"
-                  sx={{ color: "var(--color-black-dark)" }}
-                />
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                  <Checkbox
+                    {...field}
+                    checked={field.value}
+                  />
+                  <Typography sx={{ color: "var(--color-black-dark)" }}>
+                    Quiero recibir noticias del municipio por WhatsApp
+                  </Typography>
+                </Box>
               )}
             />
 
@@ -139,11 +143,31 @@ export default function ContactForm({ onClose }: ContactFormProps) {
               fullWidth
               hidden={!subscribe}
               {...register("phone", {
+                onChange: (event) => {
+                  event.target.value = event.target.value.replace(/\D/g, "");
+                },
                 validate: (value: string) =>
                   !subscribe ||
                   value.trim() !== "" ||
                   "El número de teléfono es obligatorio",
+                minLength: {
+                  value: 8,
+                  message: "Ingresá un número válido (mínimo 8 dígitos)",
+                },
+                maxLength: {
+                  value: 15,
+                  message: "Ingresá un número válido (máximo 15 dígitos)",
+                },
+                pattern: {
+                  value: /^\d*$/,
+                  message: "Solo se permiten números",
+                },
               })}
+              inputProps={{
+                inputMode: "numeric",
+                pattern: "[0-9]*",
+                maxLength: 15,
+              }}
               error={!!errors.phone}
               helperText={errors.phone?.message}
             />
@@ -152,6 +176,11 @@ export default function ContactForm({ onClose }: ContactFormProps) {
             sx={{ backgroundColor: "var(--color-green-base)" }}>
               Enviar mensaje
             </Button>
+            {submitError && (
+              <Typography sx={{ color: "red", fontSize: 14 }}>
+                {submitError}
+              </Typography>
+            )}
           </Box>
         )}
       </div>
