@@ -31,9 +31,9 @@ export default function Nav() {
                 {/* Desktop Navigation */}
                 <div className="hidden md:flex w-3/4 h-full flex-col justify-between items-end">
                     <div className="w-1/5 bg-green-base py-1 rounded-bl-xl flex flex-row justify-around">
-                        <img className="w-6 cursor-pointer transition-transform duration-200 hover:scale-110" src="Facebook.png" alt="" />
-                        <img className="w-6 cursor-pointer transition-transform duration-200 hover:scale-110" src="Mail.png" alt="" />
-                        <img className="w-6 cursor-pointer transition-transform duration-200 hover:scale-110" src="Instagram.png" alt="" />
+                        <img className="w-6 cursor-pointer transition-transform duration-200 hover:scale-110" src="/Facebook.png" alt="" />
+                        <img className="w-6 cursor-pointer transition-transform duration-200 hover:scale-110" src="/Mail.png" alt="" />
+                        <img className="w-6 cursor-pointer transition-transform duration-200 hover:scale-110" src="/Instagram.png" alt="" />
                     </div>
                     <div className="w-5/5 flex flex-row self-center justify-evenly">
                         <Link 

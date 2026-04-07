@@ -19,7 +19,7 @@
   --color-red-base: #ED3338;
   --color-yellow-base: #FDB92E;
 
-  --animate-fade: fade 1s ease-in-out;
+  --animate-fade: fade 0.5s ease-in-out;
 
   @keyframes fade {
     0% {
@@ -32,7 +32,7 @@
     }
   }
 
-  --animate-start: start 0.5s ease-in-out;
+  --animate-start: start 0.3s ease-in-out;
 
   @keyframes start {
     0% {

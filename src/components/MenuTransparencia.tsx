@@ -8,7 +8,7 @@ import { usePathname } from 'next/navigation';
 export default function MenuTransparencia() {
     let path = usePathname();
 
-    return <div className="w-5/6 h-80 bg-[#BFEEFF] shadow-lg/40 rounded-lg text-black text-center flex flex-col justify-evenly items-center">
+    return <div className="w-5/6 h-80 px-2 bg-[#BFEEFF] shadow-lg/40 rounded-lg text-black text-center flex flex-col justify-evenly items-center">
         <Link href={'/transparencia/haberes'}>
             <h1 className={`font-bold hover:text-blue-dark ${path == '/transparencia/haberes' ? 'text-blue-base' : ''}`}>
                 HABERES DE EMPLEADOS</h1>

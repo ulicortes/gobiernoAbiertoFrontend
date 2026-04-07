@@ -13,7 +13,7 @@ export default function HeroSection({ imagenFondo }: HeroSectionProps) {
           className="absolute inset-0 bg-cover bg-center"
           style={{
             backgroundImage: `url(${imagenFondo})`,
-            filter: 'blur(5px)',
+            filter: 'blur(3px)',
             transform: 'scale(1.1)',
           }}
         ></div>

@@ -18,29 +18,25 @@ type ContactFormValues = {
   name: string;
   message: string;
   subscribe: boolean;
-  phone: string;
 };
 
 export default function ContactForm({ onClose }: ContactFormProps) {
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [submittedWithSubscribe, setSubmittedWithSubscribe] = useState(false);
   const [submitError, setSubmitError] = useState("");
 
   const {
     control,
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm<ContactFormValues>({
     defaultValues: {
       name: "",
       message: "",
       subscribe: false,
-      phone: "",
     },
   });
-
-  const subscribe = watch("subscribe");
 
   const onSubmit = async (data: ContactFormValues) => {
     setSubmitError("");
@@ -48,10 +44,13 @@ export default function ContactForm({ onClose }: ContactFormProps) {
       const formData = new FormData();
       formData.append("name", data.name);
       formData.append("message", data.message);
-      formData.append("phone", data.phone ?? "");
       formData.append("subscribe", data.subscribe ? "on" : "off");
       await submitContactForm(formData);
       setIsSubmitted(true);
+      setSubmittedWithSubscribe(data.subscribe);
+      if (data.subscribe) {
+        window.open("https://wa.me/5492261413354?text=Hola,%20quiero%20recibir%20noticias", "_blank");
+      }
     } catch (error) {
       console.error(error);
       setSubmitError("No se pudo enviar el mensaje. Intentá nuevamente.");
@@ -70,14 +69,14 @@ export default function ContactForm({ onClose }: ContactFormProps) {
           X
         </button>
         {isSubmitted ? (
-          <Box sx={{ textAlign: "center", py: 8 }}>
+          <Box sx={{ textAlign: "center", py: 5 }}>
             <Typography
               variant="h5"
               sx={{ color: "var(--color-black-dark)", mb: 2 }}
             >
               ¡Gracias por escribirnos!
             </Typography>
-            <Typography variant="body1" sx={{ color: "var(--color-black-dark)" }}>
+            <Typography variant="body1" sx={{ color: "var(--color-black-dark)", mb: 2 }}>
               Recibimos tu mensaje y será leído por el equipo municipal.
               <br />
               Recordá que también podés comunicarte con Atención al Vecino al{" "}
@@ -85,6 +84,11 @@ export default function ContactForm({ onClose }: ContactFormProps) {
                 0800 999 5623
               </Link>
             </Typography>
+            {submittedWithSubscribe && (
+              <Typography variant="body1" sx={{ color: "var(--color-black-dark)", fontWeight: "bold" }}>
+                Fue redirigido a WhatsApp. Muchas gracias por elegir el servicio de difusión del municipio.
+              </Typography>
+            )}
           </Box>
         ) : (
           <Box
@@ -136,40 +140,6 @@ export default function ContactForm({ onClose }: ContactFormProps) {
                   </Typography>
                 </Box>
               )}
-            />
-
-            <TextField
-              label="Número de teléfono"
-              fullWidth
-              hidden={!subscribe}
-              {...register("phone", {
-                onChange: (event) => {
-                  event.target.value = event.target.value.replace(/\D/g, "");
-                },
-                validate: (value: string) =>
-                  !subscribe ||
-                  value.trim() !== "" ||
-                  "El número de teléfono es obligatorio",
-                minLength: {
-                  value: 8,
-                  message: "Ingresá un número válido (mínimo 8 dígitos)",
-                },
-                maxLength: {
-                  value: 15,
-                  message: "Ingresá un número válido (máximo 15 dígitos)",
-                },
-                pattern: {
-                  value: /^\d*$/,
-                  message: "Solo se permiten números",
-                },
-              })}
-              inputProps={{
-                inputMode: "numeric",
-                pattern: "[0-9]*",
-                maxLength: 15,
-              }}
-              error={!!errors.phone}
-              helperText={errors.phone?.message}
             />
 
             <Button variant="contained" type="submit"

@@ -14,12 +14,12 @@ export default function TransparenciaLayout({
     return (
         <div className="w-full h-fit md:h-250 min-h-screen mt-24. bg-transparent z-50 flex flex-col md:justify-center items-center">
             <h1 className="inline md:hidden text-black-base text-center text-5xl pb-10 font-bold w-full h-fit">{txt || 'TRANSPARENCIA'}</h1>
-            <div className="animate-fade w-full h-full flex flex-col-reverse md:flex-row justify-start items-center">
+            <div className="w-full h-full pt-50 flex flex-col-reverse md:flex-row justify-start items-start">
 
-                <div className="w-full md:w-2/5 h-full py-10 md:py-0 flex flex-col justify-center items-center">
+                <div className="w-full md:w-2/5 h-full flex flex-col items-center gap-10">
                     <MenuTransparencia />
 
-                    <div className="py-4"></div>
+                    {/* <div className="py-4"></div> */}
                     {path == '/transparencia/recibos' || path == '/transparencia/ddjj' || path == '/transparencia/nomina'
                         ? <Contacto titulo="DIRECCIÓN DE RECURSOS HUMANOS"
                             responsable="Directora de Recursos Humanos Dra. Clara Rodriguez"
