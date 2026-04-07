@@ -1,13 +1,31 @@
 'use client'
 
+import { UserLogin } from "@/types/userLogin"
 import Footer from "./Footer"
 import Nav from "./Nav"
+import { servicio } from "@/app/servicios/servicio"
+import { useEffect } from "react"
+import { redirect } from "next/navigation"
+import { navigate } from "next/dist/client/components/segment-cache/navigation"
 
 interface LoginMenuProps {
   onClose?: () => void
 }
 
 export default function LoginMenu({ onClose }: LoginMenuProps) {
+
+  async function login(formData: FormData) {
+    let data = {
+      username: formData.get('user')?.toString(),
+      password: formData.get('password')?.toString()
+    }
+    try {
+      await servicio.login(data)
+      redirect('/panel')
+    } catch (error) {
+      console.log(error)
+    }
+  }
   return (
     <div className="w-full min-h-screen h-[110%] flex flex-col justify-between items-center">
       <Nav />
@@ -31,18 +49,19 @@ export default function LoginMenu({ onClose }: LoginMenuProps) {
 
         {/* Formulario (tarjeta blanca) */}
         <form
-          action=""
+          action={login}
           className="w-[85%] md:w-[70%] bg-white rounded-xl p-6 flex flex-col gap-4 shadow-md"
-          onSubmit={(e) => e.preventDefault()}
+        // onSubmit={(e) => e.preventDefault()}
         >
           <div className="w-full flex flex-col gap-1">
             <label htmlFor="login-email" className="text-black text-base font-normal">
-              Email
+              Usuario
             </label>
             <input
-              id="login-email"
-              type="email"
-              placeholder="Value"
+              id="login-user"
+              type="text"
+              placeholder="Usuario"
+              name="user"
               className="w-full border border-gray-300 rounded-lg px-3 py-2.5 bg-white text-black placeholder:text-gray-400 focus:outline-none focus:border-gray-500"
             />
           </div>
@@ -53,7 +72,8 @@ export default function LoginMenu({ onClose }: LoginMenuProps) {
             <input
               id="login-password"
               type="password"
-              placeholder="Value"
+              placeholder="Contraseña"
+              name="pass"
               className="w-full border border-gray-300 rounded-lg px-3 py-2.5 bg-white text-black placeholder:text-gray-400 focus:outline-none focus:border-gray-500"
             />
           </div>

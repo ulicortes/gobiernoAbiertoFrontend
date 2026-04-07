@@ -1,12 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import PanelSidebar from '@/components/PanelSidebar';
 import DataTable from '@/components/DataTable';
 import { getTableDataForCategory } from '@/lib/tableData';
 import UploadForm from '@/components/UploadForm';
 import PanelHeader from '@/components/PanelHeader';
-import LoginUser from '@/components/LoginUser';
 import LoginMenu from '@/components/LoginMenu';
 
 type ContentView = 'none' | 'dataTable' | 'uploadForm';
@@ -14,7 +13,15 @@ type ContentView = 'none' | 'dataTable' | 'uploadForm';
 export default function PanelPage() {
   const [contentView, setContentView] = useState<ContentView>('none');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  // let[user, setUser] = useState(null);
+  // useEffect(() => {
+  //   const savedData = localStorage.getItem('userData');
+  //   const user = savedData ? JSON.parse(savedData) : null;
+  //   setUser(user);
 
+  // }, [])
+  // if(!user) return <LoginMenu />
+  
   const showDataTable = (category: string) => {
     setContentView('dataTable');
     setSelectedCategory(category);
@@ -22,12 +29,8 @@ export default function PanelPage() {
   const showUploadForm = () => setContentView('uploadForm');
 
   const { rows, columns } = getTableDataForCategory(selectedCategory);
-
-  let user = undefined;
-
-  if(!user) return <LoginMenu />
-
-  else return (
+  
+  return (
     <div className="w-full min-h-screen flex flex-col">
       {/* Header del panel */}
       <PanelHeader />

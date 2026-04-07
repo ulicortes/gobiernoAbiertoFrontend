@@ -1,6 +1,5 @@
 'use client'
 import Contacto from "@/components/Contacto";
-import LoginUser from "@/components/LoginUser";
 import MenuTransparencia from "@/components/MenuTransparencia";
 import { usePathname } from "next/navigation";
 
@@ -11,6 +10,7 @@ export default function TransparenciaLayout({
 }>) {
     let path = usePathname();
     let txt = path.split('/')[2]?.toUpperCase();
+
     return (
         <div className="w-full h-fit md:h-250 min-h-screen mt-24. bg-transparent z-50 flex flex-col md:justify-center items-center">
             <h1 className="inline md:hidden text-black-base text-center text-5xl pb-10 font-bold w-full h-fit">{txt || 'TRANSPARENCIA'}</h1>
