@@ -3,7 +3,7 @@
 import { UserLogin } from "@/types/userLogin"
 import Footer from "./Footer"
 import Nav from "./Nav"
-import { servicio } from "@/app/servicios/servicio"
+import { servicio } from "@/services/service"
 import { useEffect } from "react"
 import { redirect } from "next/navigation"
 import { navigate } from "next/dist/client/components/segment-cache/navigation"

@@ -1,5 +1,5 @@
 'use client'
-import { servicio } from "@/app/servicios/servicio";
+import { servicio } from "@/services/service";
 import DataTable from "@/components/DataTable";
 import { columnsAdmin, columnsUser } from "@/lib/TableColumns";
 import { getTableDataForCategory } from "@/lib/tableData";
