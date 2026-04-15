@@ -79,6 +79,22 @@ export const servicio = {
       throw error;
     }
   },
+  editarArchivo: async (id: string, name: string) => {
+    try {
+      const response = await api.patch(`/file/${id}`, { name });
+      return response.data;
+    } catch (e) {
+      console.log(e);
+    }
+  },
+  borrarArchivo: async (id: string) => {
+    try {
+      const response = await api.delete(`/file/${id}`);
+      return response.data;
+    } catch (e) {
+      console.log(e);
+    }
+  },
   insertarCategoria: async (data: NewCategory) => {
     try {
       const response = await api.post("category", data);

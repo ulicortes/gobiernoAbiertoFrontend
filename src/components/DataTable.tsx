@@ -14,12 +14,16 @@ interface DataTableProps {
   rows: readonly GridValidRowModel[];
   columns: readonly GridColDef[];
   showActions?: boolean;
+  onRowUpdate?: (newRow: GridValidRowModel) => Promise<GridValidRowModel>;
+  onRowDelete?: (id: any) => void;
 }
 
 export default function DataTable({
   rows,
   columns,
   showActions,
+  onRowUpdate,
+  onRowDelete,
 }: DataTableProps) {
   const actionsColumn: GridColDef = {
     field: "actions",
@@ -28,25 +32,24 @@ export default function DataTable({
     width: 120,
     getActions: (params) => [
       <GridActionsCellItem
-        key="edit"
-        icon={<EditIcon />}
-        label="Editar"
-        onClick={() => updateItem()}
-      />,
-      <GridActionsCellItem
         key="delete"
         icon={<DeleteIcon />}
         label="Eliminar"
-        onClick={() => deleteItem()}
+        onClick={() => deleteItem(params.row.id)}
       />,
     ],
   };
-  async function updateItem() {
-    console.log("Editar");
-  }
+  const processRowUpdate = async (newRow: GridValidRowModel) => {
+    if (onRowUpdate) {
+      return await onRowUpdate(newRow);
+    }
+    return newRow;
+  };
 
-  async function deleteItem() {
-    console.log("Borrar");
+  async function deleteItem(id: any) {
+    if (onRowDelete) {
+      onRowDelete(id);
+    }
   }
 
   const finalColumns = showActions ? [...columns, actionsColumn] : columns;
@@ -71,6 +74,7 @@ export default function DataTable({
         //   includeHeaders: true,
         // }}
         disableRowSelectionOnClick
+        processRowUpdate={processRowUpdate}
       />
     </Box>
   );

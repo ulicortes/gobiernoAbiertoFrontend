@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 
-export default function Nav() {
+export default function Header() {
     let path = usePathname()
     const [hoverBorderColor, setHoverBorderColor] = useState<string | null>(null);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);

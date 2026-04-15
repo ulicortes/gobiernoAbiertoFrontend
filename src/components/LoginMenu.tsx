@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Footer from "./Footer";
-import Nav from "./Nav";
+import Header from "./Header";
 import { servicio } from "@/services/service";
 import { useRouter } from "next/navigation";
 
@@ -33,8 +33,7 @@ export default function LoginMenu({ onClose }: LoginMenuProps) {
     }
   }
   return (
-    <div className="w-full min-h-screen h-[110%] flex flex-col justify-between items-center">
-      <Nav />
+    <div className="w-full min-h-screen flex flex-col justify-between items-center">
       <div className="w-[70%] h-fit mt-30 max-w-md md:max-w-xl bg-[#F5F5F5] rounded-2xl p-6 md:p-2 relative shadow-xl flex flex-col items-center gap-6 md:gap-8">
         {/* Cerrar */}
         {onClose && (
@@ -113,7 +112,6 @@ export default function LoginMenu({ onClose }: LoginMenuProps) {
           />
         </div>
       </div>
-      <Footer />
     </div>
   );
 }

@@ -13,7 +13,7 @@ import { AuthProvider } from "@/components/AuthProvider";
 import { columnsFile, columnsCategories } from "@/lib/TableColumns";
 import { GridColDef } from "@mui/x-data-grid";
 import { servicio } from "@/services/service";
-import CategoryTable from "@/components/CategoryTable";
+
 import { ElementoTabla } from "@/types/elemento";
 
 type ContentView = "none" | "dataTable" | "uploadForm";
@@ -34,6 +34,22 @@ export default function PanelPage() {
   const [rows, setRows] = useState<ElementoTabla[]>([]);
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState<boolean>(false);
+  const [rowsCat, setRowsCat] = useState<any[]>([]);
+
+  async function cargarCategorias() {
+    try {
+      const r = await servicio.getCategorias();
+      setRowsCat(r || []);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  useEffect(() => {
+    if (selectedCategory === "Editar categorías") {
+      cargarCategorias();
+    }
+  }, [message, selectedCategory]);
 
   async function showDataTable(category: string) {
     try {
@@ -90,7 +106,48 @@ export default function PanelPage() {
     setSelectedCategory(null);
   };
 
-  const columns: GridColDef[] = columnsFile;
+  const handleRowUpdate = async (newRow: any) => {
+    try {
+      await servicio.editarArchivo(newRow.id, newRow.title);
+      return newRow;
+    } catch (e) {
+      console.log(e);
+      return newRow;
+    }
+  };
+
+  const handleFileDelete = async (id: any) => {
+    try {
+      await servicio.borrarArchivo(id);
+      getRows();
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const handleCategoryUpdate = async (newRow: any) => {
+    try {
+      await servicio.editarCategoria(newRow.id, { name: newRow.name, section: newRow.section });
+      cargarCategorias();
+      return newRow;
+    } catch (e) {
+      console.log(e);
+      return newRow;
+    }
+  };
+
+  const handleCategoryDelete = async (id: any) => {
+    try {
+      await servicio.borrarCategoria(id);
+      cargarCategorias();
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const columns: GridColDef[] = columnsFile.map((c) => 
+    c.field === "title" ? { ...c, editable: true } : c
+  );
   const cat_columns: GridColDef[] = columnsCategories;
 
   return (
@@ -123,16 +180,12 @@ export default function PanelPage() {
               {contentView === "dataTable" &&
                 selectedCategory === "Editar categorías" && (
                   <div>
-                    {/*<button
-                      className="bg-black text-white p-2 cursor-pointer"
-                      onClick={() => cargarCategorias()}
-                    >
-                      Cargar categorias
-                    </button>*/}
-                    <CategoryTable
-                      msg={message}
+                    <DataTable
+                      rows={rowsCat}
                       columns={cat_columns}
                       showActions
+                      onRowUpdate={handleCategoryUpdate}
+                      onRowDelete={handleCategoryDelete}
                     />
                   </div>
                 )}
@@ -140,7 +193,13 @@ export default function PanelPage() {
               {contentView === "dataTable" &&
                 selectedCategory !== "Editar categorías" &&
                 !loading && (
-                  <DataTable rows={rows} columns={columns} showActions />
+                  <DataTable
+                    rows={rows}
+                    columns={columns}
+                    showActions
+                    onRowUpdate={handleRowUpdate}
+                    onRowDelete={handleFileDelete}
+                  />
                 )}
               {contentView === "uploadForm" && (
                 <UploadForm
