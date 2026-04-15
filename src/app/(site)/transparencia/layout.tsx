@@ -20,7 +20,7 @@ export default function TransparenciaLayout({
                     <MenuTransparencia />
 
                     {/* <div className="py-4"></div> */}
-                    {path == '/transparencia/recibos' || path == '/transparencia/ddjj' || path == '/transparencia/nomina'
+                    {path == '/transparencia/recibos-de-funcionarios' || path == '/transparencia/declaraciones-juradas-de-funcionarios' || path == '/transparencia/nomina-del-personal'
                         ? <Contacto titulo="DIRECCIÓN DE RECURSOS HUMANOS"
                             responsable="Directora de Recursos Humanos Dra. Clara Rodriguez"
                             direccion="Avenida San Martin 1150"
@@ -29,7 +29,7 @@ export default function TransparenciaLayout({
                         />
                         :
                         <></>}
-                    {path == '/transparencia/reportes'
+                    {path == '/transparencia/reportes-economicos'
                         ? <Contacto titulo="SECRETARÍA DE ECONOMÍA Y HACIENDA"
                             responsable="Directora: Cdora. Magdalena De Noia"
                             direccion="Avenida San Martin 1150"
