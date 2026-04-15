@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { AuthProvider } from "@/components/AuthProvider";
 
 export const metadata: Metadata = {
   title: "Gobierno abierto - Loberìa",
@@ -15,7 +16,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="w-full h-screen min-h-screen bg-white">
-        {children}
+        {/* <AuthProvider> */}
+          {children}
+        {/* </AuthProvider> */}
       </body>
     </html>
   );

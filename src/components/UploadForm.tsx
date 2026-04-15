@@ -1,41 +1,46 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { TextField, MenuItem, Button, Box, Typography } from '@mui/material';
-import { HOME_CATEGORIES, TRANSPARENCIA_CATEGORIES } from './PanelSidebar';
+import { useState, useEffect } from "react";
+import { TextField, MenuItem, Button, Box, Typography } from "@mui/material";
+import { HOME_CATEGORIES, TRANSPARENCIA_CATEGORIES } from "./PanelSidebar";
+import { servicio } from "@/services/service";
 
 type UploadFormProps = {
   initialFile?: File | null;
   initialCategory?: string | null;
 };
 
-export default function UploadForm({ initialFile, initialCategory }: UploadFormProps) {
-  const [file, setFile] = useState<File | null>(null);
+export default function UploadForm({
+  initialFile,
+  initialCategory,
+}: UploadFormProps) {
+  const [file, setFile] = useState<File | null>(initialFile);
   const [dragActive, setDragActive] = useState(false);
 
+  const [message, setMessage] = useState<String>('');
   // Form fields
-  const [fileName, setFileName] = useState('');
-  const [category, setCategory] = useState('');
-  const [quarter, setQuarter] = useState<string>('');
-  const [year, setYear] = useState<string>('');
+  const [fileName, setFileName] = useState("");
+  const [category, setCategory] = useState("");
+  const [quarter, setQuarter] = useState<string>("");
+  const [year, setYear] = useState<string>("");
 
   const handleFile = (selected: File) => {
     setFile(selected);
     setFileName(selected.name);
   };
 
-  useEffect(() => {
-    if (initialFile) handleFile(initialFile);
-  }, [initialFile]);
+  // useEffect(() => {
+  //   if (initialFile) handleFile(initialFile);
+  // }, [initialFile]);
 
-  useEffect(() => {
-    if (initialCategory) setCategory(initialCategory);
-  }, [initialCategory]);
+  // useEffect(() => {
+  //   if (initialCategory) setCategory(initialCategory);
+  // }, [initialCategory]);
 
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    setDragActive(e.type === 'dragenter' || e.type === 'dragover');
+    setDragActive(e.type === "dragenter" || e.type === "dragover");
   };
 
   const handleDrop = (e: React.DragEvent) => {
@@ -48,23 +53,32 @@ export default function UploadForm({ initialFile, initialCategory }: UploadFormP
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selected = e.target.files?.[0];
+    setMessage('');
     if (selected) handleFile(selected);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!file) return;
-    
+    try {
+      const res = await servicio.insertArchivo(file, category);
+      if(res) { 
+        setMessage('Se agrego el archivo exitosamente!');
+        setFile(null);
+      }
+    } catch (error) {
+      throw Error();
+    }
     // Aquí se puede integrar la subida real (API, etc.)
-    console.log('Subir archivo:', file.name);
-    console.log({ fileName, category, quarter, year });
-    alert(`Archivo seleccionado: ${file.name}. Categoria: ${category}. Integrar con tu API de subida.`);
   };
 
-  const allCategories = [...HOME_CATEGORIES, ...TRANSPARENCIA_CATEGORIES];
+  const allCategories = [...TRANSPARENCIA_CATEGORIES];
 
   return (
-    <form onSubmit={handleSubmit} className="w-full max-w-xl mx-auto p-6 bg-white rounded-xl border border-gray-200 shadow-sm">
+    <form
+      onSubmit={handleSubmit}
+      className="w-full max-w-xl mx-auto p-6 bg-white rounded-xl border border-gray-200 shadow-sm"
+    >
       <h2 className="text-xl font-bold text-black-base mb-4">Subir archivo</h2>
       <div
         onDragEnter={handleDrag}
@@ -72,7 +86,9 @@ export default function UploadForm({ initialFile, initialCategory }: UploadFormP
         onDragOver={handleDrag}
         onDrop={handleDrop}
         className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors mb-4 ${
-          dragActive ? 'border-blue-base bg-blue-50' : 'border-gray-300 hover:border-gray-400'
+          dragActive
+            ? "border-blue-base bg-blue-50"
+            : "border-gray-300 hover:border-gray-400"
         }`}
       >
         <input
@@ -84,18 +100,25 @@ export default function UploadForm({ initialFile, initialCategory }: UploadFormP
         />
         <label htmlFor="file-upload" className="cursor-pointer block">
           <span className="text-gray-600">
-            Arrastrá un archivo aquí o <span className="text-blue-base font-medium">elegí desde tu equipo</span>
+            Arrastrá un archivo aquí o{" "}
+            <span className="text-blue-base font-medium">
+              elegí desde tu equipo
+            </span>
           </span>
         </label>
         {file && (
-          <Typography sx={{ mt: 2, fontSize: '0.9rem', color: 'var(--color-black-base)' }}>
+          <Typography
+            sx={{ mt: 2, fontSize: "0.9rem", color: "var(--color-black-base)" }}
+          >
             Archivo actualmente seleccionado: <strong>{file.name}</strong>
           </Typography>
         )}
       </div>
-
+      {message !== '' && (
+      <h1 className="text-black text-xl w-full text-center">{message}</h1>
+	)}
       {file && (
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, mb: 2 }}>
+        <Box sx={{ display: "flex", flexDirection: "column", gap: 3, mb: 2 }}>
           <TextField
             label="Nombre del archivo"
             value={fileName}
@@ -103,7 +126,7 @@ export default function UploadForm({ initialFile, initialCategory }: UploadFormP
             fullWidth
             required
           />
-          
+
           <TextField
             label="Categoría del archivo"
             select
@@ -112,15 +135,15 @@ export default function UploadForm({ initialFile, initialCategory }: UploadFormP
             fullWidth
             required
           >
-            {allCategories.map((cat) => (
-              <MenuItem key={cat} value={cat}>
-                {cat}
+            {allCategories.map((cat, index) => (
+              <MenuItem key={index} value={cat.id}>
+                {cat.name}
               </MenuItem>
             ))}
           </TextField>
 
-          {category === 'Reportes económicos' && (
-            <Box sx={{ display: 'flex', gap: 2 }}>
+          {category === "Reportes económicos" && (
+            <Box sx={{ display: "flex", gap: 2 }}>
               <TextField
                 label="Trimestre"
                 select
@@ -134,7 +157,7 @@ export default function UploadForm({ initialFile, initialCategory }: UploadFormP
                 <MenuItem value="3">3</MenuItem>
                 <MenuItem value="4">4</MenuItem>
               </TextField>
-              
+
               <TextField
                 label="Año"
                 type="text"
@@ -147,7 +170,7 @@ export default function UploadForm({ initialFile, initialCategory }: UploadFormP
                 }}
                 fullWidth
                 required
-                inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
+                inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
               />
             </Box>
           )}
@@ -155,13 +178,18 @@ export default function UploadForm({ initialFile, initialCategory }: UploadFormP
           <Button
             type="submit"
             variant="contained"
-            disabled={!file || !fileName || !category || (category === 'Reportes económicos' && (!quarter || !year))}
+            disabled={
+              !file ||
+              !fileName ||
+              !category ||
+              (category === "Reportes económicos" && (!quarter || !year))
+            }
             sx={{
               mt: 1,
               py: 1.5,
-              backgroundColor: 'var(--color-blue-base)',
-              '&:hover': { backgroundColor: 'var(--color-blue-dark)' },
-              '&.Mui-disabled': { backgroundColor: '#c0c0c0', color: '#666' }
+              backgroundColor: "var(--color-blue-base)",
+              "&:hover": { backgroundColor: "var(--color-blue-dark)" },
+              "&.Mui-disabled": { backgroundColor: "#c0c0c0", color: "#666" },
             }}
           >
             Subir

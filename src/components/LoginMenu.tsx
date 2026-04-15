@@ -1,29 +1,34 @@
-'use client'
+"use client";
 
-import { UserLogin } from "@/types/userLogin"
-import Footer from "./Footer"
-import Nav from "./Nav"
-import { servicio } from "@/services/service"
-import { useEffect } from "react"
-import { redirect } from "next/navigation"
-import { navigate } from "next/dist/client/components/segment-cache/navigation"
+import Footer from "./Footer";
+import Nav from "./Nav";
+import { servicio } from "@/services/service";
+import { redirect, useRouter } from "next/navigation";
 
 interface LoginMenuProps {
-  onClose?: () => void
+  onClose?: () => void;
 }
 
 export default function LoginMenu({ onClose }: LoginMenuProps) {
+  const router = useRouter();
 
   async function login(formData: FormData) {
-    let data = {
-      username: formData.get('user')?.toString(),
-      password: formData.get('password')?.toString()
-    }
+    const data = {
+      username: formData.get("user")?.toString(),
+      password: formData.get("pass")?.toString(),
+    };
     try {
-      await servicio.login(data)
-      redirect('/panel')
+      const res = await servicio.login(data);
+      if (!res) {
+        redirect("/login");
+        return;
+      }
+
+      localStorage.setItem("data", JSON.stringify(res));
     } catch (error) {
-      console.log(error)
+      console.log(error);
+    } finally {
+      redirect("/panel");
     }
   }
   return (
@@ -51,10 +56,13 @@ export default function LoginMenu({ onClose }: LoginMenuProps) {
         <form
           action={login}
           className="w-[85%] md:w-[70%] bg-white rounded-xl p-6 flex flex-col gap-4 shadow-md"
-        // onSubmit={(e) => e.preventDefault()}
+          // onSubmit={(e) => e.preventDefault()}
         >
           <div className="w-full flex flex-col gap-1">
-            <label htmlFor="login-email" className="text-black text-base font-normal">
+            <label
+              htmlFor="login-email"
+              className="text-black text-base font-normal"
+            >
               Usuario
             </label>
             <input
@@ -66,7 +74,10 @@ export default function LoginMenu({ onClose }: LoginMenuProps) {
             />
           </div>
           <div className="w-full flex flex-col gap-1">
-            <label htmlFor="login-password" className="text-black text-base font-normal">
+            <label
+              htmlFor="login-password"
+              className="text-black text-base font-normal"
+            >
               Contraseña
             </label>
             <input
@@ -102,5 +113,5 @@ export default function LoginMenu({ onClose }: LoginMenuProps) {
       </div>
       <Footer />
     </div>
-  )
+  );
 }

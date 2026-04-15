@@ -1,14 +1,41 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { Box, TextField, MenuItem, Button } from '@mui/material';
+import { Dispatch, SetStateAction, useState } from "react";
+import { Box, TextField, MenuItem, Button } from "@mui/material";
+import { servicio } from "@/services/service";
+import { NewCategory } from "@/types/newCategory";
 
-export default function AddCategoryForm() {
-  const [newCategoryName, setNewCategoryName] = useState('');
-  const [newCategorySection, setNewCategorySection] = useState('');
+interface HijoAPadreProps {
+  enviarAlPadre: Dispatch<SetStateAction<string>>;
+}
 
+export default function AddCategoryForm({ enviarAlPadre }: HijoAPadreProps) {
+  const [newCategoryName, setNewCategoryName] = useState("");
+  const [newCategorySection, setNewCategorySection] = useState("");
+
+  async function newCategory() {
+    const data: NewCategory = {
+      name: newCategoryName,
+      section: newCategorySection,
+    };
+    try {
+      await servicio
+        .insertarCategoria(data)
+        .then(() => console.log("Categoria creada!"));
+    } catch (e) {
+      console.log(e);
+    }
+  }
   return (
-    <Box sx={{ mb: 4, display: 'flex', gap: 2, alignItems: 'center', flexWrap: 'wrap' }}>
+    <Box
+      sx={{
+        mb: 4,
+        display: "flex",
+        gap: 2,
+        alignItems: "center",
+        flexWrap: "wrap",
+      }}
+    >
       <TextField
         label="Nombre de categoría"
         value={newCategoryName}
@@ -23,22 +50,22 @@ export default function AddCategoryForm() {
         size="small"
         sx={{ minWidth: 160 }}
       >
-        <MenuItem value="HOME">HOME</MenuItem>
-        <MenuItem value="TRANSPARENCIA">TRANSPARENCIA</MenuItem>
+        <MenuItem value="home">home</MenuItem>
+        <MenuItem value="transparencia">transparencia</MenuItem>
       </TextField>
       <Button
         variant="contained"
         disabled={!newCategoryName || !newCategorySection}
         onClick={() => {
-          console.log({ newCategoryName, newCategorySection });
-          alert(`Futura categoría agregada: ${newCategoryName} en ${newCategorySection}`);
-          setNewCategoryName('');
-          setNewCategorySection('');
+          newCategory();
+          setNewCategoryName("");
+          setNewCategorySection("");
+          enviarAlPadre("Categoria agregada!");
         }}
         sx={{
-          backgroundColor: 'var(--color-blue-base)',
-          '&:hover': { backgroundColor: 'var(--color-blue-dark)' },
-          '&.Mui-disabled': { backgroundColor: '#c0c0c0', color: '#666' }
+          backgroundColor: "var(--color-blue-base)",
+          "&:hover": { backgroundColor: "var(--color-blue-dark)" },
+          "&.Mui-disabled": { backgroundColor: "#c0c0c0", color: "#666" },
         }}
       >
         Agregar categoría

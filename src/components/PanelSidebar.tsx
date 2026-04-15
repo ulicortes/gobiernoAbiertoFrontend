@@ -1,19 +1,16 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
+import { servicio } from "@/services/service";
+import { useState } from "react";
 
-export const HOME_CATEGORIES = [
-  'Informes de gestión',
-  'Guía de usuario',
-];
-
-export const TRANSPARENCIA_CATEGORIES = [
-  'Haberes de empleados',
-  'Recibos de funcionarios',
-  'Declaraciones juradas',
-  'Nómina del personal',
-  'Reportes económicos',
-];
+export const HOME_CATEGORIES = ["Informes de gestión", "Guía de usuario"];
+// {"id":1,"name":"haberes"}
+interface cat {
+  id: number;
+  name: string;
+  section: string;
+}
+export let TRANSPARENCIA_CATEGORIES: cat[];
 
 type PanelSidebarProps = {
   selectedCategory: string | null;
@@ -21,9 +18,39 @@ type PanelSidebarProps = {
   onEditarCategorias: () => void;
 };
 
-export default function PanelSidebar({ selectedCategory, onSelectCategory, onEditarCategorias }: PanelSidebarProps) {
-  const [homeOpen, setHomeOpen] = useState(true);
-  const [transparenciaOpen, setTransparenciaOpen] = useState(true);
+export default function PanelSidebar({
+  selectedCategory,
+  onSelectCategory,
+  onEditarCategorias,
+}: PanelSidebarProps) {
+  const [homeOpen, setHomeOpen] = useState(false);
+  const [transparenciaOpen, setTransparenciaOpen] = useState(false);
+
+  async function openHome() {
+    try {
+      if (!TRANSPARENCIA_CATEGORIES) {
+        const res = await servicio.getCategorias();
+        TRANSPARENCIA_CATEGORIES = res;
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setHomeOpen(!homeOpen);
+    }
+  }
+
+  async function openTransparencia() {
+    try {
+      if (!TRANSPARENCIA_CATEGORIES) {
+        const res = await servicio.getCategorias();
+        TRANSPARENCIA_CATEGORIES = res;
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setTransparenciaOpen(!transparenciaOpen);
+    }
+  }
 
   return (
     <aside className="h-full w-full min-h-[60vh] bg-gray-200 rounded-xl flex flex-col py-4 px-4">
@@ -31,31 +58,38 @@ export default function PanelSidebar({ selectedCategory, onSelectCategory, onEdi
       <div className="flex flex-col">
         <button
           type="button"
-          onClick={() => setHomeOpen(!homeOpen)}
+          onClick={() => openHome()}
           className="flex items-center justify-between w-full text-left font-bold text-black-base py-2 hover:bg-gray-300 rounded px-2"
         >
           HOME
           <svg
-            className={`w-5 h-5 transition-transform ${homeOpen ? 'rotate-180' : ''}`}
+            className={`w-5 h-5 transition-transform ${homeOpen ? "rotate-180" : ""}`}
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
           >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M19 9l-7 7-7-7"
+            />
           </svg>
         </button>
-        {homeOpen && (
+        {homeOpen && TRANSPARENCIA_CATEGORIES && (
           <div className="flex flex-col pl-2 mt-1">
-            {HOME_CATEGORIES.map((label) => (
-              <button
-                key={label}
-                type="button"
-                onClick={() => onSelectCategory(label)}
-                className={`text-left py-2 px-2 rounded hover:bg-gray-300 ${selectedCategory === label ? 'text-blue-base font-medium' : 'text-black-base'}`}
-              >
-                {label}
-              </button>
-            ))}
+            {TRANSPARENCIA_CATEGORIES.filter((c) => c.section == "home").map(
+              (label) => (
+                <button
+                  key={label.id}
+                  type="button"
+                  onClick={() => onSelectCategory(label.name)}
+                  className={`text-left py-2 px-2 rounded hover:bg-gray-300 ${selectedCategory === label.name ? "text-blue-base font-medium" : "text-black-base"}`}
+                >
+                  {label.name}
+                </button>
+              ),
+            )}
           </div>
         )}
       </div>
@@ -64,29 +98,36 @@ export default function PanelSidebar({ selectedCategory, onSelectCategory, onEdi
       <div className="flex flex-col mt-2">
         <button
           type="button"
-          onClick={() => setTransparenciaOpen(!transparenciaOpen)}
+          onClick={() => openTransparencia()}
           className="flex items-center justify-between w-full text-left font-bold text-black-base py-2 hover:bg-gray-300 rounded px-2"
         >
           TRANSPARENCIA
           <svg
-            className={`w-5 h-5 transition-transform ${transparenciaOpen ? 'rotate-180' : ''}`}
+            className={`w-5 h-5 transition-transform ${transparenciaOpen ? "rotate-180" : ""}`}
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
           >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M19 9l-7 7-7-7"
+            />
           </svg>
         </button>
         {transparenciaOpen && (
           <div className="flex flex-col pl-2 mt-1">
-            {TRANSPARENCIA_CATEGORIES.map((label) => (
+            {TRANSPARENCIA_CATEGORIES.filter(
+              (c) => c.section == "transparencia",
+            ).map((label: cat) => (
               <button
-                key={label}
+                key={label.id}
                 type="button"
-                onClick={() => onSelectCategory(label)}
-                className={`text-left py-2 px-2 rounded hover:bg-gray-300 ${selectedCategory === label ? 'text-blue-base font-medium' : 'text-black-base'}`}
+                onClick={() => onSelectCategory(label.name)}
+                className={`text-left py-2 px-2 rounded hover:bg-gray-300 ${selectedCategory === label.name ? "text-blue-base font-medium" : "text-black-base"}`}
               >
-                {label}
+                {label.name}
               </button>
             ))}
           </div>
@@ -98,10 +139,20 @@ export default function PanelSidebar({ selectedCategory, onSelectCategory, onEdi
         <button
           type="button"
           onClick={onEditarCategorias}
-          className={`flex items-center gap-2 w-full py-2 px-2 rounded hover:bg-gray-300 font-medium ${selectedCategory === 'Editar categorías' ? 'text-blue-base' : 'text-black-base'}`}
+          className={`flex items-center gap-2 w-full py-2 px-2 rounded hover:bg-gray-300 font-medium ${selectedCategory === "Editar categorías" ? "text-blue-base" : "text-black-base"}`}
         >
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+          <svg
+            className="w-4 h-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+            />
           </svg>
           Editar categorías
         </button>
