@@ -1,6 +1,6 @@
 'use client'
 import { servicio } from "@/services/service";
-import DataTable from "@/components/DataTable";
+import DataTable from "@/components/ui/DataTable";
 import { columnsFile } from "@/lib/TableColumns";
 import { useEffect, useState, use } from "react";
 import { ElementoTabla } from "@/types/elemento";

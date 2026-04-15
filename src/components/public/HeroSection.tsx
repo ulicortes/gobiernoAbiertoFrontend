@@ -1,4 +1,4 @@
-import ColorDivider from "@/components/ColorDivider";
+import ColorDivider from "@/components/ui/ColorDivider";
 
 interface HeroSectionProps {
   imagenFondo?: string;

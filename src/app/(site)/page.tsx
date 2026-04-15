@@ -1,12 +1,12 @@
 'use client';
 
 import { useState } from "react";
-import InfGestion from "@/components/InfGestion";
-import HeroSection from "@/components/HeroSection";
-import SeccionContenido from "@/components/SeccionContenido";
-import GuiaUsuario from "@/components/GuiaUsuario";
-import ContactSection from "@/components/ContactSection";
-import ContactForm from "@/components/ContactForm";
+import InformesGestion from "@/components/public/InformesGestion";
+import HeroSection from "@/components/public/HeroSection";
+import SeccionContenido from "@/components/public/SeccionContenido";
+import GuiaUsuario from "@/components/public/GuiaUsuario";
+import ContactSection from "@/components/public/ContactSection";
+import ContactForm from "@/components/forms/ContactForm";
 
 export default function Home() {
   const [isContactOpen, setIsContactOpen] = useState(false);
@@ -46,7 +46,7 @@ export default function Home() {
         />
       ))}
 
-      <InfGestion />
+      <InformesGestion />
 
       <GuiaUsuario />
 

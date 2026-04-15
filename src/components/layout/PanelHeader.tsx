@@ -1,6 +1,7 @@
-import ColorDivider from "@/components/ColorDivider";
+import ColorDivider from "@/components/ui/ColorDivider";
+import Image from "next/image";
+import { useAuth } from "@/components/providers/AuthProvider";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/components/AuthProvider";
 import { servicio } from "@/services/service";
 import Link from "next/link";
 

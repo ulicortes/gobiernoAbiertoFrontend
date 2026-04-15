@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import Footer from "./Footer";
-import Header from "./Header";
+import Footer from "../layout/Footer";
+import Header from "../layout/Header";
 import { servicio } from "@/services/service";
 import { useRouter } from "next/navigation";
 

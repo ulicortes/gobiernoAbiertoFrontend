@@ -2,18 +2,18 @@
 
 import { useState, useEffect } from "react";
 import { TextField, MenuItem, Button, Box, Typography } from "@mui/material";
-import { HOME_CATEGORIES, TRANSPARENCIA_CATEGORIES } from "./PanelSidebar";
+import { HOME_CATEGORIES, TRANSPARENCIA_CATEGORIES } from "../ui/PanelSidebar";
 import { servicio } from "@/services/service";
 
-type UploadFormProps = {
+type UploadFileFormProps = {
   initialFile?: File | null;
   initialCategory?: string | null;
 };
 
-export default function UploadForm({
+export default function UploadFileForm({
   initialFile,
   initialCategory,
-}: UploadFormProps) {
+}: UploadFileFormProps) {
   const [file, setFile] = useState<File | null>(initialFile || null);
   const [dragActive, setDragActive] = useState(false);
   const [message, setMessage] = useState<String>('');

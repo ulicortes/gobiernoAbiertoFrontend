@@ -3,13 +3,13 @@
 import { useState, useEffect } from "react";
 import PanelSidebar, {
   TRANSPARENCIA_CATEGORIES,
-} from "@/components/PanelSidebar";
-import DataTable from "@/components/DataTable";
-import UploadForm from "@/components/UploadForm";
-import PanelHeader from "@/components/PanelHeader";
-import AddCategoryForm from "@/components/AddCategoryForm";
-import UploadFileButton from "@/components/UploadFileButton";
-import { AuthProvider } from "@/components/AuthProvider";
+} from "@/components/ui/PanelSidebar";
+import DataTable from "@/components/ui/DataTable";
+import UploadFileForm from "@/components/forms/UploadFileForm";
+import PanelHeader from "@/components/layout/PanelHeader";
+import AddCategoryForm from "@/components/forms/AddCategoryForm";
+import UploadFileButton from "@/components/ui/UploadFileButton";
+import { AuthProvider } from "@/components/providers/AuthProvider";
 import { columnsFile, columnsCategories } from "@/lib/TableColumns";
 import { GridColDef } from "@mui/x-data-grid";
 import { servicio } from "@/services/service";
@@ -202,7 +202,7 @@ export default function PanelPage() {
                   />
                 )}
               {contentView === "uploadForm" && (
-                <UploadForm
+                <UploadFileForm
                   initialFile={uploadFile}
                   initialCategory={uploadCategory}
                   key={uploadCategory || 0}

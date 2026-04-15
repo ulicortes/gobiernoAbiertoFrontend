@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function InfGestion() {
+export default function InformesGestion() {
     const years = [2024, 2025, 2026, 2027];
 
     let [message, setMessage] = useState("");

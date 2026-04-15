@@ -1,4 +1,4 @@
-export default function Contacto({titulo, responsable, direccion, telefono, email}:{titulo: string, responsable: string, 
+export default function ContactCard({titulo, responsable, direccion, telefono, email}:{titulo: string, responsable: string, 
     direccion: string, telefono: string, email: string}) {
     return <div className="w-5/6 h-50 bg-[#BFEEFF] p-5 shadow-lg/40 rounded-lg text-black text-center flex flex-col justify-evenly items-center">
         <h1 className="font-bold">{titulo}</h1>
