@@ -11,6 +11,25 @@ export const servicio = {
       return null;
     } catch (error) {
       console.log(error);
+      throw error;
+    }
+  },
+  verify: async () => {
+    try {
+      const res = await api.get(`/auth/verify`);
+      if (res.data.statusCode == 200) return res.data.user;
+      return null;
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
+  },
+  logout: async () => {
+    try {
+      const res = await api.post(`/auth/logout`);
+      return res.data;
+    } catch (error) {
+      console.log(error);
     }
   },
   getCategorias: async () => {
@@ -29,9 +48,16 @@ export const servicio = {
       console.log(error);
     }
   },
-  getArchivosDeUnaCategoria: async (catName: string) => {
+  getArchivosDeUnaCategoria: async (catNameOrSlug: string) => {
     try {
-      const res = await api.get(`/file/cat/${catName}`);
+      const slug = catNameOrSlug
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/(^-|-$)+/g, "");
+
+      const res = await api.get(`/file/cat/${slug}`);
       return res.data;
     } catch (error) {
       console.log(error);

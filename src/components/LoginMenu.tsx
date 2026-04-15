@@ -1,9 +1,10 @@
 "use client";
 
+import { useState } from "react";
 import Footer from "./Footer";
 import Nav from "./Nav";
 import { servicio } from "@/services/service";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 interface LoginMenuProps {
   onClose?: () => void;
@@ -11,24 +12,24 @@ interface LoginMenuProps {
 
 export default function LoginMenu({ onClose }: LoginMenuProps) {
   const router = useRouter();
+  const [errorMsg, setErrorMsg] = useState("");
 
   async function login(formData: FormData) {
+    setErrorMsg("");
     const data = {
-      username: formData.get("user")?.toString(),
-      password: formData.get("pass")?.toString(),
+      username: formData.get("user")?.toString() || "",
+      password: formData.get("pass")?.toString() || "",
     };
     try {
       const res = await servicio.login(data);
       if (!res) {
-        redirect("/login");
+        setErrorMsg("Credenciales inválidas");
         return;
       }
-
-      localStorage.setItem("data", JSON.stringify(res));
-    } catch (error) {
+      router.push("/panel");
+    } catch (error: any) {
       console.log(error);
-    } finally {
-      redirect("/panel");
+      setErrorMsg(error?.response?.data?.message || "Usuario o contraseña incorrectos");
     }
   }
   return (
@@ -88,6 +89,7 @@ export default function LoginMenu({ onClose }: LoginMenuProps) {
               className="w-full border border-gray-300 rounded-lg px-3 py-2.5 bg-white text-black placeholder:text-gray-400 focus:outline-none focus:border-gray-500"
             />
           </div>
+          {errorMsg && <p className="text-red-500 text-sm text-center font-medium">{errorMsg}</p>}
           <button
             type="submit"
             className="w-full bg-[#333333] text-white font-normal py-2.5 rounded-lg hover:bg-black/90 transition-colors"
