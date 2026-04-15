@@ -110,7 +110,6 @@ export default function PanelPage() {
 
           <section className="flex-1 bg-white p-4 md:p-6 min-h-[50vh]">
             {contentView === "dataTable" &&
-              TRANSPARENCIA_CATEGORIES &&
               selectedCategory !== "Editar categorías" && (
                 <UploadFileButton onFileSelect={handleFileSelect} />
               )}

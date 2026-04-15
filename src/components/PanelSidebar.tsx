@@ -1,7 +1,7 @@
 "use client";
 
 import { servicio } from "@/services/service";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export const HOME_CATEGORIES = ["Informes de gestión", "Guía de usuario"];
 // {"id":1,"name":"haberes"}
@@ -23,8 +23,24 @@ export default function PanelSidebar({
   onSelectCategory,
   onEditarCategorias,
 }: PanelSidebarProps) {
-  const [homeOpen, setHomeOpen] = useState(false);
-  const [transparenciaOpen, setTransparenciaOpen] = useState(false);
+  const [homeOpen, setHomeOpen] = useState(true);
+  const [transparenciaOpen, setTransparenciaOpen] = useState(true);
+  const [, setForceRender] = useState(false);
+
+  useEffect(() => {
+    async function initCategories() {
+      if (!TRANSPARENCIA_CATEGORIES) {
+        try {
+          const res = await servicio.getCategorias();
+          TRANSPARENCIA_CATEGORIES = res;
+          setForceRender(true);
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    }
+    initCategories();
+  }, []);
 
   async function openHome() {
     try {
@@ -116,7 +132,7 @@ export default function PanelSidebar({
             />
           </svg>
         </button>
-        {transparenciaOpen && (
+        {transparenciaOpen && TRANSPARENCIA_CATEGORIES && (
           <div className="flex flex-col pl-2 mt-1">
             {TRANSPARENCIA_CATEGORIES.filter(
               (c) => c.section == "transparencia",
