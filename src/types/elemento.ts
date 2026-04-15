@@ -1,12 +1,6 @@
-export interface ElementoAdmin {
-  id: number;
+export interface ElementoTabla {
+  id: string | number;
   title: string;
-  date: Date;
-  size: number; 
-}
-
-export interface ElementoUser {
-  title: string;
-  date: Date;
-  size: number; 
+  date: string | Date;
+  size: number | string; 
 }

@@ -12,7 +12,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { GridRowParams } from "@mui/x-data-grid";
 import { servicio } from "../services/service";
 import { NewCategory } from "@/types/newCategory";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface DataTableProps {
   columns: readonly GridColDef[];
@@ -35,8 +35,11 @@ export default function CategoryTable({
   showActions,
   msg,
 }: Props_category) {
-  const [message, setMessage] = useState("Editar categorias.");
   const [rows_cat, setRowsCat] = useState<row_cat[]>([]);
+
+  useEffect(() => {
+    cargarCategorias();
+  }, [msg]);
 
   const actionsColumn: GridColDef = {
     field: "actions",
@@ -63,7 +66,7 @@ export default function CategoryTable({
     try {
       await servicio
         .editarCategoria(id, cat)
-        .then(() => setMessage("Categoria actualizada!"));
+        .then(() => cargarCategorias());
     } catch (e) {
       console.log(e);
     }
@@ -73,7 +76,7 @@ export default function CategoryTable({
     try {
       await servicio
         .borrarCategoria(id)
-        .then(() => setMessage("Categoria borrada!"));
+        .then(() => cargarCategorias());
     } catch (e) {
       console.log(e);
     }
@@ -83,7 +86,6 @@ export default function CategoryTable({
     try {
       await servicio.getCategorias().then((r) => {
         setRowsCat(r);
-        setMessage("");
       });
     } catch (e) {
       console.log(e);
@@ -94,38 +96,25 @@ export default function CategoryTable({
 
   return (
     <Box sx={{ height: 600, width: "90%" }}>
-      {message !== "" && (
-        <div className="w-full flex flex-col justify-center items-center">
-          <h1 className="text-black text-xl w-full text-center">{message}</h1>
-          <button
-            className="bg-black text-white p-2 cursor-pointer"
-            onClick={() => cargarCategorias()}
-          >
-            Cargar categorias
-          </button>
-        </div>
-      )}
-      {message === "" && (
-        <DataGrid
-          rows={rows_cat}
-          columns={finalColumns}
-          initialState={{
-            pagination: {
-              paginationModel: {
-                pageSize: 10,
-              },
+      <DataGrid
+        rows={rows_cat}
+        columns={finalColumns}
+        initialState={{
+          pagination: {
+            paginationModel: {
+              pageSize: 10,
             },
-          }}
-          pageSizeOptions={[10]}
-          checkboxSelection
-          // autosizeOnMount // Ajusta el ancho al cargar
-          // autosizeOptions={{
-          //   includeOutliers: true,
-          //   includeHeaders: true,
-          // }}
-          disableRowSelectionOnClick
-        />
-      )}
+          },
+        }}
+        pageSizeOptions={[10]}
+        checkboxSelection
+        // autosizeOnMount // Ajusta el ancho al cargar
+        // autosizeOptions={{
+        //   includeOutliers: true,
+        //   includeHeaders: true,
+        // }}
+        disableRowSelectionOnClick
+      />
     </Box>
   );
 }

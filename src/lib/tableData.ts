@@ -10,7 +10,6 @@ export const getTableDataForCategory = (selectedCategory: string | null) => {
     ];
     
     const columns: GridColDef[] = [
-      { field: 'id', headerName: 'ID', width: 10 },
       { field: 'nombre', headerName: 'Nombre de la Categoría', width: 300, editable: true },
       { field: 'seccion', headerName: 'Sección', width: 200 },
     ];
@@ -20,7 +19,6 @@ export const getTableDataForCategory = (selectedCategory: string | null) => {
 
   if (selectedCategory === 'Informes de gestión') {
     const columns: GridColDef[] = [
-      { field: 'id', headerName: 'ID', width: 10 },
       { field: 'title', headerName: 'Título', width: 300, editable: true },
       { field: 'date', headerName: 'Fecha', width: 90 },
     ];
@@ -37,7 +35,6 @@ export const getTableDataForCategory = (selectedCategory: string | null) => {
 
   if (selectedCategory === 'Haberes de empleados') {
     const columns: GridColDef[] = [
-      { field: 'id', headerName: 'ID', width: 10 },
       { field: 'title', headerName: 'Título', width: 300, editable: true },
       { field: 'date', headerName: 'Fecha', width: 150 },
       { field: 'size', headerName: 'Tamaño', width: 90 },
@@ -58,7 +55,6 @@ export const getTableDataForCategory = (selectedCategory: string | null) => {
 
   if (selectedCategory === 'Recibos de funcionarios') {
     const columns: GridColDef[] = [
-      { field: 'id', headerName: 'ID', width: 10 },
       { field: 'title', headerName: 'Título', width: 300, editable: true },
       { field: 'date', headerName: 'Fecha', width: 150 },
       { field: 'size', headerName: 'Tamaño', width: 90 },
@@ -79,7 +75,6 @@ export const getTableDataForCategory = (selectedCategory: string | null) => {
 
   if (selectedCategory === 'Declaraciones juradas') {
     const columns: GridColDef[] = [
-      { field: 'id', headerName: 'ID', width: 10 },
       { field: 'title', headerName: 'Título', width: 300, editable: true },
       { field: 'date', headerName: 'Fecha', width: 150 },
       { field: 'size', headerName: 'Tamaño', width: 90 },
@@ -101,7 +96,6 @@ export const getTableDataForCategory = (selectedCategory: string | null) => {
 
   if (selectedCategory === 'Nómina del personal') {
     const columns: GridColDef[] = [
-      { field: 'id', headerName: 'ID', width: 10 },
       { field: 'title', headerName: 'Título', width: 300, editable: true },
       { field: 'date', headerName: 'Fecha', width: 150 },
       { field: 'size', headerName: 'Tamaño', width: 90 },
@@ -123,7 +117,6 @@ export const getTableDataForCategory = (selectedCategory: string | null) => {
 
   if (selectedCategory === 'Reportes económicos') {
     const columns: GridColDef[] = [
-      { field: 'id', headerName: 'ID', width: 10 },
       { field: 'title', headerName: 'Título', width: 400, editable: true },
       { field: 'trimestre', headerName: 'Trimestre', width: 150 },
       { field: 'year', headerName: 'Año', width: 150 },
