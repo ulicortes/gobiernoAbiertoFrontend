@@ -19,9 +19,11 @@ export default function AddCategoryForm({ enviarAlPadre }: HijoAPadreProps) {
       section: newCategorySection,
     };
     try {
-      await servicio
-        .insertarCategoria(data)
-        .then(() => console.log("Categoria creada!"));
+      await servicio.insertarCategoria(data);
+      console.log("Categoria creada!");
+      setNewCategoryName("");
+      setNewCategorySection("");
+      enviarAlPadre(Date.now().toString());
     } catch (e) {
       console.log(e);
     }
@@ -50,18 +52,13 @@ export default function AddCategoryForm({ enviarAlPadre }: HijoAPadreProps) {
         size="small"
         sx={{ minWidth: 160 }}
       >
-        <MenuItem value="home">home</MenuItem>
-        <MenuItem value="transparencia">transparencia</MenuItem>
+        <MenuItem value="home">HOME</MenuItem>
+        <MenuItem value="transparencia">TRANSPARENCIA</MenuItem>
       </TextField>
       <Button
         variant="contained"
         disabled={!newCategoryName || !newCategorySection}
-        onClick={() => {
-          newCategory();
-          setNewCategoryName("");
-          setNewCategorySection("");
-          enviarAlPadre("Categoria agregada!");
-        }}
+        onClick={() => newCategory()}
         sx={{
           backgroundColor: "var(--color-blue-base)",
           "&:hover": { backgroundColor: "var(--color-blue-dark)" },

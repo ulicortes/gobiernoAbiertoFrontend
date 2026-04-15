@@ -1,37 +1,60 @@
 'use client'
 import Link from "next/link";
 import { usePathname } from 'next/navigation';
+import { useState, useEffect } from "react";
+import { servicio } from "@/services/service";
 
-// .toUpperCase().replace("_", " ")
-
+interface cat {
+  id: number;
+  name: string;
+  slug?: string;
+  section: string;
+}
 
 export default function MenuTransparencia() {
     let path = usePathname();
+    const [categories, setCategories] = useState<cat[]>([]);
 
-    return <div className="w-5/6 h-80 px-2 bg-[#BFEEFF] shadow-lg/40 rounded-lg text-black text-center flex flex-col justify-evenly items-center">
-        <Link href={'/transparencia/haberes'}>
-            <h1 className={`font-bold hover:text-blue-dark ${path == '/transparencia/haberes' ? 'text-blue-base' : ''}`}>
-                HABERES DE EMPLEADOS</h1>
-        </Link>
-        <div className="w-4/6 border-b-3 border-blue-base"></div>
-        <Link href={'/transparencia/recibos'}>
-            <h1 className={`font-bold hover:text-blue-dark ${path == '/transparencia/recibos' ? 'text-blue-base' : ''}`}>
-                RECIBOS DE FUNCIONARIOS</h1>
-        </Link>
-        <div className="w-4/6 border-b-3 border-blue-base"></div>
-        <Link href={'/transparencia/ddjj'}>
-            <h1 className={`font-bold hover:text-blue-dark ${path == '/transparencia/ddjj' ? 'text-blue-base' : ''}`}>
-                DECLARACIONES JURADAS DE FUNCIONARIOS</h1>
-        </Link>
-        <div className="w-4/6 border-b-3 border-blue-base"></div>
-        <Link href={'/transparencia/nomina'}>
-            <h1 className={`font-bold hover:text-blue-dark ${path == '/transparencia/nomina' ? 'text-blue-base' : ''}`}>
-                NÓMINA DEL PERSONAL</h1>
-        </Link>
-        <div className="w-4/6 border-b-3 border-blue-base"></div>
-        <Link href={'/transparencia/reportes'}>
-            <h1 className={`font-bold hover:text-blue-dark ${path == '/transparencia/reportes' ? 'text-blue-base' : ''}`}>
-                REPORTES ECONOMICOS</h1>
-        </Link>
-    </div>
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const res = await servicio.getCategorias();
+                if (res) {
+                    const transCats = res.filter((c: cat) => c.section.toLowerCase() === "transparencia");
+                    setCategories(transCats);
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        };
+        fetchCategories();
+    }, []);
+
+    // Decodificar la URL para igualarlo con el nombre exacto de la DB.
+    const currentCategory = decodeURIComponent(path.split('/')[2] || "");
+
+    return (
+        <div className="w-5/6 h-auto min-h-80 py-4 px-2 bg-[#BFEEFF] shadow-lg/40 rounded-lg text-black text-center flex flex-col justify-evenly items-center gap-4">
+            {categories.map((cat, index) => {
+                const targetSlug = cat.slug || encodeURIComponent(cat.name);
+                const isSelected = currentCategory === targetSlug || currentCategory === cat.name;
+                return (
+                    <div key={cat.id} className="w-full flex flex-col items-center">
+                        <Link href={`/transparencia/${targetSlug}`}>
+                            <h1 className={`font-bold hover:text-blue-dark ${isSelected ? 'text-blue-base' : ''}`}>
+                                {cat.name.toUpperCase()}
+                            </h1>
+                        </Link>
+                        {index !== categories.length - 1 && (
+                            <div className="w-4/6 border-b-3 border-blue-base mt-4"></div>
+                        )}
+                    </div>
+                );
+            })}
+            
+            {categories.length === 0 && (
+                <p className="text-gray-600 italic">Cargando categorías...</p>
+            )}
+        </div>
+    );
 }

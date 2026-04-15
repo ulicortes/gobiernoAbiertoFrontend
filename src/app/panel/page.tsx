@@ -10,19 +10,13 @@ import PanelHeader from "@/components/PanelHeader";
 import AddCategoryForm from "@/components/AddCategoryForm";
 import UploadFileButton from "@/components/UploadFileButton";
 import { AuthProvider } from "@/components/AuthProvider";
-import { columnsAdmin, columnsCategories } from "@/lib/TableColumns";
+import { columnsFile, columnsCategories } from "@/lib/TableColumns";
 import { GridColDef } from "@mui/x-data-grid";
 import { servicio } from "@/services/service";
 import CategoryTable from "@/components/CategoryTable";
+import { ElementoTabla } from "@/types/elemento";
 
 type ContentView = "none" | "dataTable" | "uploadForm";
-
-interface row {
-  id: number;
-  title: string;
-  date: string;
-  size: number;
-}
 
 interface row_cat {
   name: string;
@@ -37,7 +31,7 @@ export default function PanelPage() {
 
   const [uploadFile, setUploadFile] = useState<File | null>(null);
   const [uploadCategory, setUploadCategory] = useState<string | null>(null);
-  const [rows, setRows] = useState<row[]>([]);
+  const [rows, setRows] = useState<ElementoTabla[]>([]);
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -45,12 +39,19 @@ export default function PanelPage() {
     try {
       setLoading(true);
       setContentView("dataTable");
+      
       await servicio.getArchivosDeUnaCategoria(category).then((r) => {
-        const data = r.map((f: row) => ({
-          ...f,
-          size: (f.size / 1024).toFixed(2) + "KB",
-        }));
-        setRows(data);
+        if(r) {
+          const data = r.map((f: any) => ({
+             id: f.id,
+             title: f.title,
+             date: new Date(f.date).toLocaleDateString(),
+             size: f.size ? (f.size / 1024 / 1024).toFixed(2) + ' MB' : 'N/A'
+          }));
+          setRows(data);
+        } else {
+          setRows([]);
+        }
         setSelectedCategory(category);
       });
     } catch (e) {
@@ -64,10 +65,17 @@ export default function PanelPage() {
 
   async function getRows() {
     try {
-      const res = await servicio.getArchivosDeUnaCategoria(
-        selectedCategory || "",
-      );
-      setRows(res);
+      const res = await servicio.getArchivosDeUnaCategoria(selectedCategory || "");
+      if(res) {
+        setRows(res.map((f: any) => ({
+             id: f.id,
+             title: f.title,
+             date: new Date(f.date).toLocaleDateString(),
+             size: f.size ? (f.size / 1024 / 1024).toFixed(2) + ' MB' : 'N/A'
+        })));
+      } else {
+        setRows([]);
+      }
     } catch (e) {
       console.log(e);
     } finally {
@@ -82,7 +90,7 @@ export default function PanelPage() {
     setSelectedCategory(null);
   };
 
-  const columns: GridColDef[] = columnsAdmin;
+  const columns: GridColDef[] = columnsFile;
   const cat_columns: GridColDef[] = columnsCategories;
 
   return (
