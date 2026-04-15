@@ -14,28 +14,25 @@ export default function UploadForm({
   initialFile,
   initialCategory,
 }: UploadFormProps) {
-  const [file, setFile] = useState<File | null>(initialFile);
+  const [file, setFile] = useState<File | null>(initialFile || null);
   const [dragActive, setDragActive] = useState(false);
-
   const [message, setMessage] = useState<String>('');
-  // Form fields
-  const [fileName, setFileName] = useState("");
+  const [fileName, setFileName] = useState(initialFile?.name || "");
   const [category, setCategory] = useState("");
-  const [quarter, setQuarter] = useState<string>("");
-  const [year, setYear] = useState<string>("");
 
   const handleFile = (selected: File) => {
     setFile(selected);
     setFileName(selected.name);
   };
 
-  // useEffect(() => {
-  //   if (initialFile) handleFile(initialFile);
-  // }, [initialFile]);
+  const allCategories = [...TRANSPARENCIA_CATEGORIES];
 
-  // useEffect(() => {
-  //   if (initialCategory) setCategory(initialCategory);
-  // }, [initialCategory]);
+  useEffect(() => {
+    if (initialCategory) {
+      const match = allCategories.find((c) => c.name === initialCategory);
+      if (match) setCategory(String(match.id));
+    }
+  }, [initialCategory]);
 
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault();
@@ -61,7 +58,7 @@ export default function UploadForm({
     e.preventDefault();
     if (!file) return;
     try {
-      const res = await servicio.insertArchivo(file, category);
+      const res = await servicio.insertArchivo(file, category, fileName);
       if(res) { 
         setMessage('Se agrego el archivo exitosamente!');
         setFile(null);
@@ -71,8 +68,6 @@ export default function UploadForm({
     }
     // Aquí se puede integrar la subida real (API, etc.)
   };
-
-  const allCategories = [...TRANSPARENCIA_CATEGORIES];
 
   return (
     <form
@@ -142,47 +137,13 @@ export default function UploadForm({
             ))}
           </TextField>
 
-          {category === "Reportes económicos" && (
-            <Box sx={{ display: "flex", gap: 2 }}>
-              <TextField
-                label="Trimestre"
-                select
-                value={quarter}
-                onChange={(e) => setQuarter(e.target.value)}
-                fullWidth
-                required
-              >
-                <MenuItem value="1">1</MenuItem>
-                <MenuItem value="2">2</MenuItem>
-                <MenuItem value="3">3</MenuItem>
-                <MenuItem value="4">4</MenuItem>
-              </TextField>
-
-              <TextField
-                label="Año"
-                type="text"
-                value={year}
-                onChange={(e) => {
-                  const val = e.target.value;
-                  if (/^\d*$/.test(val)) {
-                    setYear(val);
-                  }
-                }}
-                fullWidth
-                required
-                inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
-              />
-            </Box>
-          )}
-
           <Button
             type="submit"
             variant="contained"
             disabled={
               !file ||
               !fileName ||
-              !category ||
-              (category === "Reportes económicos" && (!quarter || !year))
+              !category
             }
             sx={{
               mt: 1,
