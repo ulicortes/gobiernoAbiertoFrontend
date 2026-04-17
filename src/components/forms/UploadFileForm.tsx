@@ -19,13 +19,16 @@ export default function UploadFileForm({
   const [message, setMessage] = useState<String>('');
   const [fileName, setFileName] = useState(initialFile?.name || "");
   const [category, setCategory] = useState("");
+  const [trimester, setTrimester] = useState("");
+  const [year, setYear] = useState("");
 
   const handleFile = (selected: File) => {
     setFile(selected);
     setFileName(selected.name);
   };
 
-  const allCategories = [...TRANSPARENCIA_CATEGORIES];
+  const allCategories = TRANSPARENCIA_CATEGORIES ? [...TRANSPARENCIA_CATEGORIES] : [];
+  const isEconomicReports = allCategories.find((c) => String(c.id) === String(category))?.name === "Reportes económicos";
 
   useEffect(() => {
     if (initialCategory) {
@@ -58,10 +61,18 @@ export default function UploadFileForm({
     e.preventDefault();
     if (!file) return;
     try {
-      const res = await servicio.insertArchivo(file, category, fileName);
+      const res = await servicio.insertArchivo(
+        file, 
+        category, 
+        fileName, 
+        isEconomicReports ? trimester : undefined, 
+        isEconomicReports ? parseInt(year, 10) : undefined
+      );
       if(res) { 
         setMessage('Se agrego el archivo exitosamente!');
         setFile(null);
+        setTrimester("");
+        setYear("");
       }
     } catch (error) {
       throw Error();
@@ -137,13 +148,48 @@ export default function UploadFileForm({
             ))}
           </TextField>
 
+          {isEconomicReports && (
+            <>
+              <TextField
+                select
+                label="Trimestre"
+                value={trimester}
+                onChange={(e) => setTrimester(e.target.value)}
+                fullWidth
+                required
+              >
+                <MenuItem value="Primer trimestre">Primer trimestre</MenuItem>
+                <MenuItem value="Segundo trimestre">Segundo trimestre</MenuItem>
+                <MenuItem value="Tercer trimestre">Tercer trimestre</MenuItem>
+                <MenuItem value="Cuarto trimestre">Cuarto trimestre</MenuItem>
+              </TextField>
+
+              <TextField
+                label="Año"
+                placeholder="Año"
+                value={year}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  if (val === "" || /^\d+$/.test(val)) {
+                    if (val.length <= 4) setYear(val);
+                  }
+                }}
+                fullWidth
+                required
+                error={year.length > 0 && year.length < 4}
+                helperText={year.length > 0 && year.length < 4 ? "El año debe tener 4 dígitos" : ""}
+              />
+            </>
+          )}
+
           <Button
             type="submit"
             variant="contained"
             disabled={
               !file ||
               !fileName ||
-              !category
+              !category ||
+              (isEconomicReports && (!trimester || !year || year.length < 4))
             }
             sx={{
               mt: 1,

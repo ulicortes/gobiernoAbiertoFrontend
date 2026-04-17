@@ -63,11 +63,13 @@ export const servicio = {
       console.log(error);
     }
   },
-  insertArchivo: async (file: File, categoryId: string, customName?: string) => {
+  insertArchivo: async (file: File, categoryId: string, customName?: string, trimester?: string, year?: number) => {
     const formData = new FormData();
     formData.append("file", file);
     formData.append("categoryId", categoryId);
     if (customName) formData.append("customName", customName);
+    if (trimester) formData.append("trimester", trimester);
+    if (year) formData.append("year", year.toString());
     try {
       const response = await api.post("/file/upload", formData, {
         withCredentials: true,
