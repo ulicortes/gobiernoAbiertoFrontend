@@ -60,9 +60,11 @@ export default function PanelPage() {
         if(r) {
           const data = r.map((f: any) => ({
              id: f.id,
-             title: f.title,
-             date: new Date(f.date).toLocaleDateString(),
-             size: f.size ? (f.size / 1024 / 1024).toFixed(2) + ' MB' : 'N/A'
+             title: f.title || f.name,
+             date: new Date(f.date || f.createdAt || new Date()).toLocaleDateString(),
+             size: f.size ? (f.size / 1024 / 1024).toFixed(2) + ' MB' : 'N/A',
+             trimester: f.trimester || '-',
+             year: f.year || '-'
           }));
           setRows(data);
         } else {
@@ -85,9 +87,11 @@ export default function PanelPage() {
       if(res) {
         setRows(res.map((f: any) => ({
              id: f.id,
-             title: f.title,
-             date: new Date(f.date).toLocaleDateString(),
-             size: f.size ? (f.size / 1024 / 1024).toFixed(2) + ' MB' : 'N/A'
+             title: f.title || f.name,
+             date: new Date(f.date || f.createdAt || new Date()).toLocaleDateString(),
+             size: f.size ? (f.size / 1024 / 1024).toFixed(2) + ' MB' : 'N/A',
+             trimester: f.trimester || '-',
+             year: f.year || '-'
         })));
       } else {
         setRows([]);
@@ -145,9 +149,15 @@ export default function PanelPage() {
     }
   };
 
-  const columns: GridColDef[] = columnsFile.map((c) => 
+  const baseColumns: GridColDef[] = columnsFile.map((c) => 
     c.field === "title" ? { ...c, editable: true } : c
   );
+  
+  const columns: GridColDef[] = selectedCategory === "Reportes económicos" ? [
+    ...baseColumns,
+    { field: "trimester", headerName: "Trimestre", width: 150 },
+    { field: "year", headerName: "Año", width: 100 }
+  ] : baseColumns;
   const cat_columns: GridColDef[] = columnsCategories;
 
   return (
