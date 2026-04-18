@@ -55,7 +55,7 @@ export default function DataTable({
   const finalColumns = showActions ? [...columns, actionsColumn] : columns;
 
   return (
-    <Box sx={{ height: 600, width: "90%" }}>
+    <Box sx={{ height: 600, width: "100%", maxWidth: "100%", minWidth: 0 }}>
       <DataGrid
         rows={rows}
         columns={finalColumns}

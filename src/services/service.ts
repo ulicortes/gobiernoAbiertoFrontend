@@ -1,5 +1,6 @@
 import { UserLogin } from "@/types/userLogin";
 import { NewCategory } from "@/types/newCategory";
+import type { CreateManagedUserPayload, PanelUserRow } from "@/types/managedUser";
 import api from "./api";
 
 export const servicio = {
@@ -31,6 +32,27 @@ export const servicio = {
     } catch (error) {
       console.log(error);
     }
+  },
+  changeOwnPassword: async (currentPassword: string, newPassword: string) => {
+    const res = await api.patch(`/auth/me/password`, {
+      currentPassword,
+      newPassword,
+    });
+    return res.data;
+  },
+  listUsers: async (): Promise<PanelUserRow[]> => {
+    const res = await api.get(`/user`);
+    return res.data;
+  },
+  createManagedUser: async (data: CreateManagedUserPayload) => {
+    const res = await api.post(`/user`, data);
+    return res.data;
+  },
+  adminResetUserPassword: async (userId: string, newPassword: string) => {
+    const res = await api.patch(`/user/${userId}/password`, {
+      newPassword,
+    });
+    return res.data;
   },
   getCategorias: async () => {
     try {

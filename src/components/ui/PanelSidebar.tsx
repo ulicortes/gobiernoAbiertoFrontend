@@ -2,6 +2,11 @@
 
 import { servicio } from "@/services/service";
 import { useState, useEffect } from "react";
+import { useAuth } from "@/components/providers/AuthProvider";
+import {
+  PANEL_SECTION_PASSWORD,
+  PANEL_SECTION_USERS,
+} from "@/lib/panelSections";
 
 export const HOME_CATEGORIES = ["Informes de gestión", "Guía de usuario"];
 // {"id":1,"name":"haberes"}
@@ -23,6 +28,7 @@ export default function PanelSidebar({
   onSelectCategory,
   onEditarCategorias,
 }: PanelSidebarProps) {
+  const { user } = useAuth();
   const [homeOpen, setHomeOpen] = useState(true);
   const [transparenciaOpen, setTransparenciaOpen] = useState(true);
   const [, setForceRender] = useState(false);
@@ -147,6 +153,28 @@ export default function PanelSidebar({
               </button>
             ))}
           </div>
+        )}
+      </div>
+
+      <div className="flex flex-col mt-4 border-t border-gray-300 pt-3 gap-1">
+        <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide px-2">
+          Cuenta
+        </p>
+        <button
+          type="button"
+          onClick={() => onSelectCategory(PANEL_SECTION_PASSWORD)}
+          className={`text-left py-2 px-2 rounded hover:bg-gray-300 font-medium ${selectedCategory === PANEL_SECTION_PASSWORD ? "text-blue-base" : "text-black-base"}`}
+        >
+          Mi contraseña
+        </button>
+        {user?.role === "super_admin" && (
+          <button
+            type="button"
+            onClick={() => onSelectCategory(PANEL_SECTION_USERS)}
+            className={`text-left py-2 px-2 rounded hover:bg-gray-300 font-medium ${selectedCategory === PANEL_SECTION_USERS ? "text-blue-base" : "text-black-base"}`}
+          >
+            Usuarios
+          </button>
         )}
       </div>
 

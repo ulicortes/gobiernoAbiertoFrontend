@@ -5,6 +5,7 @@ import Footer from "../layout/Footer";
 import Header from "../layout/Header";
 import { servicio } from "@/services/service";
 import { useRouter } from "next/navigation";
+import PasswordField from "@/components/ui/PasswordField";
 
 interface LoginMenuProps {
   onClose?: () => void;
@@ -17,7 +18,7 @@ export default function LoginMenu({ onClose }: LoginMenuProps) {
   async function login(formData: FormData) {
     setErrorMsg("");
     const data = {
-      username: formData.get("user")?.toString() || "",
+      email: formData.get("email")?.toString().trim() || "",
       password: formData.get("pass")?.toString() || "",
     };
     try {
@@ -29,7 +30,7 @@ export default function LoginMenu({ onClose }: LoginMenuProps) {
       router.push("/panel");
     } catch (error: any) {
       console.log(error);
-      setErrorMsg(error?.response?.data?.message || "Usuario o contraseña incorrectos");
+      setErrorMsg(error?.response?.data?.message || "Correo o contraseña incorrectos");
     }
   }
   return (
@@ -63,13 +64,14 @@ export default function LoginMenu({ onClose }: LoginMenuProps) {
               htmlFor="login-email"
               className="text-black text-base font-normal"
             >
-              Usuario
+              Correo electrónico
             </label>
             <input
-              id="login-user"
-              type="text"
-              placeholder="Usuario"
-              name="user"
+              id="login-email"
+              type="email"
+              autoComplete="email"
+              placeholder="correo@municipio.gob.ar"
+              name="email"
               className="w-full border border-gray-300 rounded-lg px-3 py-2.5 bg-white text-black placeholder:text-gray-400 focus:outline-none focus:border-gray-500"
             />
           </div>
@@ -80,12 +82,11 @@ export default function LoginMenu({ onClose }: LoginMenuProps) {
             >
               Contraseña
             </label>
-            <input
+            <PasswordField
               id="login-password"
-              type="password"
               placeholder="Contraseña"
               name="pass"
-              className="w-full border border-gray-300 rounded-lg px-3 py-2.5 bg-white text-black placeholder:text-gray-400 focus:outline-none focus:border-gray-500"
+              autoComplete="current-password"
             />
           </div>
           {errorMsg && <p className="text-red-500 text-sm text-center font-medium">{errorMsg}</p>}

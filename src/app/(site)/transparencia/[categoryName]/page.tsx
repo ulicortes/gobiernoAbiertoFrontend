@@ -53,7 +53,7 @@ export default function DynamicCategoryPage({ params }: { params: Promise<{ cate
   const sortedYears = Object.keys(filesByYear).map(Number).sort((a, b) => b - a);
 
   return (
-    <div className="w-full md:w-3/5 h-[80vh] flex flex-col animate-fade items-center">
+    <div className="w-full min-w-0 h-[80vh] flex flex-col animate-fade items-center">
         {loading ? (
            <p className="mt-20 text-gray-500">Cargando documentos...</p>
         ) : rows.length === 0 ? (

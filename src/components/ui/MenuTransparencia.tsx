@@ -34,7 +34,7 @@ export default function MenuTransparencia() {
     const currentCategory = decodeURIComponent(path.split('/')[2] || "");
 
     return (
-        <div className="w-5/6 h-auto min-h-80 py-4 px-2 bg-[#BFEEFF] shadow-lg/40 rounded-lg text-black text-center flex flex-col justify-evenly items-center gap-4">
+        <div className="w-5/6 max-w-full box-border h-auto min-h-80 py-4 px-4 bg-[#BFEEFF] shadow-lg/40 rounded-lg text-black text-center flex flex-col justify-evenly items-center gap-4">
             {categories.map((cat, index) => {
                 const targetSlug = cat.slug || encodeURIComponent(cat.name);
                 const isSelected = currentCategory === targetSlug || currentCategory === cat.name;

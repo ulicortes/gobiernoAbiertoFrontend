@@ -15,8 +15,15 @@ import { GridColDef } from "@mui/x-data-grid";
 import { servicio } from "@/services/service";
 
 import { ElementoTabla } from "@/types/elemento";
+import ChangePasswordForm from "@/components/forms/ChangePasswordForm";
+import UserManagementPanel from "@/components/forms/UserManagementPanel";
+import {
+  PANEL_SECTION_PASSWORD,
+  PANEL_SECTION_USERS,
+  isPanelSyntheticCategory,
+} from "@/lib/panelSections";
 
-type ContentView = "none" | "dataTable" | "uploadForm";
+type ContentView = "none" | "dataTable" | "uploadForm" | "password" | "users";
 
 interface row_cat {
   name: string;
@@ -50,6 +57,20 @@ export default function PanelPage() {
       cargarCategorias();
     }
   }, [message, selectedCategory]);
+
+  function handleSidebarSelect(label: string) {
+    if (label === PANEL_SECTION_PASSWORD) {
+      setSelectedCategory(PANEL_SECTION_PASSWORD);
+      setContentView("password");
+      return;
+    }
+    if (label === PANEL_SECTION_USERS) {
+      setSelectedCategory(PANEL_SECTION_USERS);
+      setContentView("users");
+      return;
+    }
+    void showDataTable(label);
+  }
 
   async function showDataTable(category: string) {
     try {
@@ -170,14 +191,15 @@ export default function PanelPage() {
           <div className="w-full md:w-1/4 shrink-0 p-4 md:p-6">
             <PanelSidebar
               selectedCategory={selectedCategory}
-              onSelectCategory={showDataTable}
+              onSelectCategory={handleSidebarSelect}
               onEditarCategorias={() => showDataTable("Editar categorías")}
             />
           </div>
 
           <section className="flex-1 bg-white p-4 md:p-6 min-h-[50vh]">
             {contentView === "dataTable" &&
-              selectedCategory !== "Editar categorías" && (
+              selectedCategory !== "Editar categorías" &&
+              !isPanelSyntheticCategory(selectedCategory) && (
                 <UploadFileButton onFileSelect={handleFileSelect} />
               )}
 
@@ -187,6 +209,8 @@ export default function PanelPage() {
               )}
 
             <div className="w-full min-h-[400px]">
+              {contentView === "password" && <ChangePasswordForm />}
+              {contentView === "users" && <UserManagementPanel />}
               {contentView === "dataTable" &&
                 selectedCategory === "Editar categorías" && (
                   <div>

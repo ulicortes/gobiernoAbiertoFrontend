@@ -1,5 +1,4 @@
 import ColorDivider from "@/components/ui/ColorDivider";
-import Image from "next/image";
 import { useAuth } from "@/components/providers/AuthProvider";
 import { useRouter } from "next/navigation";
 import { servicio } from "@/services/service";
@@ -22,13 +21,16 @@ export default function PanelHeader() {
         </Link>
         <div className="w-fit flex flex-col justify-end items-end">
           <p className="text-sm md:text-base text-black-base">
-            Bienvenido, {user?.username || "Usuario"}
+            Bienvenido, {user?.name || "Usuario"}
+            {user?.role === "super_admin" && (
+              <span className="text-gray-500 font-normal"> · Super admin</span>
+            )}
           </p>
           <button
             onClick={cerrar_sesion}
             className="bg-black text-white w-fit rounded-xl px-2 cursor-pointer"
           >
-            Cerrar sesion
+            Cerrar sesión
           </button>
         </div>
       </div>
