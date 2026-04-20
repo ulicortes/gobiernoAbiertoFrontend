@@ -6,30 +6,15 @@ import { toSlug } from "@/lib/slugify";
 import DataTable from "@/components/ui/DataTable";
 import UploadFileButton from "@/components/ui/UploadFileButton";
 import UploadFileForm from "@/components/forms/UploadFileForm";
-import { columnsFilePanel, columnsCategories } from "@/lib/TableColumns";
+import { columnsFilePanel } from "@/lib/TableColumns";
 import { GridColDef } from "@mui/x-data-grid";
 import { ElementoTabla } from "@/types/elemento";
+import { resolveFileType } from "@/lib/fileUtils";
 
 interface Cat {
   id: number;
   name: string;
   section: string;
-}
-
-function resolveFileType(type: string | undefined, filePath: string | undefined): string {
-  const typeLabels: Record<string, string> = {
-    pdf: "PDF",
-    image: "Imagen",
-    doc: "Documento",
-    other: "Otro",
-  };
-  if (type && typeLabels[type]) return typeLabels[type];
-  const ext = filePath?.split(".").pop()?.toLowerCase();
-  if (ext === "pdf") return "PDF";
-  if (ext && ["jpg", "jpeg", "png", "gif", "webp", "svg"].includes(ext)) return "Imagen";
-  if (ext && ["doc", "docx"].includes(ext)) return "Documento";
-  if (ext && ["xls", "xlsx", "csv"].includes(ext)) return "Planilla";
-  return "Otro";
 }
 
 function mapFileToRow(f: any): ElementoTabla {

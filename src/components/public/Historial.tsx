@@ -38,7 +38,7 @@ export default function Historial({ anio, archivos }: HistorialProps) {
     };
 
     return (
-        <div className="mb-4 w-11/12 md:w-2/3">
+        <div className="mb-4 w-11/12 md:w-5/6">
             <Accordion 
                 sx={{ 
                     borderRadius: '24px !important', 

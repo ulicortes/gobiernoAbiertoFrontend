@@ -20,7 +20,9 @@ export default function MenuTransparencia() {
             try {
                 const res = await servicio.getCategorias();
                 if (res) {
-                    const transCats = res.filter((c: cat) => c.section.toLowerCase() === "transparencia");
+                    const transCats = res
+                        .filter((c: cat) => c.section.toLowerCase() === "transparencia")
+                        .sort((a: cat, b: cat) => a.name.localeCompare(b.name, "es"));
                     setCategories(transCats);
                 }
             } catch (err) {
