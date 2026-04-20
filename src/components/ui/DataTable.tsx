@@ -7,7 +7,6 @@ import {
   GridValidRowModel,
   GridActionsCellItem,
 } from "@mui/x-data-grid";
-import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 interface DataTableProps {
@@ -28,8 +27,8 @@ export default function DataTable({
   const actionsColumn: GridColDef = {
     field: "actions",
     type: "actions",
-    headerName: "Acciones",
-    width: 120,
+    headerName: "",
+    width: 60,
     getActions: (params) => [
       <GridActionsCellItem
         key="delete"

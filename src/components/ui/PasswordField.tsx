@@ -68,12 +68,12 @@ const PasswordField = forwardRef<HTMLInputElement, PasswordFieldProps>(
         />
         <button
           type="button"
-          className="absolute right-1.5 top-1/2 -translate-y-1/2 rounded-md p-1.5 text-gray-600 hover:bg-gray-100 hover:text-black focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-400"
+          className="absolute right-1.5 top-1/2 -translate-y-1/2 rounded-md p-1.5 text-gray-600 hover:bg-gray-100 hover:text-black focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 cursor-pointer"
           onClick={() => setVisible((v) => !v)}
           aria-label={visible ? "Ocultar contraseña" : "Mostrar contraseña"}
           tabIndex={-1}
         >
-          {visible ? <EyeSlashIcon /> : <EyeIcon />}
+          {visible ? <EyeIcon /> : <EyeSlashIcon />}
         </button>
       </div>
     );

@@ -18,18 +18,21 @@ export default function Home() {
       texto:
         "Acá iría un texto explicando brevemente lo que se encuentra en esta sección para mejorar la experiencia de usuario.",
       imagenFondo: "/WelcomePage_TransparenciaBackgroundImage.png",
+      link: "/transparencia",
     },
     {
       titulo: "DATOS ABIERTOS",
       texto:
         "Acá iría un texto explicando brevemente lo que se encuentra en esta sección para mejorar la experiencia de usuario.",
       imagenFondo: "/WelcomePage_DatosAbiertosBackgroundImage.png",
+      link: "https://datos.loberia.gov.ar",
     },
     {
       titulo: "BOLETÍN OFICIAL",
       texto:
         "Acá iría un texto explicando brevemente lo que se encuentra en esta sección para mejorar la experiencia de usuario.",
       imagenFondo: "/WelcomePage_BoletinOficialBackgroundImage.png",
+      link: "https://sibom.slyt.gba.gob.ar/cities/73",
     },
   ];
 
@@ -43,6 +46,7 @@ export default function Home() {
           titulo={seccion.titulo}
           texto={seccion.texto}
           imagenFondo={seccion.imagenFondo}
+          link={seccion.link}
         />
       ))}
 

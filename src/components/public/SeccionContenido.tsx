@@ -1,20 +1,24 @@
 
+import Link from 'next/link';
+
 interface SeccionContenidoProps {
   titulo: string;
   texto: string;
   imagenFondo?: string;
+  link?: string;
 }
 
 export default function SeccionContenido({
   titulo,
   texto,
   imagenFondo,
+  link,
 }: SeccionContenidoProps) {
-  return (
+  const content = (
     <section className="group relative w-full min-h-[40vh] flex flex-col items-center justify-center text-white overflow-hidden cursor-pointer">
       {/* Imagen de fondo con blur */}
       {imagenFondo && (
-        <div 
+        <div
           className="absolute inset-0 bg-cover bg-center transition-transform duration-600 ease-out group-hover:scale-110"
           style={{
             backgroundImage: `url(${imagenFondo})`,
@@ -31,4 +35,14 @@ export default function SeccionContenido({
       </div>
     </section>
   );
+
+  if (link) {
+    return (
+      <Link href={link} className="block w-full">
+        {content}
+      </Link>
+    );
+  }
+
+  return content;
 }
