@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/components/providers/AuthProvider";
+import MuiThemeProvider from "@/components/providers/MuiThemeProvider";
 
 export const metadata: Metadata = {
   title: "Gobierno abierto - Loberìa",
@@ -16,9 +17,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="w-full h-screen min-h-screen bg-white">
-        {/* <AuthProvider> */}
+        <MuiThemeProvider>
+          {/* <AuthProvider> */}
           {children}
-        {/* </AuthProvider> */}
+          {/* </AuthProvider> */}
+        </MuiThemeProvider>
       </body>
     </html>
   );

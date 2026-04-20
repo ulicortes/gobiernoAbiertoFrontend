@@ -55,6 +55,13 @@ export const servicio = {
     });
     return res.data;
   },
+  actualizarUsuario: async (id: string, data: Partial<import("@/types/managedUser").PanelUserRow>) => {
+    const res = await api.patch(`/user/${id}`, data);
+    return res.data;
+  },
+  eliminarUsuario: async (id: string) => {
+    await api.delete(`/user/${id}`);
+  },
   getCategorias: async () => {
     try {
       const res = await api.get(`/category`);

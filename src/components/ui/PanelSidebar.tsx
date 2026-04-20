@@ -118,7 +118,7 @@ export default function PanelSidebar() {
       </div>
 
       {/* EDITAR CATEGORÍAS */}
-      <div className="mt-auto pt-4">
+      <div className="mt-auto border-t border-gray-300 pt-4">
         <Link
           href="/panel/categorias"
           className={`flex items-center gap-2 w-full py-2 px-2 rounded hover:bg-gray-300 font-medium ${

@@ -87,7 +87,19 @@ export default function ArchivosCategoryPage({
   const columns: GridColDef[] = isEconomic
     ? [
         { field: "title", headerName: "Nombre de archivo", width: 300, editable: true },
-        { field: "trimester", headerName: "Trimestre", width: 150, editable: true },
+        {
+          field: "trimester",
+          headerName: "Trimestre",
+          width: 170,
+          editable: true,
+          type: "singleSelect",
+          valueOptions: [
+            "Primer trimestre",
+            "Segundo trimestre",
+            "Tercer trimestre",
+            "Cuarto trimestre",
+          ],
+        },
         { field: "year", headerName: "Año", width: 100, editable: true },
         ...columnsFilePanel.filter((c) => c.field !== "title"),
       ]

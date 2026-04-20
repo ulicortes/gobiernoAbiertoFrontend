@@ -38,5 +38,12 @@ export const columnsFilePanel: GridColDef[] = [
 
 export const columnsCategories: GridColDef[] = [
   { field: "name", headerName: "Nombre", width: 300, editable: true },
-  { field: "section", headerName: "Sección", width: 150, editable: true },
+  {
+    field: "section",
+    headerName: "Sección",
+    width: 160,
+    editable: true,
+    type: "singleSelect",
+    valueOptions: ["HOME", "TRANSPARENCIA"],
+  },
 ];

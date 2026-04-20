@@ -6,6 +6,7 @@ import {
   GridColDef,
   GridValidRowModel,
   GridActionsCellItem,
+  GridRowParams,
 } from "@mui/x-data-grid";
 import DeleteIcon from "@mui/icons-material/Delete";
 
@@ -15,6 +16,12 @@ interface DataTableProps {
   showActions?: boolean;
   onRowUpdate?: (newRow: GridValidRowModel) => Promise<GridValidRowModel>;
   onRowDelete?: (id: any) => void;
+  /** Acciones extra por fila, que se anteponen al botón de borrar */
+  extraActions?: (params: GridRowParams) => React.ReactElement[];
+  /** Si se provee, se muestra un `confirm()` con este mensaje antes de borrar */
+  deleteWarning?: string;
+  /** Alto del contenedor en px. Por defecto 600. */
+  height?: number;
 }
 
 export default function DataTable({
@@ -23,13 +30,19 @@ export default function DataTable({
   showActions,
   onRowUpdate,
   onRowDelete,
+  extraActions,
+  deleteWarning,
+  height = 600,
 }: DataTableProps) {
+  const actionsWidth = extraActions ? 110 : 60;
+
   const actionsColumn: GridColDef = {
     field: "actions",
     type: "actions",
     headerName: "",
-    width: 60,
-    getActions: (params) => [
+    width: actionsWidth,
+    getActions: (params: GridRowParams) => [
+      ...(extraActions ? extraActions(params) : []),
       <GridActionsCellItem
         key="delete"
         icon={<DeleteIcon />}
@@ -38,6 +51,7 @@ export default function DataTable({
       />,
     ],
   };
+
   const processRowUpdate = async (newRow: GridValidRowModel) => {
     if (onRowUpdate) {
       return await onRowUpdate(newRow);
@@ -46,6 +60,7 @@ export default function DataTable({
   };
 
   async function deleteItem(id: any) {
+    if (deleteWarning && !window.confirm(deleteWarning)) return;
     if (onRowDelete) {
       onRowDelete(id);
     }
@@ -54,8 +69,14 @@ export default function DataTable({
   const finalColumns = showActions ? [...columns, actionsColumn] : columns;
 
   return (
-    <Box sx={{ height: 600, width: "100%", maxWidth: "100%", minWidth: 0 }}>
+    <Box sx={{ height, width: "100%", maxWidth: "100%", minWidth: 0 }}>
       <DataGrid
+        sx={{
+          fontFamily: "sans-serif",
+          "& .MuiDataGrid-columnHeaderTitle": {
+            fontFamily: "Linotte, sans-serif",
+          },
+        }}
         rows={rows}
         columns={finalColumns}
         initialState={{
@@ -66,12 +87,6 @@ export default function DataTable({
           },
         }}
         pageSizeOptions={[10]}
-        //checkboxSelection
-        // autosizeOnMount // Ajusta el ancho al cargar
-        // autosizeOptions={{
-        //   includeOutliers: true,
-        //   includeHeaders: true,
-        // }}
         disableRowSelectionOnClick
         processRowUpdate={processRowUpdate}
         onProcessRowUpdateError={(error) => console.error(error)}
