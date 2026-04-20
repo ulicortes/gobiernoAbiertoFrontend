@@ -22,6 +22,8 @@ interface DataTableProps {
   deleteWarning?: string;
   /** Alto del contenedor en px. Por defecto 600. */
   height?: number;
+  /** Tamaño de fuente de los títulos de columna. Por defecto "0.875rem" (14 px). */
+  headerFontSize?: string | number;
 }
 
 export default function DataTable({
@@ -33,6 +35,7 @@ export default function DataTable({
   extraActions,
   deleteWarning,
   height = 600,
+  headerFontSize = "1rem",
 }: DataTableProps) {
   const actionsWidth = extraActions ? 110 : 60;
 
@@ -75,6 +78,7 @@ export default function DataTable({
           fontFamily: "sans-serif",
           "& .MuiDataGrid-columnHeaderTitle": {
             fontFamily: "Linotte, sans-serif",
+            fontSize: headerFontSize,
           },
         }}
         rows={rows}

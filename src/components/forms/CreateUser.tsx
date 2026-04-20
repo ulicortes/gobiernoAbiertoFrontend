@@ -152,6 +152,7 @@ export default function CreateUser({ onCreated }: CreateUserProps) {
             px: 4,
             textTransform: "none",
             minWidth: 160,
+            fontSize: "1rem",
           }}
         >
           {creating ? "Creando…" : "Crear usuario"}

@@ -19,7 +19,7 @@ export default function PanelHeader() {
         <Link href="/">
           <img src="/logo_municipio_negro.png" alt="Inicio" className="cursor-pointer" />
         </Link>
-        <div className="w-fit flex flex-col justify-end items-end">
+        <div className="w-fit flex flex-col justify-end items-end gap-2">
           <p className="text-sm md:text-base text-black-base">
             Bienvenido/a, {user?.name || "Usuario"}
             {user?.role === "super_admin" && (
@@ -28,7 +28,7 @@ export default function PanelHeader() {
           </p>
           <button
             onClick={cerrar_sesion}
-            className="bg-black text-white w-fit rounded-xl px-2 cursor-pointer"
+            className="bg-black-base hover:bg-black-dark text-white w-fit rounded-xl px-2 cursor-pointer"
           >
             Cerrar sesión
           </button>
