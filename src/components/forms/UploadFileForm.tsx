@@ -2,8 +2,13 @@
 
 import { useState, useEffect } from "react";
 import { TextField, MenuItem, Button, Box, Typography } from "@mui/material";
-import { HOME_CATEGORIES, TRANSPARENCIA_CATEGORIES } from "../ui/PanelSidebar";
 import { servicio } from "@/services/service";
+
+interface Cat {
+  id: number;
+  name: string;
+  section: string;
+}
 
 type UploadFileFormProps = {
   initialFile?: File | null;
@@ -21,13 +26,20 @@ export default function UploadFileForm({
   const [category, setCategory] = useState("");
   const [trimester, setTrimester] = useState("");
   const [year, setYear] = useState("");
+  const [allCategories, setAllCategories] = useState<Cat[]>([]);
+
+  useEffect(() => {
+    servicio
+      .getCategorias()
+      .then((res) => setAllCategories(res || []))
+      .catch(console.error);
+  }, []);
 
   const handleFile = (selected: File) => {
     setFile(selected);
     setFileName(selected.name);
   };
 
-  const allCategories = TRANSPARENCIA_CATEGORIES ? [...TRANSPARENCIA_CATEGORIES] : [];
   const selectedCategoryName =
     allCategories.find((c) => String(c.id) === String(category))?.name ?? "";
   const isEconomicReports = selectedCategoryName === "Reportes económicos";
@@ -35,11 +47,11 @@ export default function UploadFileForm({
   const shouldShowYear = isEconomicReports || isManagementReports;
 
   useEffect(() => {
-    if (initialCategory) {
+    if (initialCategory && allCategories.length > 0) {
       const match = allCategories.find((c) => c.name === initialCategory);
       if (match) setCategory(String(match.id));
     }
-  }, [initialCategory]);
+  }, [initialCategory, allCategories]);
 
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault();

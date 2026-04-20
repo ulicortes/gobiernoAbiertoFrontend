@@ -3,76 +3,42 @@
 import { servicio } from "@/services/service";
 import { useState, useEffect } from "react";
 import { useAuth } from "@/components/providers/AuthProvider";
-import {
-  PANEL_SECTION_PASSWORD,
-  PANEL_SECTION_USERS,
-} from "@/lib/panelSections";
+import { usePathname } from "next/navigation";
+import Link from "next/link";
+import { toSlug } from "@/lib/slugify";
 
-export const HOME_CATEGORIES = ["Informes de gestión", "Guía de usuario"];
-// {"id":1,"name":"haberes"}
-interface cat {
+interface Cat {
   id: number;
   name: string;
   section: string;
 }
-export let TRANSPARENCIA_CATEGORIES: cat[];
 
-type PanelSidebarProps = {
-  selectedCategory: string | null;
-  onSelectCategory: (category: string) => void;
-  onEditarCategorias: () => void;
-};
-
-export default function PanelSidebar({
-  selectedCategory,
-  onSelectCategory,
-  onEditarCategorias,
-}: PanelSidebarProps) {
+export default function PanelSidebar() {
   const { user } = useAuth();
+  const pathname = usePathname();
+  const [categories, setCategories] = useState<Cat[]>([]);
   const [homeOpen, setHomeOpen] = useState(true);
   const [transparenciaOpen, setTransparenciaOpen] = useState(true);
-  const [, setForceRender] = useState(false);
 
   useEffect(() => {
-    async function initCategories() {
-      if (!TRANSPARENCIA_CATEGORIES) {
-        try {
-          const res = await servicio.getCategorias();
-          TRANSPARENCIA_CATEGORIES = res;
-          setForceRender(true);
-        } catch (error) {
-          console.error(error);
-        }
-      }
-    }
-    initCategories();
+    servicio
+      .getCategorias()
+      .then((res) => setCategories(res || []))
+      .catch(console.error);
   }, []);
 
-  async function openHome() {
-    try {
-      if (!TRANSPARENCIA_CATEGORIES) {
-        const res = await servicio.getCategorias();
-        TRANSPARENCIA_CATEGORIES = res;
-      }
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setHomeOpen(!homeOpen);
-    }
+  function isActive(href: string) {
+    return pathname === href || pathname.startsWith(href + "/");
   }
 
-  async function openTransparencia() {
-    try {
-      if (!TRANSPARENCIA_CATEGORIES) {
-        const res = await servicio.getCategorias();
-        TRANSPARENCIA_CATEGORIES = res;
-      }
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setTransparenciaOpen(!transparenciaOpen);
-    }
+  function catLink(name: string) {
+    return `/panel/archivos/${toSlug(name)}`;
   }
+
+  const linkClass = (href: string) =>
+    `text-left py-2 px-2 rounded hover:bg-gray-300 ${
+      isActive(href) ? "text-blue-base font-medium" : "text-black-base"
+    }`;
 
   return (
     <aside className="h-full w-full min-h-[60vh] bg-gray-200 rounded-xl flex flex-col py-4 px-4">
@@ -80,7 +46,7 @@ export default function PanelSidebar({
       <div className="flex flex-col">
         <button
           type="button"
-          onClick={() => openHome()}
+          onClick={() => setHomeOpen((o) => !o)}
           className="flex items-center justify-between w-full text-left font-bold text-black-base py-2 hover:bg-gray-300 rounded px-2"
         >
           HOME
@@ -90,28 +56,18 @@ export default function PanelSidebar({
             stroke="currentColor"
             viewBox="0 0 24 24"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M19 9l-7 7-7-7"
-            />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
           </svg>
         </button>
-        {homeOpen && TRANSPARENCIA_CATEGORIES && (
+        {homeOpen && (
           <div className="flex flex-col pl-2 mt-1">
-            {TRANSPARENCIA_CATEGORIES.filter((c) => c.section == "home").map(
-              (label) => (
-                <button
-                  key={label.id}
-                  type="button"
-                  onClick={() => onSelectCategory(label.name)}
-                  className={`text-left py-2 px-2 rounded hover:bg-gray-300 ${selectedCategory === label.name ? "text-blue-base font-medium" : "text-black-base"}`}
-                >
-                  {label.name}
-                </button>
-              ),
-            )}
+            {categories
+              .filter((c) => c.section === "home")
+              .map((cat) => (
+                <Link key={cat.id} href={catLink(cat.name)} className={linkClass(catLink(cat.name))}>
+                  {cat.name}
+                </Link>
+              ))}
           </div>
         )}
       </div>
@@ -120,7 +76,7 @@ export default function PanelSidebar({
       <div className="flex flex-col mt-2">
         <button
           type="button"
-          onClick={() => openTransparencia()}
+          onClick={() => setTransparenciaOpen((o) => !o)}
           className="flex items-center justify-between w-full text-left font-bold text-black-base py-2 hover:bg-gray-300 rounded px-2"
         >
           TRANSPARENCIA
@@ -130,67 +86,46 @@ export default function PanelSidebar({
             stroke="currentColor"
             viewBox="0 0 24 24"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M19 9l-7 7-7-7"
-            />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
           </svg>
         </button>
-        {transparenciaOpen && TRANSPARENCIA_CATEGORIES && (
+        {transparenciaOpen && (
           <div className="flex flex-col pl-2 mt-1">
-            {TRANSPARENCIA_CATEGORIES.filter(
-              (c) => c.section == "transparencia",
-            ).map((label: cat) => (
-              <button
-                key={label.id}
-                type="button"
-                onClick={() => onSelectCategory(label.name)}
-                className={`text-left py-2 px-2 rounded hover:bg-gray-300 ${selectedCategory === label.name ? "text-blue-base font-medium" : "text-black-base"}`}
-              >
-                {label.name}
-              </button>
-            ))}
+            {categories
+              .filter((c) => c.section === "transparencia")
+              .map((cat) => (
+                <Link key={cat.id} href={catLink(cat.name)} className={linkClass(catLink(cat.name))}>
+                  {cat.name}
+                </Link>
+              ))}
           </div>
         )}
       </div>
 
+      {/* CUENTA */}
       <div className="flex flex-col mt-4 border-t border-gray-300 pt-3 gap-1">
         <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide px-2">
           Cuenta
         </p>
-        <button
-          type="button"
-          onClick={() => onSelectCategory(PANEL_SECTION_PASSWORD)}
-          className={`text-left py-2 px-2 rounded hover:bg-gray-300 font-medium ${selectedCategory === PANEL_SECTION_PASSWORD ? "text-blue-base" : "text-black-base"}`}
-        >
+        <Link href="/panel/password" className={linkClass("/panel/password") + " font-medium"}>
           Mi contraseña
-        </button>
+        </Link>
         {user?.role === "super_admin" && (
-          <button
-            type="button"
-            onClick={() => onSelectCategory(PANEL_SECTION_USERS)}
-            className={`text-left py-2 px-2 rounded hover:bg-gray-300 font-medium ${selectedCategory === PANEL_SECTION_USERS ? "text-blue-base" : "text-black-base"}`}
-          >
+          <Link href="/panel/usuarios" className={linkClass("/panel/usuarios") + " font-medium"}>
             Usuarios
-          </button>
+          </Link>
         )}
       </div>
 
-      {/* Editar categorías - al fondo */}
+      {/* EDITAR CATEGORÍAS */}
       <div className="mt-auto pt-4">
-        <button
-          type="button"
-          onClick={onEditarCategorias}
-          className={`flex items-center gap-2 w-full py-2 px-2 rounded hover:bg-gray-300 font-medium ${selectedCategory === "Editar categorías" ? "text-blue-base" : "text-black-base"}`}
+        <Link
+          href="/panel/categorias"
+          className={`flex items-center gap-2 w-full py-2 px-2 rounded hover:bg-gray-300 font-medium ${
+            isActive("/panel/categorias") ? "text-blue-base" : "text-black-base"
+          }`}
         >
-          <svg
-            className="w-4 h-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -199,7 +134,7 @@ export default function PanelSidebar({
             />
           </svg>
           Editar categorías
-        </button>
+        </Link>
       </div>
     </aside>
   );

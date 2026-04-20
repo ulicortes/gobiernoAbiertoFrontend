@@ -2,6 +2,7 @@ import { UserLogin } from "@/types/userLogin";
 import { NewCategory } from "@/types/newCategory";
 import type { CreateManagedUserPayload, PanelUserRow } from "@/types/managedUser";
 import api from "./api";
+import { toSlug } from "@/lib/slugify";
 
 export const servicio = {
   login: async (data: UserLogin) => {
@@ -72,14 +73,7 @@ export const servicio = {
   },
   getArchivosDeUnaCategoria: async (catNameOrSlug: string) => {
     try {
-      const slug = catNameOrSlug
-        .toLowerCase()
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .replace(/[^a-z0-9]+/g, "-")
-        .replace(/(^-|-$)+/g, "");
-
-      const res = await api.get(`/file/cat/${slug}`);
+      const res = await api.get(`/file/cat/${toSlug(catNameOrSlug)}`);
       return res.data;
     } catch (error) {
       console.log(error);

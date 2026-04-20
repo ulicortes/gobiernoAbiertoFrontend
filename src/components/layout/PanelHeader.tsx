@@ -17,11 +17,11 @@ export default function PanelHeader() {
     <header className="w-full flex flex-col items-center bg-white border-b border-gray-200">
       <div className="w-full flex flex-row justify-between items-center px-4 md:px-8 py-3">
         <Link href="/">
-          <img src="./logo_municipio_negro.png" alt="Inicio" className="cursor-pointer" />
+          <img src="/logo_municipio_negro.png" alt="Inicio" className="cursor-pointer" />
         </Link>
         <div className="w-fit flex flex-col justify-end items-end">
           <p className="text-sm md:text-base text-black-base">
-            Bienvenido, {user?.name || "Usuario"}
+            Bienvenido/a, {user?.name || "Usuario"}
             {user?.role === "super_admin" && (
               <span className="text-gray-500 font-normal"> · Super admin</span>
             )}
