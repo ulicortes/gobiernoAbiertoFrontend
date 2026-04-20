@@ -46,8 +46,8 @@ export default function UserManagementPanel() {
     e.preventDefault();
     setFormError("");
     setFormOk("");
-    if (password.length < 8) {
-      setFormError("La contraseña debe tener al menos 8 caracteres.");
+    if (password.length < 4) {
+      setFormError("La contraseña debe tener al menos 4 caracteres.");
       return;
     }
     const payload: CreateManagedUserPayload = {
@@ -82,8 +82,8 @@ export default function UserManagementPanel() {
     e.preventDefault();
     if (!resetUser) return;
     setResetError("");
-    if (newPw.length < 8) {
-      setResetError("La contraseña debe tener al menos 8 caracteres.");
+    if (newPw.length < 4) {
+      setResetError("La contraseña debe tener al menos 4 caracteres.");
       return;
     }
     if (newPw !== newPw2) {
@@ -148,12 +148,12 @@ export default function UserManagementPanel() {
             required
           />
           <PasswordField
-            placeholder="Contraseña inicial (mín. 8)"
+            placeholder="Contraseña inicial (mín. 4 caracteres)"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="!py-2"
             required
-            minLength={8}
+            minLength={4}
             autoComplete="new-password"
           />
           <select
@@ -240,7 +240,7 @@ export default function UserManagementPanel() {
                 value={newPw}
                 onChange={(e) => setNewPw(e.target.value)}
                 className="!py-2"
-                minLength={8}
+                minLength={4}
                 required
                 autoComplete="new-password"
               />
@@ -249,7 +249,7 @@ export default function UserManagementPanel() {
                 value={newPw2}
                 onChange={(e) => setNewPw2(e.target.value)}
                 className="!py-2"
-                minLength={8}
+                minLength={4}
                 required
                 autoComplete="new-password"
               />

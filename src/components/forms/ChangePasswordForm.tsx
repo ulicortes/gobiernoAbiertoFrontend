@@ -16,8 +16,8 @@ export default function ChangePasswordForm() {
     e.preventDefault();
     setError("");
     setMessage("");
-    if (newPassword.length < 8) {
-      setError("La nueva contraseña debe tener al menos 8 caracteres.");
+    if (newPassword.length < 4) {
+      setError("La nueva contraseña debe tener al menos 4 caracteres.");
       return;
     }
     if (newPassword !== confirm) {
@@ -46,7 +46,7 @@ export default function ChangePasswordForm() {
     <div className="w-full max-w-md mx-auto">
       <h2 className="text-xl font-bold text-black-base mb-2">Cambiar mi contraseña</h2>
       <p className="text-sm text-gray-600 mb-6">
-        Ingresá tu contraseña actual y elegí una nueva (mínimo 8 caracteres).
+        Ingresá tu contraseña actual y elegí una nueva (mínimo 4 caracteres).
       </p>
       <form
         onSubmit={handleSubmit}
@@ -74,7 +74,7 @@ export default function ChangePasswordForm() {
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
             required
-            minLength={8}
+            minLength={4}
           />
         </div>
         <div className="flex flex-col gap-1">
@@ -87,7 +87,7 @@ export default function ChangePasswordForm() {
             value={confirm}
             onChange={(e) => setConfirm(e.target.value)}
             required
-            minLength={8}
+            minLength={4}
           />
         </div>
         {error && (
@@ -99,7 +99,7 @@ export default function ChangePasswordForm() {
         <button
           type="submit"
           disabled={pending}
-          className="w-full bg-[#333333] text-white py-2.5 rounded-lg hover:bg-black/90 disabled:opacity-60"
+          className="w-full bg-[#333333] text-white py-2.5 rounded-lg hover:bg-black/90 disabled:opacity-60 cursor-pointer"
         >
           {pending ? "Guardando…" : "Guardar contraseña"}
         </button>

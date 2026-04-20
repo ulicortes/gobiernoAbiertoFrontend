@@ -92,7 +92,7 @@ export default function LoginMenu({ onClose }: LoginMenuProps) {
           {errorMsg && <p className="text-red-500 text-sm text-center font-medium">{errorMsg}</p>}
           <button
             type="submit"
-            className="w-full bg-[#333333] text-white font-normal py-2.5 rounded-lg hover:bg-black/90 transition-colors"
+            className="w-full bg-[#333333] text-white font-normal py-2.5 rounded-lg hover:bg-black/90 transition-colors cursor-pointer"
           >
             Ingresar
           </button>
