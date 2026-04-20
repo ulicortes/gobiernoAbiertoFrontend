@@ -91,7 +91,7 @@ export const servicio = {
     formData.append("categoryId", categoryId);
     if (customName) formData.append("customName", customName);
     if (trimester) formData.append("trimester", trimester);
-    if (year) formData.append("year", year.toString());
+    if (year !== undefined) formData.append("year", year.toString());
     try {
       const response = await api.post("/file/upload", formData, {
         withCredentials: true,
@@ -103,9 +103,19 @@ export const servicio = {
       throw error;
     }
   },
-  editarArchivo: async (id: string, name: string) => {
+  editarArchivo: async (
+    id: string,
+    name: string,
+    trimester?: string,
+    year?: string | number,
+  ) => {
     try {
-      const response = await api.patch(`/file/${id}`, { name });
+      const body: Record<string, any> = { name };
+      if (trimester !== undefined && trimester !== "-")
+        body.trimester = trimester;
+      if (year !== undefined && year !== "-")
+        body.year = typeof year === "string" ? parseInt(year, 10) : year;
+      const response = await api.patch(`/file/${id}`, body);
       return response.data;
     } catch (e) {
       console.log(e);

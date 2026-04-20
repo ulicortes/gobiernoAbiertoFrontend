@@ -10,7 +10,7 @@ import PanelHeader from "@/components/layout/PanelHeader";
 import AddCategoryForm from "@/components/forms/AddCategoryForm";
 import UploadFileButton from "@/components/ui/UploadFileButton";
 import { AuthProvider } from "@/components/providers/AuthProvider";
-import { columnsFile, columnsCategories } from "@/lib/TableColumns";
+import { columnsFilePanel, columnsCategories } from "@/lib/TableColumns";
 import { GridColDef } from "@mui/x-data-grid";
 import { servicio } from "@/services/service";
 
@@ -72,25 +72,42 @@ export default function PanelPage() {
     void showDataTable(label);
   }
 
+  function resolveFileType(type: string | undefined, filePath: string | undefined): string {
+    const typeLabels: Record<string, string> = {
+      pdf: "PDF",
+      image: "Imagen",
+      doc: "Documento",
+      other: "Otro",
+    };
+    if (type && typeLabels[type]) return typeLabels[type];
+    // fallback: derivar desde la extensión del filePath
+    const ext = filePath?.split(".").pop()?.toLowerCase();
+    if (ext === "pdf") return "PDF";
+    if (ext && ["jpg", "jpeg", "png", "gif", "webp", "svg"].includes(ext)) return "Imagen";
+    if (ext && ["doc", "docx"].includes(ext)) return "Documento";
+    if (ext && ["xls", "xlsx", "csv"].includes(ext)) return "Planilla";
+    return "Otro";
+  }
+
+  function mapFileToRow(f: any): ElementoTabla {
+    return {
+      id: f.id,
+      title: f.title || f.name,
+      date: new Date(f.date || f.createdAt || new Date()).toLocaleDateString(),
+      size: f.size ? (f.size / 1024 / 1024).toFixed(2) + " MB" : "N/A",
+      type: resolveFileType(f.type, f.filePath),
+      trimester: f.trimester || "-",
+      year: f.year || "-",
+    };
+  }
+
   async function showDataTable(category: string) {
     try {
       setLoading(true);
       setContentView("dataTable");
       
       await servicio.getArchivosDeUnaCategoria(category).then((r) => {
-        if(r) {
-          const data = r.map((f: any) => ({
-             id: f.id,
-             title: f.title || f.name,
-             date: new Date(f.date || f.createdAt || new Date()).toLocaleDateString(),
-             size: f.size ? (f.size / 1024 / 1024).toFixed(2) + ' MB' : 'N/A',
-             trimester: f.trimester || '-',
-             year: f.year || '-'
-          }));
-          setRows(data);
-        } else {
-          setRows([]);
-        }
+        setRows(r ? r.map(mapFileToRow) : []);
         setSelectedCategory(category);
       });
     } catch (e) {
@@ -105,18 +122,7 @@ export default function PanelPage() {
   async function getRows() {
     try {
       const res = await servicio.getArchivosDeUnaCategoria(selectedCategory || "");
-      if(res) {
-        setRows(res.map((f: any) => ({
-             id: f.id,
-             title: f.title || f.name,
-             date: new Date(f.date || f.createdAt || new Date()).toLocaleDateString(),
-             size: f.size ? (f.size / 1024 / 1024).toFixed(2) + ' MB' : 'N/A',
-             trimester: f.trimester || '-',
-             year: f.year || '-'
-        })));
-      } else {
-        setRows([]);
-      }
+      setRows(res ? res.map(mapFileToRow) : []);
     } catch (e) {
       console.log(e);
     } finally {
@@ -133,7 +139,13 @@ export default function PanelPage() {
 
   const handleRowUpdate = async (newRow: any) => {
     try {
-      await servicio.editarArchivo(newRow.id, newRow.title);
+      const isEconomic = selectedCategory === "Reportes económicos";
+      await servicio.editarArchivo(
+        newRow.id,
+        newRow.title,
+        isEconomic ? newRow.trimester : undefined,
+        isEconomic ? newRow.year : undefined,
+      );
       return newRow;
     } catch (e) {
       console.log(e);
@@ -170,15 +182,18 @@ export default function PanelPage() {
     }
   };
 
-  const baseColumns: GridColDef[] = columnsFile.map((c) => 
-    c.field === "title" ? { ...c, editable: true } : c
-  );
-  
-  const columns: GridColDef[] = selectedCategory === "Reportes económicos" ? [
-    ...baseColumns,
-    { field: "trimester", headerName: "Trimestre", width: 150 },
-    { field: "year", headerName: "Año", width: 100 }
-  ] : baseColumns;
+  const columns: GridColDef[] =
+    selectedCategory === "Reportes económicos"
+      ? [
+          { field: "title", headerName: "Nombre de archivo", width: 300, editable: true },
+          { field: "trimester", headerName: "Trimestre", width: 150, editable: true },
+          { field: "year", headerName: "Año", width: 100, editable: true },
+          ...columnsFilePanel.filter(
+            (c) => c.field !== "title",
+          ),
+        ]
+      : columnsFilePanel;
+
   const cat_columns: GridColDef[] = columnsCategories;
 
   return (

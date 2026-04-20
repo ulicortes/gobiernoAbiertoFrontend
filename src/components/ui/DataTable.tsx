@@ -66,7 +66,7 @@ export default function DataTable({
           },
         }}
         pageSizeOptions={[10]}
-        checkboxSelection
+        //checkboxSelection
         // autosizeOnMount // Ajusta el ancho al cargar
         // autosizeOptions={{
         //   includeOutliers: true,
@@ -74,6 +74,7 @@ export default function DataTable({
         // }}
         disableRowSelectionOnClick
         processRowUpdate={processRowUpdate}
+        onProcessRowUpdateError={(error) => console.error(error)}
       />
     </Box>
   );

@@ -1,7 +1,7 @@
 'use client'
 import { servicio } from "@/services/service";
 import DataTable from "@/components/ui/DataTable";
-import { columnsFile } from "@/lib/TableColumns";
+import { columnsFilePublic } from "@/lib/TableColumns";
 import { useEffect, useState, use } from "react";
 import { ElementoTabla } from "@/types/elemento";
 import Historial from "@/components/public/Historial";
@@ -19,13 +19,31 @@ export default function DynamicCategoryPage({ params }: { params: Promise<{ cate
         const resultado: any[] = await servicio.getArchivosDeUnaCategoria(categoryName);
         if (resultado) {
           setRawFiles(resultado);
-          // Map backend data to table columns expected format (title, date, size)
-          // Keep the ID for DataGrid's internal mapping.
-          const mappedRows = resultado.map(file => ({
-             id: file.id,
-             title: file.title || file.name,
-             date: file.date ? new Date(file.date).toLocaleDateString() : new Date(file.createdAt || new Date()).toLocaleDateString(),
-             size: file.size ? (file.size / 1024 / 1024).toFixed(2) + ' MB' : 'N/A'
+          const typeLabels: Record<string, string> = {
+            pdf: "PDF",
+            image: "Imagen",
+            doc: "Documento",
+            other: "Otro",
+          };
+          const resolveType = (type: string | undefined, filePath: string | undefined) => {
+            if (type && typeLabels[type]) return typeLabels[type];
+            const ext = filePath?.split(".").pop()?.toLowerCase();
+            if (ext === "pdf") return "PDF";
+            if (ext && ["jpg", "jpeg", "png", "gif", "webp", "svg"].includes(ext)) return "Imagen";
+            if (ext && ["doc", "docx"].includes(ext)) return "Documento";
+            if (ext && ["xls", "xlsx", "csv"].includes(ext)) return "Planilla";
+            return "Otro";
+          };
+          const mappedRows = resultado.map((file: any) => ({
+            id: file.id,
+            title: file.title || file.name,
+            date: file.date
+              ? new Date(file.date).toLocaleDateString()
+              : new Date(file.createdAt || new Date()).toLocaleDateString(),
+            size: file.size
+              ? (file.size / 1024 / 1024).toFixed(2) + " MB"
+              : "N/A",
+            type: resolveType(file.type, file.filePath),
           }));
           setRows(mappedRows);
         }
@@ -65,7 +83,7 @@ export default function DynamicCategoryPage({ params }: { params: Promise<{ cate
               ))}
            </div>
         ) : (
-           <DataTable rows={rows} columns={columnsFile} />
+           <DataTable rows={rows} columns={columnsFilePublic} />
         )}
     </div>
   );

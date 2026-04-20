@@ -28,7 +28,11 @@ export default function UploadFileForm({
   };
 
   const allCategories = TRANSPARENCIA_CATEGORIES ? [...TRANSPARENCIA_CATEGORIES] : [];
-  const isEconomicReports = allCategories.find((c) => String(c.id) === String(category))?.name === "Reportes económicos";
+  const selectedCategoryName =
+    allCategories.find((c) => String(c.id) === String(category))?.name ?? "";
+  const isEconomicReports = selectedCategoryName === "Reportes económicos";
+  const isManagementReports = selectedCategoryName === "Informes de gestión";
+  const shouldShowYear = isEconomicReports || isManagementReports;
 
   useEffect(() => {
     if (initialCategory) {
@@ -65,11 +69,11 @@ export default function UploadFileForm({
         file, 
         category, 
         fileName, 
-        isEconomicReports ? trimester : undefined, 
-        isEconomicReports ? parseInt(year, 10) : undefined
+        isEconomicReports ? trimester : undefined,
+        shouldShowYear ? parseInt(year, 10) : undefined
       );
       if(res) { 
-        setMessage('Se agrego el archivo exitosamente!');
+        setMessage('¡Se agregó el archivo exitosamente!');
         setFile(null);
         setTrimester("");
         setYear("");
@@ -148,21 +152,23 @@ export default function UploadFileForm({
             ))}
           </TextField>
 
-          {isEconomicReports && (
+          {(isEconomicReports || isManagementReports) && (
             <>
-              <TextField
-                select
-                label="Trimestre"
-                value={trimester}
-                onChange={(e) => setTrimester(e.target.value)}
-                fullWidth
-                required
-              >
-                <MenuItem value="Primer trimestre">Primer trimestre</MenuItem>
-                <MenuItem value="Segundo trimestre">Segundo trimestre</MenuItem>
-                <MenuItem value="Tercer trimestre">Tercer trimestre</MenuItem>
-                <MenuItem value="Cuarto trimestre">Cuarto trimestre</MenuItem>
-              </TextField>
+              {isEconomicReports && (
+                <TextField
+                  select
+                  label="Trimestre"
+                  value={trimester}
+                  onChange={(e) => setTrimester(e.target.value)}
+                  fullWidth
+                  required
+                >
+                  <MenuItem value="Primer trimestre">Primer trimestre</MenuItem>
+                  <MenuItem value="Segundo trimestre">Segundo trimestre</MenuItem>
+                  <MenuItem value="Tercer trimestre">Tercer trimestre</MenuItem>
+                  <MenuItem value="Cuarto trimestre">Cuarto trimestre</MenuItem>
+                </TextField>
+              )}
 
               <TextField
                 label="Año"
@@ -189,7 +195,8 @@ export default function UploadFileForm({
               !file ||
               !fileName ||
               !category ||
-              (isEconomicReports && (!trimester || !year || year.length < 4))
+              (isEconomicReports && (!trimester || !year || year.length < 4)) ||
+              (isManagementReports && (!year || year.length < 4))
             }
             sx={{
               mt: 1,
