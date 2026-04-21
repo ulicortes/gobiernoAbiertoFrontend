@@ -1,7 +1,16 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { TextField, MenuItem, Button, Box, Typography } from "@mui/material";
+import {
+  TextField,
+  MenuItem,
+  Button,
+  Box,
+  Typography,
+  FormControlLabel,
+  Checkbox,
+  Alert,
+} from "@mui/material";
 import { servicio } from "@/services/service";
 
 interface Cat {
@@ -21,11 +30,13 @@ export default function UploadFileForm({
 }: UploadFileFormProps) {
   const [file, setFile] = useState<File | null>(initialFile || null);
   const [dragActive, setDragActive] = useState(false);
-  const [message, setMessage] = useState<String>('');
+  const [message, setMessage] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
   const [fileName, setFileName] = useState(initialFile?.name || "");
   const [category, setCategory] = useState("");
   const [trimester, setTrimester] = useState("");
   const [year, setYear] = useState("");
+  const [isAnnualBudget, setIsAnnualBudget] = useState(false);
   const [allCategories, setAllCategories] = useState<Cat[]>([]);
 
   useEffect(() => {
@@ -38,6 +49,7 @@ export default function UploadFileForm({
   const handleFile = (selected: File) => {
     setFile(selected);
     setFileName(selected.name);
+    setErrorMessage("");
   };
 
   const selectedCategoryName =
@@ -45,6 +57,12 @@ export default function UploadFileForm({
   const isEconomicReports = selectedCategoryName === "Reportes económicos";
   const isManagementReports = selectedCategoryName === "Informes de gestión";
   const shouldShowYear = isEconomicReports || isManagementReports;
+
+  useEffect(() => {
+    if (!isEconomicReports) {
+      setIsAnnualBudget(false);
+    }
+  }, [isEconomicReports]);
 
   useEffect(() => {
     if (initialCategory && allCategories.length > 0) {
@@ -69,31 +87,50 @@ export default function UploadFileForm({
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selected = e.target.files?.[0];
-    setMessage('');
+    setMessage("");
+    setErrorMessage("");
     if (selected) handleFile(selected);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!file) return;
+    setErrorMessage("");
     try {
       const res = await servicio.insertArchivo(
-        file, 
-        category, 
-        fileName, 
-        isEconomicReports ? trimester : undefined,
-        shouldShowYear ? parseInt(year, 10) : undefined
+        file,
+        category,
+        fileName,
+        isEconomicReports ? (isAnnualBudget ? "null" : trimester) : undefined,
+        shouldShowYear ? parseInt(year, 10) : undefined,
+        isEconomicReports ? isAnnualBudget : undefined,
       );
-      if(res) { 
-        setMessage('¡Se agregó el archivo exitosamente!');
+      if (res) {
+        setMessage("¡Se agregó el archivo exitosamente!");
         setFile(null);
         setTrimester("");
         setYear("");
+        setIsAnnualBudget(false);
       }
-    } catch (error) {
-      throw Error();
+    } catch (error: unknown) {
+      const ax = error as {
+        response?: { status?: number; data?: { message?: string | string[] } };
+      };
+      const backendMessage = ax.response?.data?.message;
+      const parsedMessage = Array.isArray(backendMessage)
+        ? backendMessage.join(" ")
+        : backendMessage;
+
+      if (ax.response?.status === 409) {
+        setErrorMessage(
+          parsedMessage ||
+            "Ya existe un presupuesto anual para ese año. Elegí otro año o editá el existente.",
+        );
+        return;
+      }
+
+      setErrorMessage(parsedMessage || "No se pudo subir el archivo. Intentá nuevamente.");
     }
-    // Aquí se puede integrar la subida real (API, etc.)
   };
 
   return (
@@ -136,9 +173,14 @@ export default function UploadFileForm({
           </Typography>
         )}
       </div>
-      {message !== '' && (
-      <h1 className="text-black text-xl w-full text-center">{message}</h1>
-	)}
+      {message !== "" && (
+        <h1 className="text-black text-xl w-full text-center">{message}</h1>
+      )}
+      {errorMessage !== "" && (
+        <Alert severity="error" sx={{ mb: 2 }}>
+          {errorMessage}
+        </Alert>
+      )}
       {file && (
         <Box sx={{ display: "flex", flexDirection: "column", gap: 3, mb: 2 }}>
           <TextField
@@ -167,19 +209,36 @@ export default function UploadFileForm({
           {(isEconomicReports || isManagementReports) && (
             <>
               {isEconomicReports && (
-                <TextField
-                  select
-                  label="Trimestre"
-                  value={trimester}
-                  onChange={(e) => setTrimester(e.target.value)}
-                  fullWidth
-                  required
-                >
-                  <MenuItem value="Primer trimestre">Primer trimestre</MenuItem>
-                  <MenuItem value="Segundo trimestre">Segundo trimestre</MenuItem>
-                  <MenuItem value="Tercer trimestre">Tercer trimestre</MenuItem>
-                  <MenuItem value="Cuarto trimestre">Cuarto trimestre</MenuItem>
-                </TextField>
+                <>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={isAnnualBudget}
+                        onChange={(e) => {
+                          const checked = e.target.checked;
+                          setIsAnnualBudget(checked);
+                          if (checked) setTrimester("");
+                        }}
+                      />
+                    }
+                    label="¿Este archivo es un presupuesto anual?"
+                  />
+                  {!isAnnualBudget && (
+                    <TextField
+                      select
+                      label="Trimestre"
+                      value={trimester}
+                      onChange={(e) => setTrimester(e.target.value)}
+                      fullWidth
+                      required
+                    >
+                      <MenuItem value="Primer trimestre">Primer trimestre</MenuItem>
+                      <MenuItem value="Segundo trimestre">Segundo trimestre</MenuItem>
+                      <MenuItem value="Tercer trimestre">Tercer trimestre</MenuItem>
+                      <MenuItem value="Cuarto trimestre">Cuarto trimestre</MenuItem>
+                    </TextField>
+                  )}
+                </>
               )}
 
               <TextField
@@ -207,7 +266,7 @@ export default function UploadFileForm({
               !file ||
               !fileName ||
               !category ||
-              (isEconomicReports && (!trimester || !year || year.length < 4)) ||
+              (isEconomicReports && ((!isAnnualBudget && !trimester) || !year || year.length < 4)) ||
               (isManagementReports && (!year || year.length < 4))
             }
             sx={{

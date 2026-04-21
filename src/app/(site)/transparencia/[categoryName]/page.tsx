@@ -2,14 +2,15 @@
 import { servicio } from "@/services/service";
 import DataTable from "@/components/ui/DataTable";
 import { columnsFilePublic } from "@/lib/TableColumns";
-import { useEffect, useState, use } from "react";
+import { useEffect, useState } from "react";
 import { ElementoTabla } from "@/types/elemento";
 import Historial from "@/components/public/Historial";
 import { resolveFileType } from "@/lib/fileUtils";
+import { useParams } from "next/navigation";
 
-export default function DynamicCategoryPage({ params }: { params: Promise<{ categoryName: string }> }) {
-  const resolvedParams = use(params);
-  const categoryName = decodeURIComponent(resolvedParams.categoryName);
+export default function DynamicCategoryPage() {
+  const params = useParams<{ categoryName: string }>();
+  const categoryName = decodeURIComponent(params.categoryName ?? "");
   const [rows, setRows] = useState<ElementoTabla[]>([]);
   const [rawFiles, setRawFiles] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);

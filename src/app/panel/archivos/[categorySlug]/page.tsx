@@ -1,6 +1,6 @@
 "use client";
 
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { servicio } from "@/services/service";
 import { toSlug } from "@/lib/slugify";
 import DataTable from "@/components/ui/DataTable";
@@ -10,6 +10,7 @@ import { columnsFilePanel } from "@/lib/TableColumns";
 import { GridColDef } from "@mui/x-data-grid";
 import { ElementoTabla } from "@/types/elemento";
 import { resolveFileType } from "@/lib/fileUtils";
+import { useParams } from "next/navigation";
 
 interface Cat {
   id: number;
@@ -30,12 +31,9 @@ function mapFileToRow(f: any): ElementoTabla {
   };
 }
 
-export default function ArchivosCategoryPage({
-  params,
-}: {
-  params: Promise<{ categorySlug: string }>;
-}) {
-  const { categorySlug } = use(params);
+export default function ArchivosCategoryPage() {
+  const params = useParams<{ categorySlug: string }>();
+  const categorySlug = decodeURIComponent(params.categorySlug ?? "");
 
   const [rows, setRows] = useState<ElementoTabla[]>([]);
   const [loading, setLoading] = useState(true);

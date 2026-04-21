@@ -1,3 +1,5 @@
+"use client";
+
 import ColorDivider from "@/components/ui/ColorDivider";
 import { useAuth } from "@/components/providers/AuthProvider";
 import { useRouter } from "next/navigation";

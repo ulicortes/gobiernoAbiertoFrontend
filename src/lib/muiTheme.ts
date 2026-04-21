@@ -45,6 +45,14 @@ const muiTheme = createTheme({
         },
       },
     },
+    MuiFormControlLabel: {
+      styleOverrides: {
+        label: {
+          color: "var(--color-black-base)",
+          fontFamily: "sans-serif",
+        },
+      },
+    },
   },
 });
 

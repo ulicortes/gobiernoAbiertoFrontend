@@ -1,6 +1,7 @@
 'use client'
 import { Accordion, AccordionSummary, AccordionDetails, Typography, Box } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import api from '@/services/api';
 
 export interface Archivo {
   id: string;
@@ -8,6 +9,8 @@ export interface Archivo {
   title?: string;
   trimester?: string;
   year?: number;
+  filePath?: string;
+  isAnnualBudget?: boolean;
 }
 
 interface HistorialProps {
@@ -16,6 +19,18 @@ interface HistorialProps {
 }
 
 export default function Historial({ anio, archivos }: HistorialProps) {
+    const annualBudgetFile = archivos.find(
+        (archivo) => archivo.isAnnualBudget === true && archivo.year === anio
+    );
+    const annualBudgetHref = annualBudgetFile?.filePath
+        ? (() => {
+            if (/^https?:\/\//i.test(annualBudgetFile.filePath)) return annualBudgetFile.filePath;
+            const base = (api.defaults.baseURL || '').replace(/\/$/, '');
+            const rel = annualBudgetFile.filePath.replace(/^\/+/, '');
+            return base ? `${base}/${rel}` : `/${rel}`;
+        })()
+        : undefined;
+
     const renderTrimestre = (trimestre: string) => {
         const archivosTrimestre = archivos.filter(a => a.trimester === trimestre);
         
@@ -61,7 +76,20 @@ export default function Historial({ anio, archivos }: HistorialProps) {
                     </Typography>
                 </AccordionSummary>
                 <AccordionDetails sx={{ backgroundColor: 'white', display: 'flex', flexDirection: 'column', p: 4 }}>
-                    <Typography sx={{ textAlign: 'center', fontWeight: 'bold', mb: 2, cursor: 'pointer', '&:hover': { textDecoration: 'underline' } }}>
+                    <Typography
+                        component={annualBudgetHref ? 'a' : 'span'}
+                        href={annualBudgetHref}
+                        target={annualBudgetHref ? '_blank' : undefined}
+                        rel={annualBudgetHref ? 'noopener noreferrer' : undefined}
+                        sx={{
+                            textAlign: 'center',
+                            fontWeight: 'bold',
+                            mb: 2,
+                            cursor: annualBudgetHref ? 'pointer' : 'default',
+                            color: annualBudgetHref ? 'inherit' : 'text.secondary',
+                            '&:hover': { textDecoration: annualBudgetHref ? 'underline' : 'none' },
+                        }}
+                    >
                         PRESUPUESTO ANUAL
                     </Typography>
                     
