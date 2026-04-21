@@ -11,13 +11,13 @@ export default function PanelLayout({
 }) {
   return (
     <AuthProvider>
-      <div className="w-full min-h-full flex flex-col">
+      <div className="w-full min-h-full flex flex-col overflow-x-hidden">
         <PanelHeader />
-        <div className="w-full flex-1 flex flex-col md:flex-row">
+        <div className="w-full min-w-0 flex-1 flex flex-col md:flex-row">
           <div className="w-full md:w-1/4 shrink-0 p-4 md:p-6">
             <PanelSidebar />
           </div>
-          <section className="flex-1 bg-white p-4 md:p-6 min-h-[50vh]">
+          <section className="flex-1 min-w-0 overflow-x-hidden bg-white p-4 md:p-6 min-h-[50vh]">
             {children}
           </section>
         </div>

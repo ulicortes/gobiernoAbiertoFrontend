@@ -26,7 +26,7 @@ interface DataTableProps {
   extraActions?: (params: GridRowParams) => React.ReactElement[];
   /** Si se provee, se muestra un `confirm()` con este mensaje antes de borrar */
   deleteWarning?: string;
-  /** Alto del contenedor en px. Por defecto 600. */
+  /** Altura mínima en px. La tabla crece automáticamente hasta 10 filas. */
   height?: number;
   /** Tamaño de fuente de los títulos de columna. Por defecto "0.875rem" (14 px). */
   headerFontSize?: string | number;
@@ -42,9 +42,10 @@ export default function DataTable({
   onRowDelete,
   extraActions,
   deleteWarning,
-  height = 600,
+  //height = 400,
   headerFontSize = "1rem",
 }: DataTableProps) {
+  //const minTableHeight = Math.max(height, 400);
   const hasDownloadAction = showDownloadAction;
   const hasDeleteAction = Boolean(onRowDelete);
   const hasExtraActions = Boolean(extraActions);
@@ -138,9 +139,12 @@ export default function DataTable({
     showActions && hasAnyActions ? [...normalizedColumns, actionsColumn] : normalizedColumns;
 
   return (
-    <Box sx={{ height, width: "100%", maxWidth: "100%", minWidth: 0 }}>
+    <Box sx={{ width: "100%", maxWidth: "100%", minWidth: 0 }}>
       <DataGrid
+        autoHeight
         sx={{
+          width: "100%",
+          minWidth: 0,
           fontFamily: "sans-serif",
           "& .MuiDataGrid-columnHeaderTitle": {
             fontFamily: "Linotte, sans-serif",

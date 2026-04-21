@@ -80,7 +80,6 @@ export default function DynamicCategoryPage() {
         <DataTable
           rows={rows}
           columns={columnsFilePublic}
-          height={650}
           showActions
           showDownloadAction
         />

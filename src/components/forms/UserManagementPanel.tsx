@@ -107,7 +107,6 @@ export default function UserManagementPanel() {
           deleteWarning="¿Estás segura/o de que querés eliminar este usuario? Esta acción no se puede deshacer."
           onRowUpdate={handleRowUpdate}
           onRowDelete={handleRowDelete}
-          height={350}
         />
       )}
 
