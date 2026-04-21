@@ -4,7 +4,7 @@ import DataTable from "@/components/ui/DataTable";
 import { columnsFilePublic } from "@/lib/TableColumns";
 import { useEffect, useState } from "react";
 import { ElementoTabla } from "@/types/elemento";
-import Historial from "@/components/public/Historial";
+import ReporteEconomicoCard from "@/components/public/ReporteEconomicoCard";
 import { resolveFileType } from "@/lib/fileUtils";
 import { useParams } from "next/navigation";
 
@@ -73,7 +73,7 @@ export default function DynamicCategoryPage() {
       ) : isEconomicReports ? (
         <div className="flex flex-col items-center mt-4 gap-4">
           {sortedYears.map((year) => (
-            <Historial key={year} anio={year} archivos={filesByYear[year]} />
+            <ReporteEconomicoCard key={year} anio={year} archivos={filesByYear[year]} />
           ))}
         </div>
       ) : (

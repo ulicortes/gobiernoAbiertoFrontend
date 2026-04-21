@@ -13,22 +13,24 @@ export interface Archivo {
   isAnnualBudget?: boolean;
 }
 
-interface HistorialProps {
+interface ReporteEconomicoCardProps {
     anio: number;
     archivos: Archivo[];
 }
 
-export default function Historial({ anio, archivos }: HistorialProps) {
+function toAbsoluteFileUrl(filePath: string): string {
+    if (/^https?:\/\//i.test(filePath)) return filePath;
+    const base = (api.defaults.baseURL || '').replace(/\/$/, '');
+    const rel = filePath.replace(/^\/+/, '');
+    return base ? `${base}/${rel}` : `/${rel}`;
+}
+
+export default function ReporteEconomicoCard({ anio, archivos }: ReporteEconomicoCardProps) {
     const annualBudgetFile = archivos.find(
         (archivo) => archivo.isAnnualBudget === true && archivo.year === anio
     );
     const annualBudgetHref = annualBudgetFile?.filePath
-        ? (() => {
-            if (/^https?:\/\//i.test(annualBudgetFile.filePath)) return annualBudgetFile.filePath;
-            const base = (api.defaults.baseURL || '').replace(/\/$/, '');
-            const rel = annualBudgetFile.filePath.replace(/^\/+/, '');
-            return base ? `${base}/${rel}` : `/${rel}`;
-        })()
+        ? toAbsoluteFileUrl(annualBudgetFile.filePath)
         : undefined;
 
     const renderTrimestre = (trimestre: string) => {
@@ -39,11 +41,29 @@ export default function Historial({ anio, archivos }: HistorialProps) {
                 <h2 className="w-5/6 self-start text-xl text-blue-light font-bold mb-2">{trimestre}</h2>
                 <div className="w-5/6 self-center flex flex-col items-start font-sans">
                     {archivosTrimestre.length > 0 ? (
-                        archivosTrimestre.map(archivo => (
-                            <p key={archivo.id} className="py-1 text-sm cursor-pointer hover:underline text-black-base">
-                                {archivo.title || archivo.name || `Documento ${archivo.id}`}
-                            </p>
-                        ))
+                        archivosTrimestre.map((archivo) => {
+                            const fileHref = archivo.filePath
+                                ? toAbsoluteFileUrl(archivo.filePath)
+                                : undefined;
+                            return (
+                                <Typography
+                                    key={archivo.id}
+                                    component={fileHref ? 'a' : 'span'}
+                                    href={fileHref}
+                                    target={fileHref ? '_blank' : undefined}
+                                    rel={fileHref ? 'noopener noreferrer' : undefined}
+                                    sx={{
+                                        py: 0.5,
+                                        fontFamily: "sans-serif",
+                                        cursor: fileHref ? 'pointer' : 'default',
+                                        color: fileHref ? 'var(--color-black-base)' : 'text.secondary',
+                                        '&:hover': { textDecoration: fileHref ? 'underline' : 'none' },
+                                    }}
+                                >
+                                    {archivo.title || archivo.name || `Documento ${archivo.id}`}
+                                </Typography>
+                            );
+                        })
                     ) : (
                         <p className="py-1 text-sm text-gray-500 italic">No hay documentos para este trimestre.</p>
                     )}
