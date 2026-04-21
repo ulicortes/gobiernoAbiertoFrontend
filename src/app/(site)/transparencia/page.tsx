@@ -2,6 +2,13 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { servicio } from "@/services/service";
+import {
+  CategoryLike,
+  getCategoriesBySection,
+  getPublicCategorySlug,
+} from "@/lib/categoryUtils";
+
+type Cat = CategoryLike;
 
 export default function TransparenciaPage() {
     const router = useRouter();
@@ -9,11 +16,9 @@ export default function TransparenciaPage() {
     useEffect(() => {
         servicio.getCategorias()
             .then((cats) => {
-                const first = (cats ?? [])
-                    .filter((c: any) => c.section.toLowerCase() === "transparencia")
-                    .sort((a: any, b: any) => a.name.localeCompare(b.name, "es"))[0];
+                const first = getCategoriesBySection((cats ?? []) as Cat[], "transparencia")[0];
                 if (first) {
-                    const slug = first.slug || encodeURIComponent(first.name);
+                    const slug = getPublicCategorySlug(first);
                     router.replace(`/transparencia/${slug}`);
                 }
             })

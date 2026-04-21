@@ -6,12 +6,9 @@ import { useAuth } from "@/components/providers/AuthProvider";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { toSlug } from "@/lib/slugify";
+import { CategoryLike, getCategoriesBySection } from "@/lib/categoryUtils";
 
-interface Cat {
-  id: number;
-  name: string;
-  section: string;
-}
+type Cat = CategoryLike;
 
 export default function PanelSidebar() {
   const { user } = useAuth();
@@ -34,6 +31,9 @@ export default function PanelSidebar() {
   function catLink(name: string) {
     return `/panel/archivos/${toSlug(name)}`;
   }
+
+  const homeCategories = getCategoriesBySection(categories, "home");
+  const transparenciaCategories = getCategoriesBySection(categories, "transparencia");
 
   const linkClass = (href: string) =>
     `text-left py-2 px-2 rounded hover:bg-gray-300 ${
@@ -61,13 +61,11 @@ export default function PanelSidebar() {
         </button>
         {homeOpen && (
           <div className="flex flex-col pl-2 mt-1">
-            {categories
-              .filter((c) => c.section === "home")
-              .map((cat) => (
-                <Link key={cat.id} href={catLink(cat.name)} className={linkClass(catLink(cat.name))}>
-                  {cat.name}
-                </Link>
-              ))}
+            {homeCategories.map((cat) => (
+              <Link key={cat.id} href={catLink(cat.name)} className={linkClass(catLink(cat.name))}>
+                {cat.name}
+              </Link>
+            ))}
           </div>
         )}
       </div>
@@ -91,13 +89,11 @@ export default function PanelSidebar() {
         </button>
         {transparenciaOpen && (
           <div className="flex flex-col pl-2 mt-1">
-            {categories
-              .filter((c) => c.section === "transparencia")
-              .map((cat) => (
-                <Link key={cat.id} href={catLink(cat.name)} className={linkClass(catLink(cat.name))}>
-                  {cat.name}
-                </Link>
-              ))}
+            {transparenciaCategories.map((cat) => (
+              <Link key={cat.id} href={catLink(cat.name)} className={linkClass(catLink(cat.name))}>
+                {cat.name}
+              </Link>
+            ))}
           </div>
         )}
       </div>
