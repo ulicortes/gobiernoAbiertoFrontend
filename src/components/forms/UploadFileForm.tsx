@@ -124,7 +124,7 @@ export default function UploadFileForm({
       if (ax.response?.status === 409) {
         setErrorMessage(
           parsedMessage ||
-            "Ya existe un presupuesto anual para ese año. Elegí otro año o editá el existente.",
+            "Ya existe un archivo para ese año en esta categoría. Elegí otro año o editá el existente.",
         );
         return;
       }

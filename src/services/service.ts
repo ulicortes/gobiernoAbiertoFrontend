@@ -131,6 +131,7 @@ export const servicio = {
       return response.data;
     } catch (e) {
       console.log(e);
+      throw e;
     }
   },
   borrarArchivo: async (id: string) => {

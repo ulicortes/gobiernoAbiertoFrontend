@@ -10,6 +10,7 @@ import { columnsFilePanel } from "@/lib/TableColumns";
 import { GridColDef } from "@mui/x-data-grid";
 import { ElementoTabla } from "@/types/elemento";
 import { resolveFileType } from "@/lib/fileUtils";
+import { Alert } from "@mui/material";
 import { useParams } from "next/navigation";
 
 interface Cat {
@@ -39,6 +40,7 @@ export default function ArchivosCategoryPage() {
   const [loading, setLoading] = useState(true);
   const [uploadFile, setUploadFile] = useState<File | null>(null);
   const [categoryName, setCategoryName] = useState<string | null>(null);
+  const [rowEditError, setRowEditError] = useState("");
 
   useEffect(() => {
     servicio
@@ -67,6 +69,7 @@ export default function ArchivosCategoryPage() {
   }, [categorySlug]);
 
   const isEconomic = categorySlug === toSlug("Reportes económicos");
+  const isManagement = categorySlug === toSlug("Informes de gestión");
 
   const columns: GridColDef[] = isEconomic
     ? [
@@ -87,20 +90,39 @@ export default function ArchivosCategoryPage() {
         { field: "year", headerName: "Año", width: 100, editable: true },
         ...columnsFilePanel.filter((c) => c.field !== "title"),
       ]
+    : isManagement
+      ? [
+          { field: "title", headerName: "Nombre de archivo", width: 300, editable: true },
+          { field: "year", headerName: "Año", width: 100, editable: true },
+          ...columnsFilePanel.filter((c) => c.field !== "title"),
+        ]
     : columnsFilePanel;
 
-  const handleRowUpdate = async (newRow: any) => {
+  const handleRowUpdate = async (newRow: any, oldRow?: any) => {
     try {
+      setRowEditError("");
       await servicio.editarArchivo(
         newRow.id,
         newRow.title,
         isEconomic ? newRow.trimester : undefined,
-        isEconomic ? newRow.year : undefined,
+        (isEconomic || isManagement) ? newRow.year : undefined,
       );
       return newRow;
-    } catch (e) {
-      console.error(e);
-      return newRow;
+    } catch (e: unknown) {
+      const ax = e as { response?: { status?: number; data?: { message?: string | string[] } } };
+      const backendMessage = ax.response?.data?.message;
+      const parsedMessage = Array.isArray(backendMessage)
+        ? backendMessage.join(" ")
+        : backendMessage;
+      if (ax.response?.status === 409) {
+        setRowEditError(
+          parsedMessage || "Ya existe un archivo para ese año en esta categoría.",
+        );
+      } else {
+        setRowEditError(parsedMessage || "No se pudo actualizar el archivo.");
+      }
+      console.error(ax.response?.data || e);
+      return oldRow ?? newRow;
     }
   };
 
@@ -128,6 +150,11 @@ export default function ArchivosCategoryPage() {
       <UploadFileButton
         onFileSelect={(file) => setUploadFile(file)}
       />
+      {rowEditError && (
+        <Alert severity="warning" sx={{ mb: 2 }}>
+          {rowEditError}
+        </Alert>
+      )}
       {loading ? (
         <div className="py-8 text-gray-500">Cargando...</div>
       ) : (

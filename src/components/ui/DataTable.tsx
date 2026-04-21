@@ -20,7 +20,10 @@ interface DataTableProps {
   showDownloadAction?: boolean;
   /** Distribuye columnas en el ancho disponible de la tabla. */
   distributeColumns?: boolean;
-  onRowUpdate?: (newRow: GridValidRowModel) => Promise<GridValidRowModel>;
+  onRowUpdate?: (
+    newRow: GridValidRowModel,
+    oldRow?: GridValidRowModel,
+  ) => Promise<GridValidRowModel>;
   onRowDelete?: (id: any) => void;
   /** Acciones extra por fila, que se anteponen al botón de borrar */
   extraActions?: (params: GridRowParams) => React.ReactElement[];
@@ -121,9 +124,12 @@ export default function DataTable({
       })
     : [...columns];
 
-  const processRowUpdate = async (newRow: GridValidRowModel) => {
+  const processRowUpdate = async (
+    newRow: GridValidRowModel,
+    oldRow: GridValidRowModel,
+  ) => {
     if (onRowUpdate) {
-      return await onRowUpdate(newRow);
+      return await onRowUpdate(newRow, oldRow);
     }
     return newRow;
   };
