@@ -8,6 +8,7 @@ import {
   GridActionsCellItem,
   GridRowParams,
 } from "@mui/x-data-grid";
+import { esES } from "@mui/x-data-grid/locales";
 import DeleteIcon from "@mui/icons-material/Delete";
 import DownloadIcon from "@mui/icons-material/Download";
 import api from "@/services/api";
@@ -148,6 +149,7 @@ export default function DataTable({
     <Box sx={{ width: "100%", maxWidth: "100%", minWidth: 0 }}>
       <DataGrid
         autoHeight
+        localeText={esES.components.MuiDataGrid.defaultProps.localeText}
         sx={{
           width: "100%",
           minWidth: 0,
