@@ -1,12 +1,12 @@
 'use client';
 
 import { useState } from "react";
-import InfGestion from "@/components/InfGestion";
-import HeroSection from "@/components/HeroSection";
-import SeccionContenido from "@/components/SeccionContenido";
-import GuiaUsuario from "@/components/GuiaUsuario";
-import ContactSection from "@/components/ContactSection";
-import ContactForm from "@/components/ContactForm";
+import InformesGestion from "@/components/public/InformesGestion";
+import HeroSection from "@/components/public/HeroSection";
+import SeccionContenido from "@/components/public/SeccionContenido";
+import GuiaUsuario from "@/components/public/GuiaUsuario";
+import ContactSection from "@/components/public/ContactSection";
+import ContactForm from "@/components/forms/ContactForm";
 
 export default function Home() {
   const [isContactOpen, setIsContactOpen] = useState(false);
@@ -18,18 +18,21 @@ export default function Home() {
       texto:
         "Acá iría un texto explicando brevemente lo que se encuentra en esta sección para mejorar la experiencia de usuario.",
       imagenFondo: "/WelcomePage_TransparenciaBackgroundImage.png",
+      link: "/transparencia",
     },
     {
       titulo: "DATOS ABIERTOS",
       texto:
         "Acá iría un texto explicando brevemente lo que se encuentra en esta sección para mejorar la experiencia de usuario.",
       imagenFondo: "/WelcomePage_DatosAbiertosBackgroundImage.png",
+      link: "https://datos.loberia.gov.ar",
     },
     {
       titulo: "BOLETÍN OFICIAL",
       texto:
         "Acá iría un texto explicando brevemente lo que se encuentra en esta sección para mejorar la experiencia de usuario.",
       imagenFondo: "/WelcomePage_BoletinOficialBackgroundImage.png",
+      link: "https://sibom.slyt.gba.gob.ar/cities/73",
     },
   ];
 
@@ -43,10 +46,11 @@ export default function Home() {
           titulo={seccion.titulo}
           texto={seccion.texto}
           imagenFondo={seccion.imagenFondo}
+          link={seccion.link}
         />
       ))}
 
-      <InfGestion />
+      <InformesGestion />
 
       <GuiaUsuario />
 
