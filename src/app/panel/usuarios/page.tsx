@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/components/providers/AuthProvider";
-import UserManagementPanel from "@/components/forms/UserManagementPanel";
+import UserManagementPanel from "@/components/ui/UserManagementPanel";
 
 export default function UsuariosPage() {
   const { user } = useAuth();
