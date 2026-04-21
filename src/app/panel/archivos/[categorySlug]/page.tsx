@@ -24,6 +24,7 @@ function mapFileToRow(f: any): ElementoTabla {
     date: new Date(f.date || f.createdAt || new Date()).toLocaleDateString(),
     size: f.size ? (f.size / 1024 / 1024).toFixed(2) + " MB" : "N/A",
     type: resolveFileType(f.type, f.filePath),
+    filePath: f.filePath,
     trimester: f.trimester || "-",
     year: f.year || "-",
   };
@@ -136,6 +137,7 @@ export default function ArchivosCategoryPage({
           rows={rows}
           columns={columns}
           showActions
+          showDownloadAction
           onRowUpdate={handleRowUpdate}
           onRowDelete={handleFileDelete}
         />

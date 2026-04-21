@@ -32,6 +32,7 @@ export default function DynamicCategoryPage({ params }: { params: Promise<{ cate
               ? (file.size / 1024 / 1024).toFixed(2) + " MB"
               : "N/A",
             type: resolveFileType(file.type, file.filePath),
+            filePath: file.filePath,
           }));
           setRows(mappedRows);
         }
@@ -75,7 +76,13 @@ export default function DynamicCategoryPage({ params }: { params: Promise<{ cate
           ))}
         </div>
       ) : (
-        <DataTable rows={rows} columns={columnsFilePublic} height={650} />
+        <DataTable
+          rows={rows}
+          columns={columnsFilePublic}
+          height={650}
+          showActions
+          showDownloadAction
+        />
       )}
     </div>
   );

@@ -9,11 +9,17 @@ import {
   GridRowParams,
 } from "@mui/x-data-grid";
 import DeleteIcon from "@mui/icons-material/Delete";
+import DownloadIcon from "@mui/icons-material/Download";
+import api from "@/services/api";
 
 interface DataTableProps {
   rows: readonly GridValidRowModel[];
   columns: readonly GridColDef[];
   showActions?: boolean;
+  /** Muestra acción de descarga por fila (solo tablas de archivos). */
+  showDownloadAction?: boolean;
+  /** Distribuye columnas en el ancho disponible de la tabla. */
+  distributeColumns?: boolean;
   onRowUpdate?: (newRow: GridValidRowModel) => Promise<GridValidRowModel>;
   onRowDelete?: (id: any) => void;
   /** Acciones extra por fila, que se anteponen al botón de borrar */
@@ -29,7 +35,9 @@ interface DataTableProps {
 export default function DataTable({
   rows,
   columns,
-  showActions,
+  showActions = true,
+  showDownloadAction = false,
+  distributeColumns = true,
   onRowUpdate,
   onRowDelete,
   extraActions,
@@ -37,23 +45,80 @@ export default function DataTable({
   height = 600,
   headerFontSize = "1rem",
 }: DataTableProps) {
-  const actionsWidth = extraActions ? 110 : 60;
+  const hasDownloadAction = showDownloadAction;
+  const hasDeleteAction = Boolean(onRowDelete);
+  const hasExtraActions = Boolean(extraActions);
+  const hasAnyActions = hasDownloadAction || hasDeleteAction || hasExtraActions;
+  const actionsWidth =
+    (hasExtraActions ? 55 : 0) + (hasDownloadAction ? 55 : 0) + (hasDeleteAction ? 55 : 0);
+
+  function getAbsoluteFileUrl(filePath: string): string {
+    if (/^https?:\/\//i.test(filePath)) return filePath;
+    const base = (api.defaults.baseURL || "").replace(/\/$/, "");
+    const rel = filePath.replace(/^\/+/, "");
+    if (!base) return `/${rel}`;
+    return `${base}/${rel}`;
+  }
+
+  function canDownload(row: GridValidRowModel): boolean {
+    return typeof row?.filePath === "string" && row.filePath.trim().length > 0;
+  }
+
+  function downloadFile(row: GridValidRowModel) {
+    if (!canDownload(row)) return;
+    const targetUrl = getAbsoluteFileUrl(row.filePath.trim());
+    window.open(targetUrl, "_blank", "noopener,noreferrer");
+  }
 
   const actionsColumn: GridColDef = {
     field: "actions",
     type: "actions",
     headerName: "",
     width: actionsWidth,
-    getActions: (params: GridRowParams) => [
-      ...(extraActions ? extraActions(params) : []),
-      <GridActionsCellItem
-        key="delete"
-        icon={<DeleteIcon />}
-        label="Eliminar"
-        onClick={() => deleteItem(params.row.id)}
-      />,
-    ],
+    minWidth: actionsWidth,
+    maxWidth: actionsWidth,
+    sortable: false,
+    filterable: false,
+    disableColumnMenu: true,
+    getActions: (params: GridRowParams) => {
+      const isDownloadEnabled = canDownload(params.row);
+      return [
+        ...(hasDownloadAction
+          ? [
+              <GridActionsCellItem
+                key="download"
+                icon={<DownloadIcon />}
+                label={isDownloadEnabled ? "Descargar archivo" : "Archivo no disponible"}
+                disabled={!isDownloadEnabled}
+                onClick={() => downloadFile(params.row)}
+              />,
+            ]
+          : []),
+        ...(extraActions ? extraActions(params) : []),
+        ...(hasDeleteAction
+          ? [
+              <GridActionsCellItem
+                key="delete"
+                icon={<DeleteIcon />}
+                label="Eliminar"
+                onClick={() => deleteItem(params.row.id)}
+              />,
+            ]
+          : []),
+      ];
+    },
   };
+
+  const normalizedColumns: GridColDef[] = distributeColumns
+    ? columns.map((column) => {
+        if (column.flex !== undefined) return column;
+        return {
+          ...column,
+          flex: 1,
+          minWidth: column.minWidth ?? (typeof column.width === "number" ? column.width : 120),
+        };
+      })
+    : [...columns];
 
   const processRowUpdate = async (newRow: GridValidRowModel) => {
     if (onRowUpdate) {
@@ -69,7 +134,8 @@ export default function DataTable({
     }
   }
 
-  const finalColumns = showActions ? [...columns, actionsColumn] : columns;
+  const finalColumns =
+    showActions && hasAnyActions ? [...normalizedColumns, actionsColumn] : normalizedColumns;
 
   return (
     <Box sx={{ height, width: "100%", maxWidth: "100%", minWidth: 0 }}>
