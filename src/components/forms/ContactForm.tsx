@@ -105,7 +105,7 @@ export default function ContactForm({ onClose }: ContactFormProps) {
               variant="h5"
               sx={{ color: "var(--color-black-dark)" }}
             >
-              Contacto
+              Dejanos tu mensaje
             </Typography>
 
             <TextField
@@ -143,7 +143,7 @@ export default function ContactForm({ onClose }: ContactFormProps) {
             />
 
             <Button variant="contained" type="submit"
-            sx={{ backgroundColor: "var(--color-green-base)" }}>
+              sx={{ backgroundColor: "var(--color-green-base)" }}>
               Enviar mensaje
             </Button>
             {submitError && (

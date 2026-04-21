@@ -8,7 +8,40 @@ const muiTheme = createTheme({
     MuiInputBase: {
       styleOverrides: {
         input: {
-          fontFamily: "Linotte, sans-serif",
+          fontFamily: "sans-serif",
+        },
+      },
+    },
+    MuiInputLabel: {
+      styleOverrides: {
+        root: {
+          fontFamily: "sans-serif",
+          "&.Mui-focused": {
+            color: "var(--color-green-base)",
+          },
+        },
+      },
+    },
+    MuiOutlinedInput: {
+      styleOverrides: {
+        root: {
+          "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+            borderColor: "var(--color-green-base)",
+          },
+        },
+      },
+    },
+    MuiSelect: {
+      styleOverrides: {
+        select: {
+          fontFamily: "sans-serif",
+        },
+      },
+    },
+    MuiMenuItem: {
+      styleOverrides: {
+        root: {
+          fontFamily: "sans-serif",
         },
       },
     },

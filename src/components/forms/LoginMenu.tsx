@@ -1,11 +1,19 @@
 "use client";
 
 import { useState } from "react";
-import Footer from "../layout/Footer";
-import Header from "../layout/Header";
 import { servicio } from "@/services/service";
 import { useRouter } from "next/navigation";
 import PasswordField from "@/components/ui/PasswordField";
+import {
+  Box,
+  Typography,
+  TextField,
+  Button,
+  Alert,
+  IconButton,
+  Link,
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 
 interface LoginMenuProps {
   onClose?: () => void;
@@ -28,91 +36,139 @@ export default function LoginMenu({ onClose }: LoginMenuProps) {
         return;
       }
       router.push("/panel");
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.log(error);
-      setErrorMsg(error?.response?.data?.message || "Correo o contraseña incorrectos");
+      setErrorMsg("Correo o contraseña incorrectos");
     }
   }
+
   return (
-    <div className="w-full min-h-screen flex flex-col justify-between items-center">
-      <div className="w-[70%] h-fit mt-30 max-w-md md:max-w-xl bg-[#F5F5F5] rounded-2xl p-6 md:p-2 relative shadow-xl flex flex-col items-center gap-6 md:gap-8">
-        {/* Cerrar */}
+    <div className="w-full min-h-screen flex justify-center">
+      <Box
+        sx={{
+          width: "70%",
+          maxWidth: { xs: "28rem", md: "36rem" },
+          height: "fit-content",
+          mt: "7.5rem",
+          bgcolor: "#F5F5F5",
+          borderRadius: 4,
+          px: { xs: 3, md: 1 },
+          py: { xs: 3, md: 1 },
+          boxShadow: 8,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: { xs: 3, md: 4 },
+          position: "relative",
+        }}
+      >
         {onClose && (
-          <button
-            type="button"
+          <IconButton
             onClick={onClose}
-            className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center text-black font-bold text-xl hover:bg-black/10 rounded-full transition-colors cursor-pointer"
             aria-label="Cerrar"
+            size="small"
+            sx={{ position: "absolute", top: 12, right: 12 }}
           >
-            X
-          </button>
+            <CloseIcon />
+          </IconButton>
         )}
 
-        {/* Título */}
-        <h1 className="text-2xl md:text-3xl font-bold text-black text-center pt-10">
+        <Typography
+          component="h1"
+          fontWeight="bold"
+          textAlign="center"
+          color="text.primary"
+          sx={{ pt: { md: 5 }, fontSize: "1.75rem" }}
+        >
           INICIAR SESIÓN DE ADMINISTRADOR
-        </h1>
+        </Typography>
 
-        {/* Formulario (tarjeta blanca) */}
+        {/* form nativo para mantener action={fn} con FormData */}
         <form
           action={login}
-          className="w-[85%] md:w-[70%] bg-white rounded-xl p-6 flex flex-col gap-4 shadow-md"
-          // onSubmit={(e) => e.preventDefault()}
+          style={{ width: "100%", display: "flex", justifyContent: "center" }}
         >
-          <div className="w-full flex flex-col gap-1">
-            <label
-              htmlFor="login-email"
-              className="text-black text-base font-normal"
-            >
-              Correo electrónico
-            </label>
-            <input
-              id="login-email"
-              type="email"
-              autoComplete="email"
-              placeholder="correo@municipio.gob.ar"
-              name="email"
-              className="w-full border border-gray-300 rounded-lg px-3 py-2.5 bg-white text-black placeholder:text-gray-400 focus:outline-none focus:border-gray-500"
-            />
-          </div>
-          <div className="w-full flex flex-col gap-1">
-            <label
-              htmlFor="login-password"
-              className="text-black text-base font-normal"
-            >
-              Contraseña
-            </label>
-            <PasswordField
-              id="login-password"
-              placeholder="Contraseña"
-              name="pass"
-              autoComplete="current-password"
-            />
-          </div>
-          {errorMsg && <p className="text-red-500 text-sm text-center font-medium">{errorMsg}</p>}
-          <button
-            type="submit"
-            className="w-full bg-[#333333] text-white font-normal py-2.5 rounded-lg hover:bg-black/90 transition-colors cursor-pointer"
+          <Box
+            sx={{
+              width: { xs: "85%", md: "70%" },
+              bgcolor: "white",
+              borderRadius: 2,
+              p: 3,
+              display: "flex",
+              flexDirection: "column",
+              gap: 2,
+              boxShadow: 2,
+            }}
           >
-            Ingresar
-          </button>
-          <a
-            href="#"
-            className="text-sm text-black underline hover:no-underline mt-1"
-          >
-            ¿Olvidaste tu contraseña?
-          </a>
+
+            <Box sx={{ display: "flex", flexDirection: "column", gap: 0.5 }}>
+              <Typography variant="body2" color="text.primary">
+                Correo electrónico
+              </Typography>
+              <TextField
+                id="login-email"
+                type="email"
+                name="email"
+                autoComplete="email"
+                placeholder="correo@municipio.gob.ar"
+                size="small"
+                fullWidth
+              />
+            </Box>
+
+            <Box sx={{ display: "flex", flexDirection: "column", gap: 0.5 }}>
+              <Typography variant="body2" color="text.primary">
+                Contraseña
+              </Typography>
+              <PasswordField
+                id="login-password"
+                placeholder="Ingrese su contraseña"
+                name="pass"
+                autoComplete="current-password"
+              />
+            </Box>
+
+            {errorMsg && (
+              <Alert severity="error" sx={{ py: 0.5 }}>
+                {errorMsg}
+              </Alert>
+            )}
+
+            <Button
+              type="submit"
+              variant="contained"
+              fullWidth
+              sx={{
+                bgcolor: "#333",
+                "&:hover": { bgcolor: "black" },
+                textTransform: "none",
+                py: 1.25,
+                fontWeight: "normal",
+              }}
+            >
+              Ingresar
+            </Button>
+
+            <Link
+              href="#"
+              variant="body2"
+              color="text.primary"
+              underline="always"
+              sx={{ mt: 0.5 }}
+            >
+              ¿Olvidaste tu contraseña?
+            </Link>
+          </Box>
         </form>
 
-        {/* Footer: logo + texto */}
-        <div className="w-full flex flex-row items-center justify-center gap-3 pt-2">
+        <Box sx={{ pt: 1, pb: 1 }}>
           <img
             src="/logo_municipio_negro.png"
             alt="Municipalidad de Lobería"
-            className="w-60 h-28 object-contain"
+            style={{ width: 240, height: 112, objectFit: "contain" }}
           />
-        </div>
-      </div>
+        </Box>
+      </Box>
     </div>
   );
 }
