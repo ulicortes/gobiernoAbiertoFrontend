@@ -25,7 +25,10 @@ export default function CategoriasPage() {
 
   // Recarga la tabla cada vez que AddCategoryForm señaliza un nuevo registro
   useEffect(() => {
-    if (refreshTrigger) cargarCategorias();
+    if (refreshTrigger) {
+      cargarCategorias();
+      window.dispatchEvent(new Event("panel:categories-changed"));
+    }
   }, [refreshTrigger]);
 
   const handleRowUpdate = async (newRow: any) => {
@@ -35,6 +38,7 @@ export default function CategoriasPage() {
         section: newRow.section,
       });
       cargarCategorias();
+      window.dispatchEvent(new Event("panel:categories-changed"));
       return newRow;
     } catch (e) {
       console.error(e);
@@ -46,6 +50,7 @@ export default function CategoriasPage() {
     try {
       await servicio.borrarCategoria(id);
       cargarCategorias();
+      window.dispatchEvent(new Event("panel:categories-changed"));
     } catch (e) {
       console.error(e);
     }
@@ -58,6 +63,7 @@ export default function CategoriasPage() {
         rows={rows}
         columns={columnsCategories}
         showActions
+        deleteWarning="¿Eliminar esta categoría? Se eliminarán también todos los archivos asociados y esta acción no se puede deshacer."
         onRowUpdate={handleRowUpdate}
         onRowDelete={handleRowDelete}
       />

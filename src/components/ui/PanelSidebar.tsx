@@ -1,7 +1,7 @@
 "use client";
 
 import { servicio } from "@/services/service";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "@/components/providers/AuthProvider";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
@@ -17,12 +17,24 @@ export default function PanelSidebar() {
   const [homeOpen, setHomeOpen] = useState(true);
   const [transparenciaOpen, setTransparenciaOpen] = useState(true);
 
-  useEffect(() => {
+  const loadCategories = useCallback(() => {
     servicio
       .getCategorias()
       .then((res) => setCategories(res || []))
       .catch(console.error);
   }, []);
+
+  useEffect(() => {
+    loadCategories();
+  }, [loadCategories]);
+
+  useEffect(() => {
+    const onCategoriesChanged = () => loadCategories();
+    window.addEventListener("panel:categories-changed", onCategoriesChanged);
+    return () => {
+      window.removeEventListener("panel:categories-changed", onCategoriesChanged);
+    };
+  }, [loadCategories]);
 
   function isActive(href: string) {
     return pathname === href || pathname.startsWith(href + "/");

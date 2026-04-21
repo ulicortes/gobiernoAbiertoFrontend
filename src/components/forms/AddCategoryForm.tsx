@@ -52,8 +52,8 @@ export default function AddCategoryForm({ enviarAlPadre }: HijoAPadreProps) {
         size="small"
         sx={{ minWidth: 160 }}
       >
-        <MenuItem value="home">HOME</MenuItem>
-        <MenuItem value="transparencia">TRANSPARENCIA</MenuItem>
+        <MenuItem value="HOME">HOME</MenuItem>
+        <MenuItem value="TRANSPARENCIA">TRANSPARENCIA</MenuItem>
       </TextField>
       <Button
         variant="contained"
