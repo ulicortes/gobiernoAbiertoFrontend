@@ -142,6 +142,15 @@ export const servicio = {
       console.log(e);
     }
   },
+  descargarArchivo: async (id: string) => {
+    try {
+      return await api.get(`/file/download/${id}`, {
+        responseType: 'blob'
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  },
   insertarCategoria: async (data: NewCategory) => {
     try {
       const response = await api.post("category", data);
