@@ -40,7 +40,7 @@ interface DataTableProps {
 
 interface Row {
   date: string,
-  filePath: string,
+  // filePath: string,
   id: string,
   size: string,
   title: string,
@@ -89,7 +89,6 @@ export default function DataTable({
       const url = window.URL.createObjectURL(new Blob([response?.data]));
       const link = document.createElement('a');
       link.href = url;
-      console.log(row)
       // Usamos el nombre que viene de la fila o uno genérico
       link.setAttribute('download', row.title);
 
@@ -115,17 +114,17 @@ export default function DataTable({
     filterable: false,
     disableColumnMenu: true,
     getActions: (params: GridRowParams) => {
-      const isDownloadEnabled = canDownload(params.row);
+      // const isDownloadEnabled = canDownload(params.row);
       return [
         ...(hasDownloadAction
           ? [
             <GridActionsCellItem
               key="download"
               icon={<DownloadIcon />}
-              label={isDownloadEnabled ? "Descargar archivo" : "Archivo no disponible"}
-              disabled={!isDownloadEnabled}
+              label={"Descargar archivo"}
+              // label={isDownloadEnabled ? "Descargar archivo" : "Archivo no disponible"}
+              // disabled={!isDownloadEnabled}
               onClick={() => downloadFile(params.row)}
-            // onClick={() => downloadFile(params.row)}
             />,
           ]
           : []),

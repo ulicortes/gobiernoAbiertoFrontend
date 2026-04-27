@@ -38,7 +38,7 @@ export default function DynamicCategoryClientPage({
               ? (file.size / 1024 / 1024).toFixed(2) + " MB"
               : "N/A",
             type: resolveFileType(file.type, file.filePath),
-            filePath: file.filePath,
+            // filePath: file.filePath,
           }));
           setRows(mappedRows);
         }
