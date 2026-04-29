@@ -7,11 +7,13 @@ import {
   GridValidRowModel,
   GridActionsCellItem,
   GridRowParams,
+  GridRowId,
 } from "@mui/x-data-grid";
 import { esES } from "@mui/x-data-grid/locales";
 import DeleteIcon from "@mui/icons-material/Delete";
 import DownloadIcon from "@mui/icons-material/Download";
 import api from "@/services/api";
+import { servicio } from "@/services/service";
 
 interface DataTableProps {
   rows: readonly GridValidRowModel[];
@@ -34,6 +36,15 @@ interface DataTableProps {
   height?: number;
   /** Tamaño de fuente de los títulos de columna. Por defecto "0.875rem" (14 px). */
   headerFontSize?: string | number;
+}
+
+interface Row {
+  date: string,
+  // filePath: string,
+  id: string,
+  size: string,
+  title: string,
+  type: string
 }
 
 export default function DataTable({
@@ -69,10 +80,27 @@ export default function DataTable({
     return typeof row?.filePath === "string" && row.filePath.trim().length > 0;
   }
 
-  function downloadFile(row: GridValidRowModel) {
-    if (!canDownload(row)) return;
-    const targetUrl = getAbsoluteFileUrl(row.filePath.trim());
-    window.open(targetUrl, "_blank", "noopener,noreferrer");
+  async function downloadFile(row: Row) {
+    // const url = `http://localhost:3000/files/download/${row}`;
+    try {
+      const response = await servicio.descargarArchivo(row.id.toString());
+
+      // Creamos un link invisible en el DOM
+      const url = window.URL.createObjectURL(new Blob([response?.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      // Usamos el nombre que viene de la fila o uno genérico
+      link.setAttribute('download', row.title);
+
+      document.body.appendChild(link);
+      link.click();
+
+      // Limpieza
+      link.parentNode?.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Error al descargar:", error);
+    }
   }
 
   const actionsColumn: GridColDef = {
@@ -86,29 +114,30 @@ export default function DataTable({
     filterable: false,
     disableColumnMenu: true,
     getActions: (params: GridRowParams) => {
-      const isDownloadEnabled = canDownload(params.row);
+      // const isDownloadEnabled = canDownload(params.row);
       return [
         ...(hasDownloadAction
           ? [
-              <GridActionsCellItem
-                key="download"
-                icon={<DownloadIcon />}
-                label={isDownloadEnabled ? "Descargar archivo" : "Archivo no disponible"}
-                disabled={!isDownloadEnabled}
-                onClick={() => downloadFile(params.row)}
-              />,
-            ]
+            <GridActionsCellItem
+              key="download"
+              icon={<DownloadIcon />}
+              label={"Descargar archivo"}
+              // label={isDownloadEnabled ? "Descargar archivo" : "Archivo no disponible"}
+              // disabled={!isDownloadEnabled}
+              onClick={() => downloadFile(params.row)}
+            />,
+          ]
           : []),
         ...(extraActions ? extraActions(params) : []),
         ...(hasDeleteAction
           ? [
-              <GridActionsCellItem
-                key="delete"
-                icon={<DeleteIcon />}
-                label="Eliminar"
-                onClick={() => deleteItem(params.row.id)}
-              />,
-            ]
+            <GridActionsCellItem
+              key="delete"
+              icon={<DeleteIcon />}
+              label="Eliminar"
+              onClick={() => deleteItem(params.row.id)}
+            />,
+          ]
           : []),
       ];
     },
@@ -116,13 +145,13 @@ export default function DataTable({
 
   const normalizedColumns: GridColDef[] = distributeColumns
     ? columns.map((column) => {
-        if (column.flex !== undefined) return column;
-        return {
-          ...column,
-          flex: 1,
-          minWidth: column.minWidth ?? (typeof column.width === "number" ? column.width : 120),
-        };
-      })
+      if (column.flex !== undefined) return column;
+      return {
+        ...column,
+        flex: 1,
+        minWidth: column.minWidth ?? (typeof column.width === "number" ? column.width : 120),
+      };
+    })
     : [...columns];
 
   const processRowUpdate = async (

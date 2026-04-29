@@ -37,9 +37,24 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     checkAuth();
   }, [router]);
 
-  return (
+  if (loading) {
+    return (
+      <div style={{
+        height: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        background: '#f5f5f5'
+      }}>
+        <p>Iniciando sesión...</p>
+      </div>
+    );
+  }
+
+  else return (
     <AuthContext.Provider value={{ user, loading }}>
-      {!loading ? children : null}
+      {children}
     </AuthContext.Provider>
   );
 };
