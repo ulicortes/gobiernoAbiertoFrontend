@@ -2,15 +2,16 @@
 import { Accordion, AccordionSummary, AccordionDetails, Typography, Box } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import api from '@/services/api';
+import { servicio } from '@/services/service';
 
 export interface Archivo {
-  id: string;
-  name?: string;
-  title?: string;
-  trimester?: string;
-  year?: number;
-  filePath?: string;
-  isAnnualBudget?: boolean;
+    id: string;
+    name?: string;
+    title?: string;
+    trimester?: string;
+    year?: number;
+    filePath?: string;
+    isAnnualBudget?: boolean;
 }
 
 interface ReporteEconomicoCardProps {
@@ -29,13 +30,33 @@ export default function ReporteEconomicoCard({ anio, archivos }: ReporteEconomic
     const annualBudgetFile = archivos.find(
         (archivo) => archivo.isAnnualBudget === true && archivo.year === anio
     );
-    const annualBudgetHref = annualBudgetFile?.filePath
-        ? toAbsoluteFileUrl(annualBudgetFile.filePath)
-        : undefined;
+    // const annualBudgetHref = annualBudgetFile?.filePath
+    //     ? toAbsoluteFileUrl(annualBudgetFile.filePath)
+    //     : undefined;
+
+    async function downloadFile(id?: string, title?: string) {
+        try {
+            const response = await servicio.descargarArchivo(id||'');
+
+            const url = window.URL.createObjectURL(new Blob([response?.data]));
+            const link = document.createElement('a');
+            link.href = url;
+
+            link.setAttribute('download', title||'');
+
+            document.body.appendChild(link);
+            link.click();
+
+            link.parentNode?.removeChild(link);
+            window.URL.revokeObjectURL(url);
+        } catch (error) {
+            console.error("Error al descargar:", error);
+        }
+    }
 
     const renderTrimestre = (trimestre: string) => {
         const archivosTrimestre = archivos.filter(a => a.trimester === trimestre);
-        
+
         return (
             <div className="w-full flex flex-col mb-4">
                 <h2 className="w-5/6 self-start text-xl text-blue-light font-bold mb-2">{trimestre}</h2>
@@ -48,19 +69,17 @@ export default function ReporteEconomicoCard({ anio, archivos }: ReporteEconomic
                             return (
                                 <Typography
                                     key={archivo.id}
-                                    component={fileHref ? 'a' : 'span'}
-                                    href={fileHref}
-                                    target={fileHref ? '_blank' : undefined}
-                                    rel={fileHref ? 'noopener noreferrer' : undefined}
+                                    component={'a'}
+                                    onClick={() => downloadFile(archivo?.id, archivo?.title)}
                                     sx={{
                                         py: 0.5,
                                         fontFamily: "sans-serif",
-                                        cursor: fileHref ? 'pointer' : 'default',
-                                        color: fileHref ? 'var(--color-black-base)' : 'text.secondary',
-                                        '&:hover': { textDecoration: fileHref ? 'underline' : 'none' },
+                                        cursor: 'pointer',
+                                        color: 'var(--color-black-base)',
+                                        '&:hover': { textDecoration: 'underline' },
                                     }}
                                 >
-                                    {archivo.title || archivo.name || `Documento ${archivo.id}`}
+                                    {archivo.title || archivo.name}
                                 </Typography>
                             );
                         })
@@ -74,9 +93,9 @@ export default function ReporteEconomicoCard({ anio, archivos }: ReporteEconomic
 
     return (
         <div className="mb-4 w-11/12 md:w-5/6">
-            <Accordion 
-                sx={{ 
-                    borderRadius: '24px !important', 
+            <Accordion
+                sx={{
+                    borderRadius: '24px !important',
                     overflow: 'hidden',
                     border: '1px solid var(--color-black-base)',
                     boxShadow: 'none',
@@ -97,24 +116,22 @@ export default function ReporteEconomicoCard({ anio, archivos }: ReporteEconomic
                 </AccordionSummary>
                 <AccordionDetails sx={{ backgroundColor: 'white', display: 'flex', flexDirection: 'column', p: 4 }}>
                     <Typography
-                        component={annualBudgetHref ? 'a' : 'span'}
-                        href={annualBudgetHref}
-                        target={annualBudgetHref ? '_blank' : undefined}
-                        rel={annualBudgetHref ? 'noopener noreferrer' : undefined}
+                        component={annualBudgetFile ? 'a' : 'span'}
+                        onClick={annualBudgetFile ? () => downloadFile(annualBudgetFile?.id, annualBudgetFile?.title): undefined}
                         sx={{
                             textAlign: 'center',
                             fontWeight: 'bold',
                             mb: 2,
-                            cursor: annualBudgetHref ? 'pointer' : 'default',
-                            color: annualBudgetHref ? 'inherit' : 'text.secondary',
-                            '&:hover': { textDecoration: annualBudgetHref ? 'underline' : 'none' },
+                            cursor: annualBudgetFile ? 'pointer' : 'default',
+                            color: annualBudgetFile ? 'inherit' : 'text.secondary',
+                            '&:hover': { textDecoration: annualBudgetFile ? 'underline' : 'none' },
                         }}
                     >
                         PRESUPUESTO ANUAL
                     </Typography>
-                    
+
                     <hr className="w-3/4 h-1 bg-blue-light border-0 rounded-lg mb-6 self-center shrink-0" aria-hidden />
-                    
+
                     <Box sx={{ width: '100%', px: 2, maxHeight: '400px', overflowY: 'auto' }}>
                         {renderTrimestre("Primer trimestre")}
                         {renderTrimestre("Segundo trimestre")}

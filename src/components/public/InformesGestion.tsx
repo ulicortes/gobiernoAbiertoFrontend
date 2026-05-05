@@ -12,7 +12,6 @@ type ArchivoCategoria = {
   name?: string;
   date?: string;
   year?: number;
-  filePath?: string;
 };
 
 function anioDelArchivo(file: ArchivoCategoria): number {
@@ -60,7 +59,7 @@ export default function InformesGestion() {
     let cancelled = false;
     (async () => {
       try {
-        const resultado = await servicio.getArchivosDeUnaCategoria(CATEGORIA_INFORMES);
+        const resultado = await servicio.getUltimosArchivosDeUnaCategoria(CATEGORIA_INFORMES);
         if (!cancelled) {
           setFiles(Array.isArray(resultado) ? resultado : []);
         }
@@ -85,14 +84,27 @@ export default function InformesGestion() {
     return { yearsSorted, byYear: map };
   }, [files]);
 
-  function abrirInforme(year: number) {
-    const file = byYear.get(year);
-    const path = file?.filePath?.trim();
-    if (!path) {
-      setMessage("No hay archivo disponible para descargar este año.");
-      return;
+  async function abrirInforme(year: number) {
+    try {
+      const file = byYear.get(year);
+      if(!file) {
+        setMessage("No hay archivo disponible para descargar este año.");
+        return;
+      }
+      const response = await servicio.descargarArchivo(file?.id);
+      
+      const url = window.URL.createObjectURL(new Blob([response?.data], { type: 'application/pdf' }));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', file?.title || '');
+
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode?.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Error al descargar:", error);
     }
-    window.open(urlAbsolutaArchivo(path), "_blank", "noopener,noreferrer");
   }
 
   return (

@@ -1,63 +1,31 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-import api from "@/services/api";
+import { useState } from "react";
 import { servicio } from "@/services/service";
 
-const CATEGORIA_GUIAS = "Guías de usuario";
-
-type ArchivoGuia = {
-  id: string;
-  date?: string;
-  createdAt?: string;
-  filePath?: string;
-};
-
-function urlAbsolutaArchivo(filePath: string): string {
-  if (/^https?:\/\//i.test(filePath)) return filePath;
-  const base = (api.defaults.baseURL || "").replace(/\/$/, "");
-  const rel = filePath.replace(/^\/+/, "");
-  return base ? `${base}/${rel}` : `/${rel}`;
-}
-
 export default function GuiaUsuario() {
-  const [files, setFiles] = useState<ArchivoGuia[]>([]);
   const [message, setMessage] = useState("");
 
-  useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      try {
-        const resultado = await servicio.getArchivosDeUnaCategoria(CATEGORIA_GUIAS);
-        if (!cancelled) {
-          setFiles(Array.isArray(resultado) ? resultado : []);
-        }
-      } catch {
-        if (!cancelled) setFiles([]);
-      }
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  const latestGuide = useMemo(() => {
-    if (files.length === 0) return null;
-    return [...files].sort((a, b) => {
-      const tA = new Date(a.date || a.createdAt || 0).getTime();
-      const tB = new Date(b.date || b.createdAt || 0).getTime();
-      return tB - tA;
-    })[0];
-  }, [files]);
-
-  function abrirGuia() {
-    const path = latestGuide?.filePath?.trim();
-    if (!path) {
-      setMessage("No hay una guía de usuario disponible para descargar.");
-      return;
-    }
+  async function abrirGuia() {
     setMessage("");
-    window.open(urlAbsolutaArchivo(path), "_blank", "noopener,noreferrer");
+    try {
+      const response = await servicio.descargarGuia();
+      if(!response) {
+        setMessage("No hay una guia cargada por el momento. Disculpe las molestias");
+        return;
+      }
+      const url = window.URL.createObjectURL(new Blob([response?.data], { type: 'application/pdf' }));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', 'jorge');
+
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode?.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return (
@@ -67,7 +35,6 @@ export default function GuiaUsuario() {
           type="button"
           onClick={abrirGuia}
           className="w-fit px-8 py-4 bg-green-base text-white text-xl font-bold uppercase rounded-lg hover:bg-green-dark transition-all duration-300 cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed"
-          disabled={!latestGuide}
         >
           GUÍA DE USUARIO
         </button>

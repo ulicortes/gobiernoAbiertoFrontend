@@ -8,16 +8,11 @@ import {
   Link,
 } from "@mui/material";
 import { Controller, useForm, FieldValues, FieldError } from "react-hook-form";
-import { submitContactForm } from "@/lib/resendAction";
+import { servicio } from "@/services/service";
+import { ContactFormValues } from "@/types/contactFormValues";
 
 type ContactFormProps = {
   onClose: () => void;
-};
-
-type ContactFormValues = {
-  name: string;
-  message: string;
-  subscribe: boolean;
 };
 
 export default function ContactForm({ onClose }: ContactFormProps) {
@@ -45,7 +40,7 @@ export default function ContactForm({ onClose }: ContactFormProps) {
       formData.append("name", data.name);
       formData.append("message", data.message);
       formData.append("subscribe", data.subscribe ? "on" : "off");
-      await submitContactForm(formData);
+      await servicio.sendEmail(data);
       setIsSubmitted(true);
       setSubmittedWithSubscribe(data.subscribe);
       if (data.subscribe) {

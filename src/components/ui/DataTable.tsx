@@ -81,21 +81,18 @@ export default function DataTable({
   }
 
   async function downloadFile(row: Row) {
-    // const url = `http://localhost:3000/files/download/${row}`;
     try {
       const response = await servicio.descargarArchivo(row.id.toString());
 
-      // Creamos un link invisible en el DOM
       const url = window.URL.createObjectURL(new Blob([response?.data]));
       const link = document.createElement('a');
       link.href = url;
-      // Usamos el nombre que viene de la fila o uno genérico
+      
       link.setAttribute('download', row.title);
 
       document.body.appendChild(link);
       link.click();
 
-      // Limpieza
       link.parentNode?.removeChild(link);
       window.URL.revokeObjectURL(url);
     } catch (error) {

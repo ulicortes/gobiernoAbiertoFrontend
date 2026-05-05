@@ -3,6 +3,9 @@ import { NewCategory } from "@/types/newCategory";
 import type { CreateManagedUserPayload, PanelUserRow } from "@/types/managedUser";
 import api from "./api";
 import { toSlug } from "@/lib/slugify";
+import { log } from "console";
+import { ContactFormValues } from "@/types/contactFormValues";
+
 
 export const servicio = {
   login: async (data: UserLogin) => {
@@ -86,6 +89,14 @@ export const servicio = {
       console.log(error);
     }
   },
+  getUltimosArchivosDeUnaCategoria: async (catNameOrSlug: string) => {
+    try {
+      const res = await api.get(`/file/cat/${toSlug(catNameOrSlug)}/latest`);
+      return res.data;
+    } catch (error) {
+      console.log(error);
+    }
+  },
   insertArchivo: async (
     file: File,
     categoryId: string,
@@ -151,6 +162,15 @@ export const servicio = {
       console.log(error);
     }
   },
+  descargarGuia: async () => {
+    try {
+      return await api.get(`/file/guide/download`, {
+        responseType: 'blob'
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  },
   insertarCategoria: async (data: NewCategory) => {
     try {
       const response = await api.post("category", data);
@@ -175,4 +195,12 @@ export const servicio = {
       console.log(e);
     }
   },
+  sendEmail: async (form: ContactFormValues) => {
+    try {
+      const response = await api.post('email/contact', form);
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
 };
