@@ -10,7 +10,7 @@ import { ContactFormValues } from "@/types/contactFormValues";
 export const servicio = {
   login: async (data: UserLogin) => {
     try {
-      const res = await api.post(`/auth/login`, data);
+      const res = await api.post(`/auth/login/`, data);
 
       if (res.data.statusCode == 200) return res.data.user;
       return null;
