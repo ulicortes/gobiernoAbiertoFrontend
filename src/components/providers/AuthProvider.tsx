@@ -25,13 +25,22 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     const checkAuth = async () => {
-      const userData = await servicio.verify();
-      if (userData) {
-        setUser(userData);
-      } else {
-        router.push('/login');
+      try {
+        const userData = await servicio.verify();
+
+        if (userData) {
+          setUser(userData);
+          // Aquí no hacemos nada, dejamos que el flujo siga al children
+        } else {
+          // Solo si explícitamente no hay usuario (401 o null)
+          router.push('/login/');
+        }
+      } catch (error) {
+        console.error("Error en la verificación:", error);
+        router.push('/login/');
+      } finally {
+        setLoading(false); // RECIÉN ACÁ liberamos el renderizado
       }
-      setLoading(false);
     };
 
     checkAuth();
