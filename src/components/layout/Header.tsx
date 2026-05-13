@@ -32,15 +32,15 @@ export default function Header() {
                 </div>
                 {/* Desktop Navigation */}
                 <div className="hidden md:flex w-3/4 h-full flex-col justify-between items-end">
-                    <div className="w-1/5 bg-green-base py-1 rounded-bl-xl flex flex-row justify-around">
-                        <img className="w-6 cursor-pointer transition-transform duration-200 hover:scale-110" src="/Facebook.png" alt="" />
-                        <img className="w-6 cursor-pointer transition-transform duration-200 hover:scale-110" src="/Mail.png" alt="" />
-                        <img className="w-6 cursor-pointer transition-transform duration-200 hover:scale-110" src="/Instagram.png" alt="" />
+                    <div className="w-1/5 bg-green-base py-1. rounded-bl-xl flex flex-row justify-around">
+                        <Link href={'https://www.facebook.com/municipalidadloberia/'}><img className="w-6 cursor-pointer transition-transform duration-200 hover:scale-110" src="/Facebook.png" alt="" /></Link>
+                        <Link href={'prensamunicipioloberia@gmail.com'}><img className="w-6 cursor-pointer transition-transform duration-200 hover:scale-110" src="/Mail.png" alt="" /></Link>
+                        <Link href={'https://www.instagram.com/muniloberia/'}><img className="w-6 cursor-pointer transition-transform duration-200 hover:scale-110" src="/Instagram.png" alt="" /></Link>
                     </div>
                     <div className="w-5/5 flex flex-row self-center justify-evenly">
                         <Link
                             href={'/transparencia'}
-                            className={`w-fit py-1 px-4 cursor-pointer text-center font-bold rounded-t-xl transition-colors duration-300 ${path.startsWith('/transparencia') ? 'bg-blue-base' : ''} hover:bg-blue-base`}
+                            className={`w-fit py-1 px-4 cursor-pointer text-white text-center font-bold rounded-t-xl transition-colors duration-300 ${path.startsWith('/transparencia') ? 'bg-blue-base' : ''} hover:bg-blue-base`}
                             onMouseEnter={() => setHoverBorderColor('border-blue-base')}
                             onMouseLeave={() => setHoverBorderColor(null)}
                         >
@@ -50,7 +50,7 @@ export default function Header() {
                             href={'https://datos.loberia.gov.ar'}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="w-fit py-1 px-4 cursor-pointer text-center font-bold rounded-t-xl transition-colors duration-300 hover:bg-red-base"
+                            className="w-fit py-1 px-4 cursor-pointer text-white text-center font-bold rounded-t-xl transition-colors duration-300 hover:bg-red-base"
                             onMouseEnter={() => setHoverBorderColor('border-red-base')}
                             onMouseLeave={() => setHoverBorderColor(null)}
                         >
@@ -60,7 +60,7 @@ export default function Header() {
                             href={'https://sibom.slyt.gba.gob.ar/cities/73'}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="w-fit py-1 px-4 cursor-pointer text-center font-bold rounded-t-xl transition-colors duration-300 hover:bg-yellow-base"
+                            className="w-fit py-1 px-4 cursor-pointer text-white text-center font-bold rounded-t-xl transition-colors duration-300 hover:bg-yellow-base"
                             onMouseEnter={() => setHoverBorderColor('border-yellow-base')}
                             onMouseLeave={() => setHoverBorderColor(null)}
                         >
@@ -93,7 +93,7 @@ export default function Header() {
                 <div className="flex flex-col items-center py-4">
                     <Link
                         href={'/transparencia'}
-                        className={`w-fit py-3 text-center font-bold`}
+                        className={`w-fit py-3 text-white text-center font-bold`}
                     >
                         TRANSPARENCIA
                     </Link>
@@ -101,7 +101,7 @@ export default function Header() {
                         href={'https://datos.loberia.gov.ar'}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="w-fit py-3 text-center font-bold"
+                        className="w-fit py-3 text-white text-center font-bold"
                     >
                         DATOS ABIERTOS
                     </Link>
@@ -109,15 +109,15 @@ export default function Header() {
                         href={'https://sibom.slyt.gba.gob.ar/cities/73'}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="w-fit py-3 text-center font-bold"
+                        className="w-fit py-3 text-white text-center font-bold"
                     >
                         BOLETIN OFICIAL
                     </Link>
                 </div>
                 <div className="py-4 flex flex-row justify-around">
-                    <img className="w-6" src="/Facebook.png" alt="" />
-                    <img className="w-6" src="/Mail.png" alt="" />
-                    <img className="w-6" src="/Instagram.png" alt="" />
+                    <Link href={'https://www.facebook.com/municipalidadloberia/'}><img className="w-6" src="/Facebook.png" alt="" /></Link>
+                    <Link href={'prensamunicipioloberia@gmail.com'}><img className="w-6" src="/Mail.png" alt="" /></Link>
+                    <Link href={'https://www.instagram.com/muniloberia/'}><img className="w-6" src="/Instagram.png" alt="" /></Link>
                 </div>
             </div>
         </>

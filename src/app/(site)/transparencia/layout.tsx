@@ -18,9 +18,9 @@ export default function TransparenciaLayout({
                 </div>
 
                 <div className="flex mb-15 md:mb-0 w-full justify-center">
-                    {(path === '/transparencia/recibos-de-funcionarios' ||
-                        path === '/transparencia/declaraciones-juradas-de-funcionarios' ||
-                        path === '/transparencia/nomina-del-personal') && (
+                    {(path.startsWith('/transparencia/recibos-de-funcionarios')  ||
+                        path.startsWith('/transparencia/declaraciones-juradas-de-funcionarios') ||
+                        path.startsWith('/transparencia/nomina-del-personal')) && (
                             <ContactCard
                                 titulo="DIRECCIÓN DE RECURSOS HUMANOS"
                                 responsable="Directora de Recursos Humanos Dra. Clara Rodriguez"
@@ -29,7 +29,7 @@ export default function TransparenciaLayout({
                                 email="recursoshumanosloberia@gmail.com"
                             />)}
 
-                    {path === '/transparencia/reportes-economicos' && (
+                    {path.startsWith('/transparencia/reportes-economicos') && (
                         <ContactCard
                             titulo="SECRETARÍA DE ECONOMÍA Y HACIENDA"
                             responsable="Directora: Cdora. Magdalena De Noia"

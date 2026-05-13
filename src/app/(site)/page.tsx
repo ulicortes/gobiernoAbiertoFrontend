@@ -16,21 +16,21 @@ export default function Home() {
     {
       titulo: "TRANSPARENCIA",
       texto:
-        "Acá iría un texto explicando brevemente lo que se encuentra en esta sección para mejorar la experiencia de usuario.",
+        "Información para la ciudadanía.",
       imagenFondo: "/WelcomePage_TransparenciaBackgroundImage.png",
       link: "/transparencia",
     },
     {
       titulo: "DATOS ABIERTOS",
       texto:
-        "Acá iría un texto explicando brevemente lo que se encuentra en esta sección para mejorar la experiencia de usuario.",
+        "Aquí podrás encontrar información pública en formatos abiertos para su libre uso.",
       imagenFondo: "/WelcomePage_DatosAbiertosBackgroundImage.png",
       link: "https://datos.loberia.gov.ar",
     },
     {
       titulo: "BOLETÍN OFICIAL",
       texto:
-        "Acá iría un texto explicando brevemente lo que se encuentra en esta sección para mejorar la experiencia de usuario.",
+        "Accedé a la legislación municipal vigente.",
       imagenFondo: "/WelcomePage_BoletinOficialBackgroundImage.png",
       link: "https://sibom.slyt.gba.gob.ar/cities/73",
     },
