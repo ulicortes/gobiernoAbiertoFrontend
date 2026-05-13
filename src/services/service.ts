@@ -22,7 +22,9 @@ export const servicio = {
   verify: async () => {
     try {
       const res = await api.get(`/auth/verify`);
-      if (res.data.statusCode == 200) return res.data.user;
+      if (res.data) {
+        return res.data.user;
+      }
       return null;
     } catch (error) {
       console.log(error);
