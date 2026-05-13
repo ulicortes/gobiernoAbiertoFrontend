@@ -23,24 +23,47 @@ export default function LoginMenu({ onClose }: LoginMenuProps) {
   const router = useRouter();
   const [errorMsg, setErrorMsg] = useState("");
 
-  async function login(formData: FormData) {
-    setErrorMsg("");
-    const data = {
-      email: formData.get("email")?.toString().trim() || "",
-      password: formData.get("pass")?.toString() || "",
-    };
-    try {
-      const res = await servicio.login(data);
-      if (!res) {
-        setErrorMsg("Credenciales inválidas");
-        return;
-      }
-      router.push("/panel");
-    } catch (error: unknown) {
-      console.log(error);
-      setErrorMsg("Correo o contraseña incorrectos");
+  // async function login(formData: FormData) {
+  //   setErrorMsg("");
+  //   const data = {
+  //     email: formData.get("email")?.toString().trim() || "",
+  //     password: formData.get("pass")?.toString() || "",
+  //   };
+  //   try {
+  //     const res = await servicio.login(data);
+  //     if (!res) {
+  //       setErrorMsg("Credenciales inválidas");
+  //       return;
+  //     }
+  //     router.push("/panel");
+  //   } catch (error: unknown) {
+  //     console.log(error);
+  //     setErrorMsg("Correo o contraseña incorrectos");
+  //   }
+  // }
+
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault(); 
+  setErrorMsg("");
+
+  const formData = new FormData(e.currentTarget);
+  const data = {
+    email: formData.get("email")?.toString().trim() || "",
+    password: formData.get("pass")?.toString() || "",
+  };
+
+  try {
+    const res = await servicio.login(data); 
+    if (!res) {
+      setErrorMsg("Credenciales inválidas");
+      return;
     }
+    router.push("/panel");
+  } catch (error: unknown) {
+    console.log(error);
+    setErrorMsg("Correo o contraseña incorrectos");
   }
+};
 
   return (
     <div className="w-full min-h-screen flex justify-center">
@@ -85,7 +108,8 @@ export default function LoginMenu({ onClose }: LoginMenuProps) {
 
         {/* form nativo para mantener action={fn} con FormData */}
         <form
-          action={login}
+          // action={login}
+          onSubmit={handleLogin}
           style={{ width: "100%", display: "flex", justifyContent: "center" }}
         >
           <Box
