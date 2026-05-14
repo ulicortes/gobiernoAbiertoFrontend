@@ -3,6 +3,24 @@
 import { useState } from "react";
 import { servicio } from "@/services/service";
 
+function parseFilenameFromContentDisposition(header: string | undefined | null): string | null {
+  if (!header) return null;
+
+  const utf8Match = header.match(/filename\*\s*=\s*(?:UTF-8'')?([^;]+)/i);
+  if (utf8Match) {
+    try {
+      return decodeURIComponent(utf8Match[1].trim().replace(/^"|"$/g, ""));
+    } catch {
+      // ignore and fall through al parsing simple
+    }
+  }
+
+  const plainMatch = header.match(/filename\s*=\s*"?([^";]+)"?/i);
+  if (plainMatch) return plainMatch[1].trim();
+
+  return null;
+}
+
 export default function GuiaUsuario() {
   const [message, setMessage] = useState("");
 
@@ -14,10 +32,15 @@ export default function GuiaUsuario() {
         setMessage("No hay una guia cargada por el momento. Disculpe las molestias");
         return;
       }
-      const url = window.URL.createObjectURL(new Blob([response?.data], { type: 'application/pdf' }));
+      const contentType = (response.headers?.["content-type"] as string) || "application/octet-stream";
+      const filename =
+        parseFilenameFromContentDisposition(response.headers?.["content-disposition"] as string | undefined) ||
+        "guia-de-usuario";
+
+      const url = window.URL.createObjectURL(new Blob([response?.data], { type: contentType }));
       const link = document.createElement('a');
       link.href = url;
-      link.setAttribute('download', 'jorge');
+      link.setAttribute('download', filename);
 
       document.body.appendChild(link);
       link.click();
