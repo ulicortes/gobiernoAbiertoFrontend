@@ -6,8 +6,10 @@ import type { PanelUserRow } from "@/types/managedUser";
 import DataTable from "@/components/ui/DataTable";
 import CreateUser from "@/components/forms/CreateUser";
 import ResetPassword from "@/components/forms/ResetPassword";
-import { GridColDef, GridActionsCellItem, GridRowParams } from "@mui/x-data-grid";
+import { GridColDef, GridActionsCellItem, GridRowParams, GridCellParams } from "@mui/x-data-grid";
+import { Alert } from "@mui/material";
 import LockResetIcon from "@mui/icons-material/LockReset";
+import WarningAmberIcon from "@mui/icons-material/WarningAmber";
 
 const USER_COLUMNS: GridColDef[] = [
   { field: "name", headerName: "Nombre", flex: 1, minWidth: 90, editable: true },
@@ -31,6 +33,7 @@ export default function UserManagementPanel() {
   const [users, setUsers] = useState<PanelUserRow[]>([]);
   const [loadError, setLoadError] = useState("");
   const [loading, setLoading] = useState(true);
+  const [actionError, setActionError] = useState("");
   const [resetUser, setResetUser] = useState<PanelUserRow | null>(null);
 
   const load = useCallback(async () => {
@@ -50,7 +53,17 @@ export default function UserManagementPanel() {
     load();
   }, [load]);
 
-  const handleRowUpdate = async (newRow: any) => {
+  const extractBackendMessage = (err: unknown, fallback: string): string => {
+    const ax = err as {
+      response?: { data?: { message?: string | string[] } };
+    };
+    const raw = ax.response?.data?.message;
+    if (Array.isArray(raw)) return raw.join(" ");
+    return raw || fallback;
+  };
+
+  const handleRowUpdate = async (newRow: any, oldRow?: any) => {
+    setActionError("");
     try {
       await servicio.actualizarUsuario(newRow.id, {
         name: newRow.name,
@@ -60,19 +73,34 @@ export default function UserManagementPanel() {
       });
       return newRow;
     } catch (err: unknown) {
-      const ax = err as { response?: { data?: { message?: string } } };
-      console.error(ax.response?.data?.message || "Error al actualizar usuario.");
-      return newRow;
+      const message = extractBackendMessage(
+        err,
+        "No se pudo actualizar el usuario. Intentá nuevamente.",
+      );
+      setActionError(message);
+      return oldRow ?? newRow;
     }
   };
 
   const handleRowDelete = async (id: any) => {
+    setActionError("");
     try {
       await servicio.eliminarUsuario(id);
       await load();
-    } catch (e) {
-      console.error(e);
+    } catch (err: unknown) {
+      const message = extractBackendMessage(
+        err,
+        "No se pudo eliminar el usuario. Intentá nuevamente.",
+      );
+      setActionError(message);
     }
+  };
+
+  const isCellEditable = (params: GridCellParams) => {
+    if (params.field === "role" && params.row?.role === "super_admin") {
+      return false;
+    }
+    return true;
   };
 
   const extraActions = (params: GridRowParams) => [
@@ -94,7 +122,38 @@ export default function UserManagementPanel() {
         </p>
       </div>
 
+      <div
+        role="alert"
+        aria-live="polite"
+        className="mx-auto w-full flex flex-col items-center gap-2 px-6 py-5 bg-red-50 border-2 border-red-600 rounded-lg shadow-md text-center"
+      >
+        <WarningAmberIcon
+          fontSize="large"
+          className="text-red-600"
+          aria-hidden="true"
+        />
+        <h3 className="font-bold uppercase tracking-wide text-red-700 text-base sm:text-lg">
+          Atención
+        </h3>
+        <p className="text-red-800 text-sm sm:text-base leading-relaxed max-w-2xl">
+          Debe existir{" "}
+          <strong className="font-bold uppercase">siempre al menos un super administrador</strong>{" "}
+          activo para poder ingresar al panel y gestionar a los administradores.
+          No elimines ni cambies el rol del último super administrador disponible.
+        </p>
+      </div>
+
       {loadError && <p className="text-red-600">{loadError}</p>}
+
+      {actionError && (
+        <Alert
+          severity="error"
+          onClose={() => setActionError("")}
+          sx={{ alignItems: "center" }}
+        >
+          {actionError}
+        </Alert>
+      )}
 
       <CreateUser onCreated={load} />
 
@@ -107,6 +166,7 @@ export default function UserManagementPanel() {
           deleteWarning="¿Estás segura/o de que querés eliminar este usuario? Esta acción no se puede deshacer."
           onRowUpdate={handleRowUpdate}
           onRowDelete={handleRowDelete}
+          isCellEditable={isCellEditable}
         />
       )}
 

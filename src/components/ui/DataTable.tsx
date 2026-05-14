@@ -8,6 +8,7 @@ import {
   GridActionsCellItem,
   GridRowParams,
   GridRowId,
+  GridCellParams,
 } from "@mui/x-data-grid";
 import { esES } from "@mui/x-data-grid/locales";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -36,6 +37,8 @@ interface DataTableProps {
   height?: number;
   /** Tamaño de fuente de los títulos de columna. Por defecto "0.875rem" (14 px). */
   headerFontSize?: string | number;
+  /** Permite deshabilitar la edición de celdas específicas según la fila/columna. */
+  isCellEditable?: (params: GridCellParams) => boolean;
 }
 
 interface Row {
@@ -59,6 +62,7 @@ export default function DataTable({
   deleteWarning,
   //height = 400,
   headerFontSize = "1rem",
+  isCellEditable,
 }: DataTableProps) {
   //const minTableHeight = Math.max(height, 400);
   const hasDownloadAction = showDownloadAction;
@@ -198,6 +202,7 @@ export default function DataTable({
         disableRowSelectionOnClick
         processRowUpdate={processRowUpdate}
         onProcessRowUpdateError={(error) => console.error(error)}
+        isCellEditable={isCellEditable}
       />
     </Box>
   );
