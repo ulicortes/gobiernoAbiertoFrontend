@@ -19,6 +19,7 @@ export default function ContactForm({ onClose }: ContactFormProps) {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [submittedWithSubscribe, setSubmittedWithSubscribe] = useState(false);
   const [submitError, setSubmitError] = useState("");
+  const [existContact, setContact] = useState(false);
 
   const {
     control,
@@ -30,16 +31,25 @@ export default function ContactForm({ onClose }: ContactFormProps) {
       name: "",
       message: "",
       subscribe: false,
+      contacto: undefined,
+      dni: "",
     },
   });
 
   const onSubmit = async (data: ContactFormValues) => {
     setSubmitError("");
     try {
+      // console.log(data);
       const formData = new FormData();
       formData.append("name", data.name);
       formData.append("message", data.message);
       formData.append("subscribe", data.subscribe ? "on" : "off");
+      if (!data.contacto) {
+        console.log("Hay que poner un metodo de contacto");
+        return;
+      }
+      console.log(data);
+      // return;
       await servicio.sendEmail(data);
       setIsSubmitted(true);
       setSubmittedWithSubscribe(data.subscribe);
@@ -106,7 +116,11 @@ export default function ContactForm({ onClose }: ContactFormProps) {
             <TextField
               label="Nombre y apellido"
               fullWidth
-              {...register("name")}
+              {...register("name", {
+                required: "El nombre es obligatorio",
+              })}
+              error={!!errors.name}
+              helperText={errors.name?.message}
             />
 
             <TextField
@@ -119,6 +133,59 @@ export default function ContactForm({ onClose }: ContactFormProps) {
               })}
               error={!!errors.message}
               helperText={errors.message?.message}
+            />
+
+            <TextField
+              label="DNI"
+              fullWidth
+              {...register("dni", {
+                required: "El dni es obligatorio",
+                validate: {
+                  formato: (val) => /^\d{7,8}$/.test(val) || "El DNI debe tener 7 u 8 números",
+                  noFalso: (val) => {
+                    const secuenciales = ["1234567", "12345678", "87654321", "123456789"];
+                    // Verifica si son todos números iguales (ej: 11111111)
+                    const todosIguales = /^(\d)\1+$/.test(val);
+
+                    if (secuenciales.includes(val) || todosIguales) {
+                      return "Por favor, ingresá un número de DNI válido";
+                    }
+                    return true;
+                  },
+                  dni_logico: (val) => {
+                    const dni = Number(val);
+                    // console.log(getValues('telefono'))
+                    if (dni < 2000000 || dni > 55000000) {
+                      return "El número de DNI no corresponde a un rango válido";
+                    }
+                  }
+                }
+              })}
+              error={!!errors.dni}
+              helperText={errors.dni?.message}
+            />
+
+            <TextField
+              label="Deja tu email o celular"
+              fullWidth
+              margin="normal"
+              {...register("contacto", {
+                validate: {
+                  formato: (val) => {
+                    const stringLimpio = val.toString().replace(/[\s\-\(\)]/g, "");
+
+                    const celularRegex = /^(?:11|[23]\d{2,3})\d{6,8}$/;
+
+                    if (!celularRegex.test(stringLimpio) && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(val)) {
+                      return "Por favor ingresar un mail valido o un nro de celular con +549 seguido de la característica sin 0 y el celular sin 15";
+                    }
+
+                    return true;
+                  },
+                }
+              })}
+              error={!!errors.contacto}
+              helperText={errors.contacto?.message}
             />
 
             <Controller
