@@ -27,17 +27,17 @@ export default function Header() {
             <nav className={`fixed top-0 left-0 right-0 z-50 w-full h-24 bg-black-base border-b-4 transition-colors duration-300 ${getBorderColor()} flex flex-row justify-between`}>
                 <div className="h-full flex justify-center items-center">
                     <Link href={'/'}>
-                    <img src="/logo_municipio.png" alt="" className="w-4/5 pl-2" />
+                        <img src="/logo_municipio.png" alt="" className="w-4/5 pl-2" />
                     </Link>
                 </div>
                 {/* Desktop Navigation */}
                 <div className="hidden md:flex w-3/4 h-full flex-col justify-between items-end">
-                    <div className="w-1/5 bg-green-base py-1. rounded-bl-xl flex flex-row justify-around">
-                        <Link href={'https://www.facebook.com/municipalidadloberia/'}><img className="w-6 cursor-pointer transition-transform duration-200 hover:scale-110" src="/Facebook.png" alt="" /></Link>
-                        <Link href={'prensamunicipioloberia@gmail.com'}><img className="w-6 cursor-pointer transition-transform duration-200 hover:scale-110" src="/Mail.png" alt="" /></Link>
-                        <Link href={'https://www.instagram.com/muniloberia/'}><img className="w-6 cursor-pointer transition-transform duration-200 hover:scale-110" src="/Instagram.png" alt="" /></Link>
+                    <div className="w-1/6 bg-green-base. py-3 rounded-bl-xl flex flex-row justify-around">
+                        <Link href={'https://www.facebook.com/municipalidadloberia/'}><img className="w-6 cursor-pointer transition-transform duration-200 hover:scale-110" src="/facebook-svg.svg" alt="" /></Link>
+                        <Link href={'mailto:prensamunicipioloberia@gmail.com'}><img className="w-6 cursor-pointer transition-transform duration-200 hover:scale-110" src="/gmail-svg.svg" alt="" /></Link>
+                        <Link href={'https://www.instagram.com/muniloberia/'}><img className="w-6 cursor-pointer transition-transform duration-200 hover:scale-110" src="/instagram-svg.svg" alt="" /></Link>
                     </div>
-                    <div className="w-5/5 flex flex-row self-center justify-evenly">
+                    <div className="w-3/5 flex flex-row self-end justify-evenly">
                         <Link
                             href={'/transparencia'}
                             className={`w-fit py-1 px-4 cursor-pointer text-white text-center font-bold rounded-t-xl transition-colors duration-300 ${path.startsWith('/transparencia') ? 'bg-blue-base' : ''} hover:bg-blue-base`}
@@ -115,9 +115,9 @@ export default function Header() {
                     </Link>
                 </div>
                 <div className="py-4 flex flex-row justify-around">
-                    <Link href={'https://www.facebook.com/municipalidadloberia/'}><img className="w-6" src="/Facebook.png" alt="" /></Link>
-                    <Link href={'prensamunicipioloberia@gmail.com'}><img className="w-6" src="/Mail.png" alt="" /></Link>
-                    <Link href={'https://www.instagram.com/muniloberia/'}><img className="w-6" src="/Instagram.png" alt="" /></Link>
+                    <Link href={'https://www.facebook.com/municipalidadloberia/'}><img className="w-6" src="/facebook-svg.svg" alt="" /></Link>
+                    <Link href={'mailto:prensamunicipioloberia@gmail.com'}><img className="w-6" src="/gmail-svg.svg" alt="" /></Link>
+                    <Link href={'https://www.instagram.com/muniloberia/'}><img className="w-6" src="/instagram-svg.svg" alt="" /></Link>
                 </div>
             </div>
         </>
